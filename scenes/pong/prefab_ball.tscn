@@ -1,0 +1,74 @@
+[gd_scene load_steps=10 format=3 uid="uid://rd5g3vdir2e2"]
+
+[ext_resource type="Script" uid="uid://dgbhun6vlrb4i" path="res://scripts/pong/obj/Ball.cs" id="1_q74i4"]
+[ext_resource type="AudioStream" uid="uid://d4ihouk4557te" path="res://assets/sounds/sfx_jump.ogg" id="2_35srh"]
+[ext_resource type="AudioStream" uid="uid://buu16y6mn8h87" path="res://assets/sounds/sfx_gem.ogg" id="3_q74i4"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_68cmp"]
+
+[sub_resource type="Curve" id="Curve_35srh"]
+_data = [Vector2(0, 0.5473888), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_q74i4"]
+width = 1024
+curve = SubResource("Curve_35srh")
+
+[sub_resource type="Curve" id="Curve_68cmp"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_35srh"]
+width = 36
+curve = SubResource("Curve_68cmp")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_35srh"]
+particle_flag_align_y = true
+particle_flag_rotate_y = true
+particle_flag_disable_z = true
+gravity = Vector3(0, 0, 0)
+scale_min = 0.0
+scale_max = 0.0
+scale_curve = SubResource("CurveTexture_35srh")
+color = Color(0.6255971, 0.6255971, 0.6255971, 1)
+alpha_curve = SubResource("CurveTexture_q74i4")
+
+[node name="PrefabBall" type="CharacterBody2D"]
+collision_mask = 3
+script = ExtResource("1_q74i4")
+AudioHit = ExtResource("2_35srh")
+AudioScore = ExtResource("3_q74i4")
+Acceleration = 10
+Size = 16
+metadata/_custom_type_script = "uid://dgbhun6vlrb4i"
+
+[node name="ColorRect" type="ColorRect" parent="."]
+clip_contents = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_68cmp")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+z_index = -1
+amount = 2048
+speed_scale = 0.8
+fixed_fps = 60
+draw_order = 0
+trail_lifetime = 1.8
+process_material = SubResource("ParticleProcessMaterial_35srh")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+volume_db = -4.0

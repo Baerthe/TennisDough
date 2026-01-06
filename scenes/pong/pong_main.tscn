@@ -1,0 +1,118 @@
+[gd_scene load_steps=7 format=3 uid="uid://bnvht5v51wkfj"]
+
+[ext_resource type="Script" uid="uid://ldf13dgujunn" path="res://scripts/pong/Main.cs" id="1_242ye"]
+[ext_resource type="PackedScene" uid="uid://d0744oosad0d3" path="res://scenes/pong/prefab_paddle.tscn" id="2_242ye"]
+[ext_resource type="PackedScene" uid="uid://rd5g3vdir2e2" path="res://scenes/pong/prefab_ball.tscn" id="3_wwidt"]
+[ext_resource type="Theme" uid="uid://c5b38epkeox6b" path="res://assets/themes/pong_main.tres" id="4_ufty6"]
+[ext_resource type="PackedScene" uid="uid://o4bhpha3fwb4" path="res://scenes/pong/pong_menu.tscn" id="5_pja5u"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_242ye"]
+a = Vector2(-20, 0)
+b = Vector2(660, 0)
+
+[node name="PongMain" type="Node2D" node_paths=PackedStringArray("Menu", "PauseWatcher", "GameTimer", "PaddleP1", "PaddleP2", "Ball", "ScoreP1Label", "ScoreP2Label")]
+script = ExtResource("1_242ye")
+Menu = NodePath("PongMenu")
+PauseWatcher = NodePath("")
+GameTimer = NodePath("Timer")
+PaddleP1 = NodePath("Paddle1")
+PaddleP2 = NodePath("Paddle2")
+Ball = NodePath("PrefabBall")
+ScoreP1Label = NodePath("HUD/P1Score")
+ScoreP2Label = NodePath("HUD/P2Score")
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="Background" type="ColorRect" parent="World"]
+z_index = -20
+offset_right = 640.0
+offset_bottom = 480.0
+color = Color(0, 0, 0, 1)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="World"]
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/StaticBody2D"]
+position = Vector2(0, 24)
+shape = SubResource("SegmentShape2D_242ye")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="World"]
+collision_layer = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/StaticBody2D2"]
+position = Vector2(0, 483)
+shape = SubResource("SegmentShape2D_242ye")
+
+[node name="Paddle1" parent="." instance=ExtResource("2_242ye")]
+position = Vector2(0, 240)
+
+[node name="Paddle2" parent="." instance=ExtResource("2_242ye")]
+position = Vector2(640, 240)
+
+[node name="PrefabBall" parent="." instance=ExtResource("3_wwidt")]
+position = Vector2(320, 240)
+
+[node name="HUD" type="Control" parent="."]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LabelScore" type="Label" parent="HUD"]
+layout_mode = 0
+offset_right = 128.0
+offset_bottom = 24.0
+theme = ExtResource("4_ufty6")
+theme_override_colors/font_color = Color(0.62763536, 0.62763536, 0.62763536, 1)
+text = "P1 Score"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="P1Score" type="Label" parent="HUD"]
+layout_mode = 0
+offset_left = 128.0
+offset_right = 256.0
+offset_bottom = 24.0
+theme = ExtResource("4_ufty6")
+text = "00000000"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="LabelScore2" type="Label" parent="HUD"]
+layout_mode = 0
+offset_left = 384.0
+offset_right = 512.0
+offset_bottom = 24.0
+theme = ExtResource("4_ufty6")
+theme_override_colors/font_color = Color(0.62763536, 0.62763536, 0.62763536, 1)
+text = "P2 Score"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="P2Score" type="Label" parent="HUD"]
+layout_mode = 0
+offset_left = 512.0
+offset_right = 640.0
+offset_bottom = 24.0
+theme = ExtResource("4_ufty6")
+text = "00000000"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="ColorRect" type="ColorRect" parent="HUD"]
+layout_mode = 0
+offset_top = 21.0
+offset_right = 640.0
+offset_bottom = 25.0
+
+[node name="PongMenu" parent="." instance=ExtResource("5_pja5u")]
