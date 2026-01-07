@@ -13,7 +13,7 @@ b = Vector2(660, 0)
 [node name="PongMain" type="Node2D" node_paths=PackedStringArray("Menu", "PauseWatcher", "GameTimer", "PaddleP1", "PaddleP2", "Ball", "ScoreP1Label", "ScoreP2Label")]
 script = ExtResource("1_242ye")
 Menu = NodePath("PongMenu")
-PauseWatcher = NodePath("")
+PauseWatcher = NodePath("PauseWatcher")
 GameTimer = NodePath("Timer")
 PaddleP1 = NodePath("Paddle1")
 PaddleP2 = NodePath("Paddle2")

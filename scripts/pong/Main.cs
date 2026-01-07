@@ -11,6 +11,7 @@ public partial class Main : Node2D
 {
     [ExportGroup("References")]
     [Export] public Menu Menu { get; private set; }
+    [Export] public PauseWatcher PauseWatcher { get; private set; }
     [Export] public Timer GameTimer {get; private set; }
     [Export] public Paddle PaddleP1 { get; private set; }
     [Export] public Paddle PaddleP2 { get; private set; }
@@ -22,17 +23,15 @@ public partial class Main : Node2D
     private bool _isPaused = false;
     private IController _controller1;
     private IController _controller2;
-    private PauseWatcher _pauseWatcher;
     private Score _scoreP1;
     private Score _scoreP2;
 
     public override void _Ready()
     {
-        _pauseWatcher = GetParent().GetNode<PauseWatcher>("PauseWatcher");
         _scoreP1 = new Score(ScoreP1Label);
         _scoreP2 = new Score(ScoreP2Label);
         Menu.OnGameStart += GameStart;
-        _pauseWatcher.OnTogglePause += GamePause;
+        PauseWatcher.OnTogglePause += GamePause;
     }
     public override void _Process(double delta)
     {
@@ -44,7 +43,7 @@ public partial class Main : Node2D
     public override void _ExitTree()
     {
         Menu.OnGameStart -= GameStart;
-        _pauseWatcher.OnTogglePause -= GamePause;
+        PauseWatcher.OnTogglePause -= GamePause;
     }
     // -> Game State Functions
     private void GamePause()
@@ -80,7 +79,7 @@ public partial class Main : Node2D
         Ball.ToggleEnable();
         _isGameOver = false;
     }
-    private void GameStart(PlayerType player1Type, PlayerType player2Type, int ballSize)
+    private void GameStart(PlayerType player1Type, PlayerType player2Type, int ballSize, int paddle1Size, int paddle2Size)
     {
         if (_controller1 != null)
             _controller1.Detach();
@@ -104,6 +103,8 @@ public partial class Main : Node2D
         _controller1.Attach();
         _controller2.Attach();
         Ball.AdjustSize((byte)ballSize);
+        PaddleP1.Resize((byte)paddle1Size);
+        PaddleP2.Resize((byte)paddle2Size);
         if (_isPaused)
             GamePause();
         if (_isGameOver)
