@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="TennisDough"
-run/main_scene="uid://uvu0m4hmn0ki"
+run/main_scene="uid://bnvht5v51wkfj"
 config/features=PackedStringArray("4.5", "C#", "GL Compatibility")
 boot_splash/bg_color=Color(0, 0.42163724, 0.2824901, 1)
 config/icon="res://icon.svg"

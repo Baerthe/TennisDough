@@ -21,6 +21,10 @@ Ball = NodePath("PrefabBall")
 ScoreP1Label = NodePath("HUD/P1Score")
 ScoreP2Label = NodePath("HUD/P2Score")
 
+[node name="PauseWatcher" type="Node" parent="."]
+script = ExtResource("3_sugp2")
+metadata/_custom_type_script = "uid://bjws67o000lvq"
+
 [node name="Timer" type="Timer" parent="."]
 
 [node name="World" type="Node2D" parent="."]
