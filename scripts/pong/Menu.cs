@@ -4,7 +4,7 @@ using System;
 using Godot;
 public partial class Menu : Control
 {
-    public event Action<PlayerType, PlayerType, int, int, int, int, int, Color, Color> OnGameStart;
+    public event Action<PlayerType, PlayerType, int, int, int, int, int, Color, Color, int, int> OnGameStart;
     public event Action OnGameCancel;
     public event Action OnGameReset;
     [Export] public Button ButtonReset { get; private set; }
@@ -13,8 +13,7 @@ public partial class Menu : Control
     [Export] private Button _buttonQuit;
     [Export] private OptionButton _optionPaddle1;
     [Export] private OptionButton _optionPaddle2;
-    [Export] private HSlider _gameTimeSlider;
-    [Export] private Label _labelGameTime;
+    [ExportGroup("Settings Sliders")]
     [Export] private HSlider _sliderBall;
     [Export] private Label _labelBallSpeed;
     [Export] private HSlider _sliderPaddle1Size;
@@ -27,6 +26,10 @@ public partial class Menu : Control
     [Export] private Label _labelPaddle2Speed;
     [Export] private ColorPickerButton _colorPickerPaddle1;
     [Export] private ColorPickerButton _colorPickerPaddle2;
+    [Export] private HSlider _gameTimeSlider;
+    [Export] private Label _labelGameTime;
+    [Export] private HSlider _maxScoreSlider;
+    [Export] private Label _labelMaxScore;
     public override void _Ready()
     {
         _buttonPlay.Pressed += OnButtonPlayPressed;
@@ -36,16 +39,21 @@ public partial class Menu : Control
         ButtonCancel.Visible = false;
         ButtonCancel.Pressed += () => Visible = false;
         ButtonCancel.Pressed += () => OnGameCancel?.Invoke();
+        _gameTimeSlider.ValueChanged += (double value) => _labelGameTime.Text = ((int)value).ToString("D4");
         _sliderBall.ValueChanged += (double value) => _labelBallSpeed.Text = ((int)value).ToString("D2");
         _sliderPaddle1Size.ValueChanged += (double value) => _labelPaddle1Size.Text = ((int)value).ToString("D2");
         _sliderPaddle2Size.ValueChanged += (double value) => _labelPaddle2Size.Text = ((int)value).ToString("D2");
         _sliderPaddle1Speed.ValueChanged += (double value) => _labelPaddle1Speed.Text = ((int)value).ToString("D2");
         _sliderPaddle2Speed.ValueChanged += (double value) => _labelPaddle2Speed.Text = ((int)value).ToString("D2");
+        _maxScoreSlider.ValueChanged += (double value) => _labelMaxScore.Text = ((int)value).ToString("D2");
+        // Initialize labels
+        _labelGameTime.Text = ((int)_gameTimeSlider.Value).ToString("D4");
         _labelBallSpeed.Text = ((int)_sliderBall.Value).ToString("D2");
         _labelPaddle1Size.Text = ((int)_sliderPaddle1Size.Value).ToString("D2");
         _labelPaddle2Size.Text = ((int)_sliderPaddle2Size.Value).ToString("D2");
         _labelPaddle1Speed.Text = ((int)_sliderPaddle1Speed.Value).ToString("D2");
         _labelPaddle2Speed.Text = ((int)_sliderPaddle2Speed.Value).ToString("D2");
+        _labelMaxScore.Text = ((int)_maxScoreSlider.Value).ToString("D2");
     }
     private void OnButtonPlayPressed()
     {
@@ -60,7 +68,9 @@ public partial class Menu : Control
             (int)_sliderPaddle1Speed.Value,
             (int)_sliderPaddle2Speed.Value,
             _colorPickerPaddle1.Color,
-            _colorPickerPaddle2.Color
+            _colorPickerPaddle2.Color,
+            (int)_gameTimeSlider.Value,
+            (int)_maxScoreSlider.Value
         );
         GD.Print($"Controllers selected: P1 - {(PlayerType)_optionPaddle1.GetSelectedId()}, P2 - {(PlayerType)_optionPaddle2.GetSelectedId()}");
     }

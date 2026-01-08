@@ -1,6 +1,6 @@
 namespace Pong;
 
-using Common;
+
 using Godot;
 using System;
 /// <summary>
@@ -20,6 +20,7 @@ public partial class Main : Node2D
     [Export] public Label ScoreP1Label { get; private set; }
     [Export] public Label ScoreP2Label { get; private set; }
     [Export] public Label TimerLabel { get; private set; }
+    [Export] public Label MiddleScreenLabel { get; private set; }
     private bool _isGameOver = true;
     private bool _isPaused = false;
     private IController _controller1;
@@ -28,7 +29,8 @@ public partial class Main : Node2D
     private Score _scoreP2;
     private int _timeInSeconds = 0;
     private int _maxTimeInSeconds = 9999;
-
+    private byte _maxScore = 255;
+    // -> Godot Overrides
     public override void _Ready()
     {
         _scoreP1 = new Score(ScoreP1Label);
@@ -47,30 +49,49 @@ public partial class Main : Node2D
         _controller2.Update();
     }
     // -> Game State Functions
+    /// <summary>
+    /// Pauses or unpauses the current game.
+    /// </summary>
     private void GamePause()
     {
         if (_isGameOver)
             return;
         if (_isPaused)
         {
-            GameTimer.Start();
+            if (GameTimer.IsStopped())
+                GameTimer.Start();
+            GameTimer.Paused = false;
             Ball.ToggleEnable();
             Menu.Visible = false;
             _isPaused = false;
         }
         else
         {
-            GameTimer.Stop();
+            GameTimer.Paused = true;
             Ball.ToggleEnable();
             Menu.Visible = true;
             _isPaused = true;
         }
     }
-    private void GameOver()
+    /// <summary>
+    /// Ends the current game.
+    /// </summary>
+    private async void GameOver()
     {
+        GameTimer.Stop();
+        MiddleScreenLabel.Text = "Game Over, Returning to Menu...";
+        Menu.ButtonReset.Visible = false;
+        Menu.ButtonCancel.Visible = false;
         Ball.ToggleEnable();
         _isGameOver = true;
+        await ToSignal(GetTree().CreateTimer(5.0), "timeout");
+        MiddleScreenLabel.Visible = false;
+        Menu.Visible = true;
+        GameReset();
     }
+    /// <summary>
+    /// Resets the current game to initial state.
+    /// </summary>
     private void GameReset()
     {
         GameTimer.Stop();
@@ -79,11 +100,28 @@ public partial class Main : Node2D
         _scoreP1.Reset();
         _scoreP2.Reset();
         Ball.ToggleEnable();
+        TimerLabel.Text = "0000";
+        _timeInSeconds = 0;
         _isGameOver = false;
         if (_isPaused)
             _isPaused = false;
     }
-    private void GameStart(PlayerType player1Type, PlayerType player2Type, int ballSize, int paddle1Size, int paddle2Size, int paddle1Speed, int paddle2Speed, Color paddle1Color, Color paddle2Color)
+    /// <summary>
+    /// Starts a new game with the given parameters sent from the Menu.
+    /// </summary>
+    /// <param name="player1Type"></param>
+    /// <param name="player2Type"></param>
+    /// <param name="ballSize"></param>
+    /// <param name="paddle1Size"></param>
+    /// <param name="paddle2Size"></param>
+    /// <param name="paddle1Speed"></param>
+    /// <param name="paddle2Speed"></param>
+    /// <param name="paddle1Color"></param>
+    /// <param name="paddle2Color"></param>
+    /// <param name="gameTime"></param>
+    /// <param name="maxScore"></param>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    private void GameStart(PlayerType player1Type, PlayerType player2Type, int ballSize, int paddle1Size, int paddle2Size, int paddle1Speed, int paddle2Speed, Color paddle1Color, Color paddle2Color, int gameTime, int maxScore)
     {
         if (_controller1 != null)
             _controller1.Detach();
@@ -106,6 +144,7 @@ public partial class Main : Node2D
         };
         _controller1.Attach();
         _controller2.Attach();
+        MiddleScreenLabel.Visible = false;
         Ball.AdjustSize((byte)ballSize);
         PaddleP1.Resize((byte)paddle1Size);
         PaddleP2.Resize((byte)paddle2Size);
@@ -113,24 +152,36 @@ public partial class Main : Node2D
         PaddleP2.ChangeSpeed((uint)paddle2Speed);
         PaddleP1.ChangeColor(paddle1Color);
         PaddleP2.ChangeColor(paddle2Color);
+        _maxTimeInSeconds = gameTime;
+        _maxScore = (byte)maxScore;
         if (_isPaused)
+        {
             GamePause();
+            return;
+        }
         if (!_isGameOver)
         {
             Menu.ButtonReset.Visible = true;
             Menu.ButtonCancel.Visible = true;
             TimerLabel.Text = "0000";
             GameTimer.WaitTime = 1.0;
+            _timeInSeconds = 0;
             GameTimer.Start();
-        } else
-        {
-            Menu.ButtonReset.Visible = false;
-            Menu.ButtonCancel.Visible = false;
-            GameOver();
         }
     }
-    private void TimerUpdate()
+    /// <summary>
+    /// Updates the game timer each second. Calls GameOver if the max time (or score) is reached.
+    /// </summary>
+    private async void TimerUpdate()
     {
+        if (_scoreP1.CurrentScore >= _maxScore || _scoreP2.CurrentScore >= _maxScore)
+        {
+            MiddleScreenLabel.Text = $"Player {( _scoreP1.CurrentScore >= _maxScore ? "1" : "2" )} Wins!";
+            MiddleScreenLabel.Visible = true;
+            await ToSignal(GetTree().CreateTimer(8.0), "timeout");
+            GameOver();
+            return;
+        }
         if (_timeInSeconds < _maxTimeInSeconds)
         {
             _timeInSeconds = int.Parse(TimerLabel.Text);

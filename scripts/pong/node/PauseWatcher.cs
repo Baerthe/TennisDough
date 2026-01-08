@@ -1,4 +1,4 @@
-namespace Common;
+namespace Pong;
 
 using System;
 using Godot;
