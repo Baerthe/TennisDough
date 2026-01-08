@@ -19,12 +19,15 @@ public partial class Main : Node2D
     [ExportGroup("HUD Properties")]
     [Export] public Label ScoreP1Label { get; private set; }
     [Export] public Label ScoreP2Label { get; private set; }
+    [Export] public Label TimerLabel { get; private set; }
     private bool _isGameOver = true;
     private bool _isPaused = false;
     private IController _controller1;
     private IController _controller2;
     private Score _scoreP1;
     private Score _scoreP2;
+    private int _timeInSeconds = 0;
+    private int _maxTimeInSeconds = 9999;
 
     public override void _Ready()
     {
@@ -33,6 +36,7 @@ public partial class Main : Node2D
         Menu.OnGameCancel += GamePause;
         Menu.OnGameReset += GameReset;
         Menu.OnGameStart += GameStart;
+        GameTimer.Timeout += TimerUpdate;
         PauseWatcher.OnTogglePause += GamePause;
     }
     public override void _Process(double delta)
@@ -69,6 +73,7 @@ public partial class Main : Node2D
     }
     private void GameReset()
     {
+        GameTimer.Stop();
         PaddleP1.ResetPosition();
         PaddleP2.ResetPosition();
         _scoreP1.Reset();
@@ -110,12 +115,28 @@ public partial class Main : Node2D
         PaddleP2.ChangeColor(paddle2Color);
         if (_isPaused)
             GamePause();
-        if (_isGameOver)
-            GameReset();
-        else
+        if (!_isGameOver)
         {
             Menu.ButtonReset.Visible = true;
             Menu.ButtonCancel.Visible = true;
+            TimerLabel.Text = "0000";
+            GameTimer.WaitTime = 1.0;
+            GameTimer.Start();
+        } else
+        {
+            Menu.ButtonReset.Visible = false;
+            Menu.ButtonCancel.Visible = false;
+            GameOver();
         }
+    }
+    private void TimerUpdate()
+    {
+        if (_timeInSeconds < _maxTimeInSeconds)
+        {
+            _timeInSeconds = int.Parse(TimerLabel.Text);
+            _timeInSeconds++;
+            TimerLabel.Text = _timeInSeconds.ToString("D4");
+        } else
+            GameOver();
     }
 }

@@ -26,6 +26,9 @@ ScoreP2Label = NodePath("HUD/P2Score")
 script = ExtResource("2_g2830")
 
 [node name="Timer" type="Timer" parent="."]
+wait_time = 1.0
+one_shot = false
+autostart = false
 
 [node name="World" type="Node2D" parent="."]
 
@@ -118,5 +121,13 @@ layout_mode = 0
 offset_top = 21.0
 offset_right = 640.0
 offset_bottom = 25.0
+
+[node name="Divider" type="ColorRect" parent="HUD"]
+z-index = -20
+layout_mode = 0
+offset_top = 21.0
+offset_left = 318.0
+offset_right = 322.0
+offset_bottom = 480.0
 
 [node name="PongMenu" parent="." instance=ExtResource("5_pja5u")]
