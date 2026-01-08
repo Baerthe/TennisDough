@@ -56,6 +56,10 @@ public sealed partial class Ball : CharacterBody2D
             }
         }
     }
+    /// <summary>
+    /// Adjusts the size of the ball and updates related components.
+    /// </summary>
+    /// <param name="size"></param>
     public void AdjustSize(byte size)
     {
         Size = (byte)Mathf.Clamp(size, 8, 32);
@@ -65,7 +69,22 @@ public sealed partial class Ball : CharacterBody2D
         _trailParticles.ProcessMaterial.Set("scale_max", Size);
         _trailParticles.ProcessMaterial.Set("scale_min", Size);
     }
+    /// <summary>
+    /// Adjusts the color of the ball and its trail effect.
+    /// </summary>
+    /// <param name="color"></param>
+    public void AdjustColor(Color color)
+    {
+        _colorRect.Color = color;
+        _trailParticles.ProcessMaterial.Set("color", color);
+    }
+    /// <summary>
+    /// Toggles whether the ball is enabled (moving) or not.
+    /// </summary>
     public void ToggleEnable() => _isEnabled = !_isEnabled;
+    /// <summary>
+    /// Resets the ball position and velocity when it goes out of bounds.
+    /// </summary>
     private void ResetBall()
     {
         var winner = GlobalPosition.X < 0 ? false : true;

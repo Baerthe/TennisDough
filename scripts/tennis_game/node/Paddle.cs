@@ -33,7 +33,7 @@ public sealed partial class Paddle : CharacterBody2D
         Velocity = Velocity * _fixedFriction;
         MoveAndCollide(Velocity * (float)delta);
     }
-    public void ChangeColor(Color color)
+    public void AdjustColor(Color color)
     {
         _colorRect.Color = color;
     }

@@ -4,7 +4,7 @@ using System;
 using Godot;
 public partial class Menu : Control
 {
-    public event Action<PlayerType, PlayerType, int, int, int, int, int, Color, Color, int, int> OnGameStart;
+    public event Action<PlayerType, PlayerType, int, int, int, int, int, Color, Color, Color,int, int> OnGameStart;
     public event Action OnGameCancel;
     public event Action OnGameReset;
     private AudioStreamPlayer _audioPlayer;
@@ -31,6 +31,7 @@ public partial class Menu : Control
     [Export] private Label _labelPaddle2Speed;
     [Export] private ColorPickerButton _colorPickerPaddle1;
     [Export] private ColorPickerButton _colorPickerPaddle2;
+    [Export] private ColorPickerButton _colorPickerBall;
     [Export] private HSlider _gameTimeSlider;
     [Export] private Label _labelGameTime;
     [Export] private HSlider _maxScoreSlider;
@@ -76,6 +77,7 @@ public partial class Menu : Control
         // Configure color pickers
         ConfigureColorPicker(_colorPickerPaddle1);
         ConfigureColorPicker(_colorPickerPaddle2);
+        ConfigureColorPicker(_colorPickerBall);
     }
     /// <summary>
     /// Toggles the visibility of the Reset and Cancel buttons.
@@ -102,6 +104,7 @@ public partial class Menu : Control
             (int)_sliderPaddle2Speed.Value,
             _colorPickerPaddle1.Color,
             _colorPickerPaddle2.Color,
+            _colorPickerBall.Color,
             (int)_gameTimeSlider.Value,
             (int)_maxScoreSlider.Value
         );

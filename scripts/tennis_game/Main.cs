@@ -122,7 +122,7 @@ public partial class Main : Node2D
     /// <param name="gameTime"></param>
     /// <param name="maxScore"></param>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
-    private void GameStart(PlayerType player1Type, PlayerType player2Type, int ballSize, int paddle1Size, int paddle2Size, int paddle1Speed, int paddle2Speed, Color paddle1Color, Color paddle2Color, int gameTime, int maxScore)
+    private void GameStart(PlayerType player1Type, PlayerType player2Type, int ballSize, int paddle1Size, int paddle2Size, int paddle1Speed, int paddle2Speed, Color paddle1Color, Color paddle2Color, Color ballColor, int gameTime, int maxScore)
     {
         if (_controller1 != null)
             _controller1.Detach();
@@ -151,8 +151,8 @@ public partial class Main : Node2D
         PaddleP2.Resize((byte)paddle2Size);
         PaddleP1.ChangeSpeed((uint)paddle1Speed);
         PaddleP2.ChangeSpeed((uint)paddle2Speed);
-        PaddleP1.ChangeColor(paddle1Color);
-        PaddleP2.ChangeColor(paddle2Color);
+        PaddleP1.AdjustColor(paddle1Color);
+        PaddleP2.AdjustColor(paddle2Color);
         _maxTimeInSeconds = gameTime;
         _maxScore = (byte)maxScore;
         if (_isPaused)
@@ -205,8 +205,9 @@ public partial class Main : Node2D
             ScoreP2Label.AddThemeColorOverride("font_color", Colors.White);
             TimerLabel.AddThemeColorOverride("font_color", Colors.White);
             MiddleScreenLabel.AddThemeColorOverride("font_color", Colors.White);
-            PaddleP1.ChangeColor(Colors.White);
-            PaddleP2.ChangeColor(Colors.White);
+            PaddleP1.AdjustColor(Colors.White);
+            PaddleP2.AdjustColor(Colors.White);
+            Ball.AdjustColor(Colors.White);
             return;
         }
         while (toggle)
@@ -218,8 +219,9 @@ public partial class Main : Node2D
             ScoreP2Label.AddThemeColorOverride("font_color", color);
             TimerLabel.AddThemeColorOverride("font_color", color);
             MiddleScreenLabel.AddThemeColorOverride("font_color", color);
-            PaddleP1.ChangeColor(color);
-            PaddleP2.ChangeColor(color);
+            PaddleP1.AdjustColor(color);
+            PaddleP2.AdjustColor(color);
+            Ball.AdjustColor(color);
             await ToSignal(GetTree().CreateTimer(0.1f), "timeout");
         }
     }
