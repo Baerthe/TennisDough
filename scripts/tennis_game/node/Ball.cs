@@ -44,8 +44,7 @@ public sealed partial class Ball : CharacterBody2D
         var collision = MoveAndCollide(Velocity * (float)delta * _speedFactor);
         if (collision != null)
         {
-            _audioPlayer.Stream = AudioHit;
-            _audioPlayer.Play();
+            PlaySfx(AudioHit);
             var normal = collision.GetNormal();
             Velocity = Velocity.Bounce(normal);
             _speedFactor += _speedFactor * (Acceleration / 200.0f);
@@ -83,23 +82,22 @@ public sealed partial class Ball : CharacterBody2D
     /// </summary>
     public void ToggleEnable() => _isEnabled = !_isEnabled;
     /// <summary>
+    /// Plays a sound effect.
+    /// </summary>
+    /// <param name="sfx"></param>
+    private void PlaySfx(AudioStream sfx)
+    {
+        _audioPlayer.Stream = sfx;
+        _audioPlayer.Play();
+    }
+    /// <summary>
     /// Resets the ball position and velocity when it goes out of bounds.
     /// </summary>
     private void ResetBall()
     {
         var winner = GlobalPosition.X < 0 ? false : true;
-        if (GlobalPosition.X < 0)
-        {
-            _audioPlayer.Stream = AudioScore;
-            _audioPlayer.Play();
-            OnOutOfBounds?.Invoke(false);
-        }
-        else
-        {
-            _audioPlayer.Stream = AudioScore;
-            _audioPlayer.Play();
-            OnOutOfBounds?.Invoke(true);
-        }
+        PlaySfx(AudioScore);
+        OnOutOfBounds?.Invoke(winner);
         Velocity = Vector2.Zero;
         GlobalPosition = _initialPosition;
         _speedFactor = 0.05f;
