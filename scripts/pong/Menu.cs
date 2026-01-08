@@ -13,6 +13,8 @@ public partial class Menu : Control
     [Export] private Button _buttonQuit;
     [Export] private OptionButton _optionPaddle1;
     [Export] private OptionButton _optionPaddle2;
+    [Export] private HSlider _gameTimeSlider;
+    [Export] private Label _labelGameTime;
     [Export] private HSlider _sliderBall;
     [Export] private Label _labelBallSpeed;
     [Export] private HSlider _sliderPaddle1Size;
@@ -30,15 +32,15 @@ public partial class Menu : Control
         _buttonPlay.Pressed += OnButtonPlayPressed;
         ButtonReset.Visible = false;
         ButtonReset.Pressed += () => OnGameReset?.Invoke();
-        _buttonQuit.Pressed += OnButtonQuitPressed;
-        ButtonCancel.Pressed += OnButtonCancelPressed;
+        _buttonQuit.Pressed += () => GetTree().Quit();
         ButtonCancel.Visible = false;
+        ButtonCancel.Pressed += () => Visible = false;
         ButtonCancel.Pressed += () => OnGameCancel?.Invoke();
-        _sliderBall.ValueChanged += OnSliderBallValueChanged;
-        _sliderPaddle1Size.ValueChanged += OnSliderPaddle1SizeValueChanged;
-        _sliderPaddle2Size.ValueChanged += OnSliderPaddle2SizeValueChanged;
-        _sliderPaddle1Speed.ValueChanged += OnSliderPaddle1SpeedValueChanged;
-        _sliderPaddle2Speed.ValueChanged += OnSliderPaddle2SpeedValueChanged;
+        _sliderBall.ValueChanged += (double value) => _labelBallSpeed.Text = ((int)value).ToString("D2");
+        _sliderPaddle1Size.ValueChanged += (double value) => _labelPaddle1Size.Text = ((int)value).ToString("D2");
+        _sliderPaddle2Size.ValueChanged += (double value) => _labelPaddle2Size.Text = ((int)value).ToString("D2");
+        _sliderPaddle1Speed.ValueChanged += (double value) => _labelPaddle1Speed.Text = ((int)value).ToString("D2");
+        _sliderPaddle2Speed.ValueChanged += (double value) => _labelPaddle2Speed.Text = ((int)value).ToString("D2");
         _labelBallSpeed.Text = ((int)_sliderBall.Value).ToString("D2");
         _labelPaddle1Size.Text = ((int)_sliderPaddle1Size.Value).ToString("D2");
         _labelPaddle2Size.Text = ((int)_sliderPaddle2Size.Value).ToString("D2");
@@ -62,11 +64,4 @@ public partial class Menu : Control
         );
         GD.Print($"Controllers selected: P1 - {(PlayerType)_optionPaddle1.GetSelectedId()}, P2 - {(PlayerType)_optionPaddle2.GetSelectedId()}");
     }
-    private void OnButtonQuitPressed() => GetTree().Quit();
-    private void OnButtonCancelPressed() => Visible = false;
-    private void OnSliderBallValueChanged(double value) => _labelBallSpeed.Text = ((int)value).ToString("D2");
-    private void OnSliderPaddle1SizeValueChanged(double value) => _labelPaddle1Size.Text = ((int)value).ToString("D2");
-    private void OnSliderPaddle2SizeValueChanged(double value) => _labelPaddle2Size.Text = ((int)value).ToString("D2");
-    private void OnSliderPaddle1SpeedValueChanged(double value) => _labelPaddle1Speed.Text = ((int)value).ToString("D2");
-    private void OnSliderPaddle2SpeedValueChanged(double value) => _labelPaddle2Speed.Text = ((int)value).ToString("D2");
 }
