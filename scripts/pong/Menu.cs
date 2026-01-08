@@ -7,6 +7,7 @@ public partial class Menu : Control
     public event Action<PlayerType, PlayerType, int, int, int, int, int, Color, Color, int, int> OnGameStart;
     public event Action OnGameCancel;
     public event Action OnGameReset;
+    [ExportGroup("Buttons")]
     [Export] public Button ButtonReset { get; private set; }
     [Export] public Button ButtonCancel { get; private set; }
     [Export] private Button _buttonPlay;

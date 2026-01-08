@@ -16,6 +16,9 @@ public partial class Main : Node2D
     [Export] public Paddle PaddleP1 { get; private set; }
     [Export] public Paddle PaddleP2 { get; private set; }
     [Export] public Ball Ball { get; private set; }
+    [ExportGroup("Rects")]
+    [Export] public ColorRect CrossRect { get; private set; }
+    [Export] public ColorRect DividerRect { get; private set; }
     [ExportGroup("HUD Properties")]
     [Export] public Label ScoreP1Label { get; private set; }
     [Export] public Label ScoreP2Label { get; private set; }
@@ -84,7 +87,7 @@ public partial class Main : Node2D
         Menu.ButtonCancel.Visible = false;
         Ball.ToggleEnable();
         _isGameOver = true;
-        await ToSignal(GetTree().CreateTimer(5.0), "timeout");
+        await ToSignal(GetTree().CreateTimer(6.0), "timeout");
         MiddleScreenLabel.Visible = false;
         Menu.Visible = true;
         GameReset();
@@ -178,7 +181,9 @@ public partial class Main : Node2D
         {
             MiddleScreenLabel.Text = $"Player {( _scoreP1.CurrentScore >= _maxScore ? "1" : "2" )} Wins!";
             MiddleScreenLabel.Visible = true;
+            RainbowColorEffect(true);
             await ToSignal(GetTree().CreateTimer(8.0), "timeout");
+            RainbowColorEffect(false);
             GameOver();
             return;
         }
@@ -189,5 +194,33 @@ public partial class Main : Node2D
             TimerLabel.Text = _timeInSeconds.ToString("D4");
         } else
             GameOver();
+    }
+    /// <summary>
+    /// Applies a rainbow color effect to various game elements.
+    /// </summary>
+    private async void RainbowColorEffect(bool toggle)
+    {
+        if (!toggle)
+        {
+            CrossRect.AddThemeColorOverride("color", Colors.White);
+            DividerRect.AddThemeColorOverride("color", Colors.White);
+            ScoreP1Label.AddThemeColorOverride("font_color", Colors.White);
+            ScoreP2Label.AddThemeColorOverride("font_color", Colors.White);
+            TimerLabel.AddThemeColorOverride("font_color", Colors.White);
+            PaddleP1.ChangeColor(Colors.White);
+            PaddleP2.ChangeColor(Colors.White);
+            return;
+        }
+        while (toggle)
+        {
+            CrossRect.AddThemeColorOverride("color", new Color(GD.Randf(), GD.Randf(), GD.Randf()));
+            DividerRect.AddThemeColorOverride("color", new Color(GD.Randf(), GD.Randf(), GD.Randf()));
+            ScoreP1Label.AddThemeColorOverride("font_color", new Color(GD.Randf(), GD.Randf(), GD.Randf()));
+            ScoreP2Label.AddThemeColorOverride("font_color", new Color(GD.Randf(), GD.Randf(), GD.Randf()));
+            TimerLabel.AddThemeColorOverride("font_color", new Color(GD.Randf(), GD.Randf(), GD.Randf()));
+            PaddleP1.ChangeColor(new Color(GD.Randf(), GD.Randf(), GD.Randf()));
+            PaddleP2.ChangeColor(new Color(GD.Randf(), GD.Randf(), GD.Randf()));
+            await ToSignal(GetTree().CreateTimer(0.2f), "timeout");
+        }
     }
 }
