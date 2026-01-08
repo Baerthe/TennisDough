@@ -1,19 +1,19 @@
 [gd_scene load_steps=8 format=3 uid="uid://bnvht5v51wkfj"]
 
-[ext_resource type="Script" uid="uid://ldf13dgujunn" path="res://scripts/pong/Main.cs" id="1_242ye"]
+[ext_resource type="Script" uid="uid://ldf13dgujunn" path="res://scripts/tennis_game/Main.cs" id="1_242ye"]
 [ext_resource type="PackedScene" uid="uid://d0744oosad0d3" path="res://scenes/prefab_paddle.tscn" id="2_242ye"]
 [ext_resource type="Script" uid="uid://bjws67o000lvq" path="res://scripts/common/PauseWatcher.cs" id="2_g2830"]
 [ext_resource type="PackedScene" uid="uid://rd5g3vdir2e2" path="res://scenes/prefab_ball.tscn" id="3_wwidt"]
-[ext_resource type="Theme" uid="uid://c5b38epkeox6b" path="res://assets/themes/pong_main.tres" id="4_ufty6"]
-[ext_resource type="PackedScene" uid="uid://o4bhpha3fwb4" path="res://scenes/pong_menu.tscn" id="5_pja5u"]
+[ext_resource type="Theme" uid="uid://c5b38epkeox6b" path="res://assets/themes/tennis_game_main.tres" id="4_ufty6"]
+[ext_resource type="PackedScene" uid="uid://o4bhpha3fwb4" path="res://scenes/tennis_game_menu.tscn" id="5_pja5u"]
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_242ye"]
 a = Vector2(-20, 0)
 b = Vector2(660, 0)
 
-[node name="PongMain" type="Node2D" node_paths=PackedStringArray("Menu", "PauseWatcher", "GameTimer", "PaddleP1", "PaddleP2", "Ball", "ScoreP1Label", "ScoreP2Label")]
+[node name="tennis_gameMain" type="Node2D" node_paths=PackedStringArray("Menu", "PauseWatcher", "GameTimer", "PaddleP1", "PaddleP2", "Ball", "ScoreP1Label", "ScoreP2Label")]
 script = ExtResource("1_242ye")
-Menu = NodePath("PongMenu")
+Menu = NodePath("tennis_gameMenu")
 PauseWatcher = NodePath("PauseWatcher")
 GameTimer = NodePath("Timer")
 PaddleP1 = NodePath("Paddle1")
@@ -130,4 +130,4 @@ offset_left = 318.0
 offset_right = 322.0
 offset_bottom = 480.0
 
-[node name="PongMenu" parent="." instance=ExtResource("5_pja5u")]
+[node name="tennis_gameMenu" parent="." instance=ExtResource("5_pja5u")]

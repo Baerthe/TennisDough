@@ -1,7 +1,8 @@
-namespace Pong;
+namespace tennis_game;
 
-
-using Godot;
+/// <summary>
+/// Interface for a controller that manages paddle movement and scoring.
+/// </summary>
 public interface IController
 {
     Ball Ball { get; }

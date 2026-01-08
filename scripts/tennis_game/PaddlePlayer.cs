@@ -1,5 +1,9 @@
-namespace Pong;
+namespace tennis_game;
 
+/// <summary>
+/// AI controller for the paddle in the tennis_game.
+/// Determines paddle movement based on ball position.
+/// </summary>
 using Godot;
 public class PaddlePlayer : IController
 {

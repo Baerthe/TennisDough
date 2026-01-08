@@ -1,6 +1,9 @@
-namespace Pong;
+namespace tennis_game;
 
 using Godot;
+/// <summary>
+/// Manages the score data for an IController player.
+/// </summary>
 public sealed class Score
 {
     public byte CurrentScore { get { return _points; }}

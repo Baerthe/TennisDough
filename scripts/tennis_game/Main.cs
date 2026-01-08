@@ -1,9 +1,9 @@
-namespace Pong;
+namespace tennis_game;
 
 using Godot;
 using System;
 /// <summary>
-/// Main game controller for Pong game. Pong is a pretty simple game, so we will have Main being the controller and orchestrator of the game.
+/// Main game controller for tennis_game. tennis_game is a pretty simple game, so we will have Main being the controller and orchestrator of the game.
 /// It will manage the paddles and the ball, and handle the game logic.
 /// </summary>
 public partial class Main : Node2D

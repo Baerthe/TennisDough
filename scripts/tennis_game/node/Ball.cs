@@ -1,5 +1,9 @@
-namespace Pong;
+namespace tennis_game;
 
+/// <summary>
+/// Represents the ball in the tennis_game.
+/// Handles movement, collisions, scoring, and visual effects.
+/// </summary>
 using System;
 using Godot;
 [GlobalClass]

@@ -1,4 +1,4 @@
-namespace Pong;
+namespace tennis_game;
 
 using System;
 using Godot;
@@ -73,6 +73,9 @@ public partial class Menu : Control
         _labelPaddle1Speed.Text = ((int)_sliderPaddle1Speed.Value).ToString("D2");
         _labelPaddle2Speed.Text = ((int)_sliderPaddle2Speed.Value).ToString("D2");
         _labelMaxScore.Text = ((int)_maxScoreSlider.Value).ToString("D2");
+        // Configure color pickers
+        ConfigureColorPicker(_colorPickerPaddle1);
+        ConfigureColorPicker(_colorPickerPaddle2);
     }
     /// <summary>
     /// Toggles the visibility of the Reset and Cancel buttons.
@@ -112,5 +115,19 @@ public partial class Menu : Control
     {
         _audioPlayer.Stream = sfx;
         _audioPlayer.Play();
+    }
+    /// <summary>
+    /// Configures the appearance and behavior of a ColorPickerButton.
+    /// </summary>
+    private void ConfigureColorPicker(ColorPickerButton button)
+    {
+        ColorPicker picker = button.GetPicker();
+        picker.AddThemeConstantOverride("sv_width", 100);
+        picker.AddThemeConstantOverride("sv_height", 100);
+        picker.PresetsVisible = false;
+        picker.CanAddSwatches = false;
+        picker.SamplerVisible = false;
+        picker.ColorModesVisible = false;
+        picker.HexVisible = false;
     }
 }
