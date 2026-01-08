@@ -30,8 +30,9 @@ public partial class Main : Node2D
     {
         _scoreP1 = new Score(ScoreP1Label);
         _scoreP2 = new Score(ScoreP2Label);
-        Menu.OnGameStart += GameStart;
+        Menu.OnGameCancel += GamePause;
         Menu.OnGameReset += GameReset;
+        Menu.OnGameStart += GameStart;
         PauseWatcher.OnTogglePause += GamePause;
     }
     public override void _Process(double delta)
@@ -40,12 +41,6 @@ public partial class Main : Node2D
             return;
         _controller1.Update();
         _controller2.Update();
-    }
-    public override void _ExitTree()
-    {
-        Menu.OnGameStart -= GameStart;
-        Menu.OnGameReset -= GameReset;
-        PauseWatcher.OnTogglePause -= GamePause;
     }
     // -> Game State Functions
     private void GamePause()
@@ -80,6 +75,8 @@ public partial class Main : Node2D
         _scoreP2.Reset();
         Ball.ToggleEnable();
         _isGameOver = false;
+        if (_isPaused)
+            _isPaused = false;
     }
     private void GameStart(PlayerType player1Type, PlayerType player2Type, int ballSize, int paddle1Size, int paddle2Size, int paddle1Speed, int paddle2Speed, Color paddle1Color, Color paddle2Color)
     {
@@ -115,5 +112,10 @@ public partial class Main : Node2D
             GamePause();
         if (_isGameOver)
             GameReset();
+        else
+        {
+            Menu.ButtonReset.Visible = true;
+            Menu.ButtonCancel.Visible = true;
+        }
     }
 }

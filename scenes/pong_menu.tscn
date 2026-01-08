@@ -1,13 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://o4bhpha3fwb4"]
+[gd_scene load_steps=8 format=3 uid="uid://o4bhpha3fwb4"]
 
 [ext_resource type="Theme" uid="uid://c5b38epkeox6b" path="res://assets/themes/pong_main.tres" id="1_q33qw"]
 [ext_resource type="Script" uid="uid://bfp7radqu12n8" path="res://scripts/pong/Menu.cs" id="1_wut2e"]
 [ext_resource type="Texture2D" uid="uid://c8nrigv8n7dc8" path="res://assets/interface/icon_play_light.png" id="3_l1anq"]
+[ext_resource type="Texture2D" uid="uid://cj7irj6myj87f" path="res://assets/interface/icon_repeat_light.png" id="4_bh513"]
+[ext_resource type="Texture2D" uid="uid://bujgserp3xxm0" path="res://assets/interface/input_square.png" id="5_htdr4"]
+[ext_resource type="Texture2D" uid="uid://b2tmegq7tdaf5" path="res://assets/interface/icon_arrow_up_light.png" id="6_gpx4e"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_l1anq"]
 font_size = 36
 
-[node name="PongMenu" type="Control" node_paths=PackedStringArray("_buttonPlay", "_optionPaddle1", "_optionPaddle2", "_sliderBall", "_labelBallSpeed")]
+[node name="PongMenu" type="Control" node_paths=PackedStringArray("ButtonReset", "ButtonCancel", "_buttonPlay", "_buttonQuit", "_optionPaddle1", "_optionPaddle2", "_sliderBall", "_labelBallSpeed", "_sliderPaddle1Size", "_labelPaddle1Size", "_sliderPaddle2Size", "_labelPaddle2Size", "_sliderPaddle1Speed", "_labelPaddle1Speed", "_sliderPaddle2Speed", "_labelPaddle2Speed", "_colorPickerPaddle1", "_colorPickerPaddle2")]
 top_level = true
 z_index = 255
 texture_filter = 1
@@ -15,20 +18,39 @@ layout_mode = 3
 anchors_preset = 0
 theme = ExtResource("1_q33qw")
 script = ExtResource("1_wut2e")
+ButtonReset = NodePath("ButtonReset")
+ButtonCancel = NodePath("ButtonCancel")
 _buttonPlay = NodePath("ButtonPlay")
+_buttonQuit = NodePath("ButtonQuit")
 _optionPaddle1 = NodePath("OptionPaddle1")
 _optionPaddle2 = NodePath("OptionPaddle2")
-_sliderBall = NodePath("SliderBall")
-_labelBallSpeed = NodePath("LabelBall")
+_sliderBall = NodePath("Slider 1/SliderBall")
+_labelBallSpeed = NodePath("Slider 1/LabelBall")
+_sliderPaddle1Size = NodePath("Slider 2/SliderP1Size")
+_labelPaddle1Size = NodePath("Slider 2/LabelP1Size")
+_sliderPaddle2Size = NodePath("Slider 3/SliderP2Size")
+_labelPaddle2Size = NodePath("Slider 3/LabelP2Size")
+_sliderPaddle1Speed = NodePath("Slider 4/SliderP1Speed")
+_labelPaddle1Speed = NodePath("Slider 4/LabelP1Speed")
+_sliderPaddle2Speed = NodePath("Slider 5/SliderP2Speed")
+_labelPaddle2Speed = NodePath("Slider 5/LabelP2Speed")
+_colorPickerPaddle1 = NodePath("Color 1/ColorPickerButton")
+_colorPickerPaddle2 = NodePath("Color 2/ColorPickerButton")
+metadata/_edit_horizontal_guides_ = [78.0]
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Control" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Background" type="ColorRect" parent="Control"]
 z_index = -20
 layout_mode = 0
 offset_right = 640.0
 offset_bottom = 480.0
 color = Color(0, 0, 0, 1)
 
-[node name="ColorRect2" type="ColorRect" parent="."]
+[node name="ColorRect2" type="ColorRect" parent="Control"]
 layout_mode = 0
 offset_left = 64.0
 offset_top = 64.0
@@ -36,7 +58,15 @@ offset_right = 272.0
 offset_bottom = 480.0
 color = Color(0.39118537, 0.39118534, 0.39118534, 1)
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect3" type="ColorRect" parent="Control"]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 64.0
+offset_right = 496.0
+offset_bottom = 480.0
+color = Color(0.39118537, 0.39118534, 0.39118534, 1)
+
+[node name="ColorRect" type="ColorRect" parent="Control"]
 layout_mode = 0
 offset_top = 61.0
 offset_right = 640.0
@@ -73,16 +103,64 @@ vertical_alignment = 1
 
 [node name="ButtonPlay" type="Button" parent="."]
 layout_mode = 0
-offset_left = 488.0
-offset_top = 400.0
-offset_right = 632.0
-offset_bottom = 468.0
+offset_left = 496.0
+offset_top = 78.0
+offset_right = 640.0
+offset_bottom = 146.0
 theme_override_colors/icon_normal_color = Color(1, 1, 1, 0.23529412)
 theme_override_colors/icon_pressed_color = Color(1, 1, 1, 0.98039216)
 theme_override_colors/icon_hover_color = Color(1, 1, 1, 0.78431374)
 theme_override_font_sizes/font_size = 32
 text = "Play"
 icon = ExtResource("3_l1anq")
+flat = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="ButtonReset" type="Button" parent="."]
+layout_mode = 0
+offset_left = 496.0
+offset_top = 168.0
+offset_right = 640.0
+offset_bottom = 236.0
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 0.23529412)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 0.98039216)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 0.78431374)
+theme_override_font_sizes/font_size = 32
+text = "Reset"
+icon = ExtResource("4_bh513")
+flat = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="ButtonQuit" type="Button" parent="."]
+layout_mode = 0
+offset_left = 496.0
+offset_top = 381.0
+offset_right = 640.0
+offset_bottom = 449.0
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 0.23529412)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 0.98039216)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 0.78431374)
+theme_override_font_sizes/font_size = 32
+text = "Quit"
+icon = ExtResource("5_htdr4")
+flat = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="ButtonCancel" type="Button" parent="."]
+layout_mode = 0
+offset_left = 496.0
+offset_top = 256.0
+offset_right = 640.0
+offset_bottom = 324.0
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 0.23529412)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 0.98039216)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 0.78431374)
+theme_override_font_sizes/font_size = 32
+text = "ESC"
+icon = ExtResource("6_gpx4e")
 flat = true
 icon_alignment = 1
 expand_icon = true
@@ -121,22 +199,25 @@ popup/item_1/id = 1
 popup/item_2/text = "AI"
 popup/item_2/id = 2
 
-[node name="Label4" type="Label" parent="."]
+[node name="Slider 1" type="Control" parent="."]
+anchors_preset = 0
+
+[node name="Label4" type="Label" parent="Slider 1"]
 layout_mode = 0
 offset_left = 72.0
-offset_top = 256.0
+offset_top = 200.0
 offset_right = 256.0
-offset_bottom = 280.0
+offset_bottom = 224.0
 text = "Ball Size"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LabelBall" type="Label" parent="."]
+[node name="LabelBall" type="Label" parent="Slider 1"]
 layout_mode = 0
 offset_left = 240.0
-offset_top = 272.0
+offset_top = 216.0
 offset_right = 270.0
-offset_bottom = 304.0
+offset_bottom = 248.0
 text = "00"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -144,15 +225,249 @@ autowrap_mode = 2
 autowrap_trim_flags = 0
 justification_flags = 128
 
-[node name="SliderBall" type="HSlider" parent="."]
+[node name="SliderBall" type="HSlider" parent="Slider 1"]
 layout_mode = 0
 offset_left = 72.0
-offset_top = 280.0
+offset_top = 224.0
 offset_right = 232.0
-offset_bottom = 296.0
+offset_bottom = 240.0
 min_value = 8.0
 max_value = 32.0
 value = 16.0
 rounded = true
 tick_count = 24
 ticks_on_borders = true
+
+[node name="Slider 2" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 224.0
+offset_top = -128.0
+offset_right = 224.0
+offset_bottom = -128.0
+
+[node name="Label4" type="Label" parent="Slider 2"]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 200.0
+offset_right = 256.0
+offset_bottom = 224.0
+text = "Paddle 1 Size"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelP1Size" type="Label" parent="Slider 2"]
+layout_mode = 0
+offset_left = 240.0
+offset_top = 216.0
+offset_right = 270.0
+offset_bottom = 248.0
+text = "00"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+autowrap_trim_flags = 0
+justification_flags = 128
+
+[node name="SliderP1Size" type="HSlider" parent="Slider 2"]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 224.0
+offset_right = 224.0
+offset_bottom = 240.0
+min_value = 8.0
+max_value = 200.0
+step = 8.0
+value = 128.0
+rounded = true
+tick_count = 25
+ticks_on_borders = true
+
+[node name="Slider 3" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 224.0
+offset_top = -80.0
+offset_right = 224.0
+offset_bottom = -80.0
+
+[node name="Label4" type="Label" parent="Slider 3"]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 200.0
+offset_right = 256.0
+offset_bottom = 224.0
+text = "Paddle 2 Size"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelP2Size" type="Label" parent="Slider 3"]
+layout_mode = 0
+offset_left = 240.0
+offset_top = 216.0
+offset_right = 270.0
+offset_bottom = 248.0
+text = "00"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+autowrap_trim_flags = 0
+justification_flags = 128
+
+[node name="SliderP2Size" type="HSlider" parent="Slider 3"]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 224.0
+offset_right = 224.0
+offset_bottom = 240.0
+min_value = 8.0
+max_value = 200.0
+step = 8.0
+value = 128.0
+rounded = true
+tick_count = 25
+ticks_on_borders = true
+
+[node name="Slider 4" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 224.0
+offset_top = -32.0
+offset_right = 224.0
+offset_bottom = -32.0
+
+[node name="Label4" type="Label" parent="Slider 4"]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 200.0
+offset_right = 256.0
+offset_bottom = 224.0
+text = "Paddle 1 Speed"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelP1Speed" type="Label" parent="Slider 4"]
+layout_mode = 0
+offset_left = 229.0
+offset_top = 216.0
+offset_right = 259.0
+offset_bottom = 248.0
+text = "0000"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+autowrap_trim_flags = 0
+justification_flags = 128
+
+[node name="SliderP1Speed" type="HSlider" parent="Slider 4"]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 224.0
+offset_right = 200.0
+offset_bottom = 240.0
+min_value = 1000.0
+max_value = 3000.0
+step = 100.0
+value = 1000.0
+rounded = true
+tick_count = 25
+ticks_on_borders = true
+
+[node name="Slider 5" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 224.0
+offset_top = 16.0
+offset_right = 224.0
+offset_bottom = 16.0
+
+[node name="Label4" type="Label" parent="Slider 5"]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 200.0
+offset_right = 256.0
+offset_bottom = 224.0
+text = "Paddle 2 Speed"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelP2Speed" type="Label" parent="Slider 5"]
+layout_mode = 0
+offset_left = 229.0
+offset_top = 216.0
+offset_right = 259.0
+offset_bottom = 248.0
+text = "0000"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+autowrap_trim_flags = 0
+justification_flags = 128
+
+[node name="SliderP2Speed" type="HSlider" parent="Slider 5"]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 224.0
+offset_right = 200.0
+offset_bottom = 240.0
+min_value = 1000.0
+max_value = 3000.0
+step = 100.0
+value = 1000.0
+rounded = true
+tick_count = 25
+ticks_on_borders = true
+
+[node name="Color 1" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 224.0
+offset_top = 64.0
+offset_right = 224.0
+offset_bottom = 64.0
+
+[node name="Label4" type="Label" parent="Color 1"]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 200.0
+offset_right = 256.0
+offset_bottom = 224.0
+text = "Paddle 1 Color"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="Color 1"]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 226.0
+offset_right = 155.0
+offset_bottom = 255.0
+text = "Color Paddle 1"
+flat = true
+color = Color(1, 1, 1, 1)
+edit_alpha = false
+edit_intensity = false
+
+[node name="Color 2" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 224.0
+offset_top = 120.0
+offset_right = 224.0
+offset_bottom = 120.0
+
+[node name="Label4" type="Label" parent="Color 2"]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 200.0
+offset_right = 256.0
+offset_bottom = 224.0
+text = "Paddle 2 Color"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="Color 2"]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 226.0
+offset_right = 268.0
+offset_bottom = 255.0
+text = "Color Paddle 2"
+flat = true
+color = Color(1, 1, 1, 1)
+edit_alpha = false
+edit_intensity = false
