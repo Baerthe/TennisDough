@@ -1,6 +1,5 @@
 namespace Pong;
 
-
 using Godot;
 using System;
 /// <summary>
@@ -83,8 +82,7 @@ public partial class Main : Node2D
     {
         GameTimer.Stop();
         MiddleScreenLabel.Text = "Game Over, Returning to Menu...";
-        Menu.ButtonReset.Visible = false;
-        Menu.ButtonCancel.Visible = false;
+        Menu.ToggleButtons();
         Ball.ToggleEnable();
         _isGameOver = true;
         await ToSignal(GetTree().CreateTimer(6.0), "timeout");
@@ -164,8 +162,7 @@ public partial class Main : Node2D
         }
         if (!_isGameOver)
         {
-            Menu.ButtonReset.Visible = true;
-            Menu.ButtonCancel.Visible = true;
+            Menu.ToggleButtons();
             TimerLabel.Text = "0000";
             GameTimer.WaitTime = 1.0;
             _timeInSeconds = 0;
@@ -207,20 +204,23 @@ public partial class Main : Node2D
             ScoreP1Label.AddThemeColorOverride("font_color", Colors.White);
             ScoreP2Label.AddThemeColorOverride("font_color", Colors.White);
             TimerLabel.AddThemeColorOverride("font_color", Colors.White);
+            MiddleScreenLabel.AddThemeColorOverride("font_color", Colors.White);
             PaddleP1.ChangeColor(Colors.White);
             PaddleP2.ChangeColor(Colors.White);
             return;
         }
         while (toggle)
         {
-            CrossRect.AddThemeColorOverride("color", new Color(GD.Randf(), GD.Randf(), GD.Randf()));
-            DividerRect.AddThemeColorOverride("color", new Color(GD.Randf(), GD.Randf(), GD.Randf()));
-            ScoreP1Label.AddThemeColorOverride("font_color", new Color(GD.Randf(), GD.Randf(), GD.Randf()));
-            ScoreP2Label.AddThemeColorOverride("font_color", new Color(GD.Randf(), GD.Randf(), GD.Randf()));
-            TimerLabel.AddThemeColorOverride("font_color", new Color(GD.Randf(), GD.Randf(), GD.Randf()));
-            PaddleP1.ChangeColor(new Color(GD.Randf(), GD.Randf(), GD.Randf()));
-            PaddleP2.ChangeColor(new Color(GD.Randf(), GD.Randf(), GD.Randf()));
-            await ToSignal(GetTree().CreateTimer(0.2f), "timeout");
+            Color color = new Color(GD.Randf(), GD.Randf(), GD.Randf());
+            CrossRect.AddThemeColorOverride("color", color);
+            DividerRect.AddThemeColorOverride("color", color);
+            ScoreP1Label.AddThemeColorOverride("font_color", color);
+            ScoreP2Label.AddThemeColorOverride("font_color", color);
+            TimerLabel.AddThemeColorOverride("font_color", color);
+            MiddleScreenLabel.AddThemeColorOverride("font_color", color);
+            PaddleP1.ChangeColor(color);
+            PaddleP2.ChangeColor(color);
+            await ToSignal(GetTree().CreateTimer(0.1f), "timeout");
         }
     }
 }

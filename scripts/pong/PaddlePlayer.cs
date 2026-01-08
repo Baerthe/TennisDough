@@ -1,6 +1,5 @@
 namespace Pong;
 
-
 using Godot;
 public class PaddlePlayer : IController
 {

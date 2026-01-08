@@ -7,9 +7,13 @@ public partial class Menu : Control
     public event Action<PlayerType, PlayerType, int, int, int, int, int, Color, Color, int, int> OnGameStart;
     public event Action OnGameCancel;
     public event Action OnGameReset;
+    private AudioStreamPlayer _audioPlayer;
+    [ExportGroup("Sound Effects")]
+    [Export] private AudioStream _sfxButtonPress;
+    [Export] private AudioStream _sfxMenuOpen;
     [ExportGroup("Buttons")]
-    [Export] public Button ButtonReset { get; private set; }
-    [Export] public Button ButtonCancel { get; private set; }
+    [Export] private Button _buttonReset;
+    [Export] private Button _buttonCancel;
     [Export] private Button _buttonPlay;
     [Export] private Button _buttonQuit;
     [Export] private OptionButton _optionPaddle1;
@@ -33,13 +37,27 @@ public partial class Menu : Control
     [Export] private Label _labelMaxScore;
     public override void _Ready()
     {
+        _audioPlayer = new AudioStreamPlayer();
+        AddChild(_audioPlayer);
+        _buttonReset.Visible = false;
+        _buttonCancel.Visible = false;
+        // Connect button signals
         _buttonPlay.Pressed += OnButtonPlayPressed;
-        ButtonReset.Visible = false;
-        ButtonReset.Pressed += () => OnGameReset?.Invoke();
         _buttonQuit.Pressed += () => GetTree().Quit();
-        ButtonCancel.Visible = false;
-        ButtonCancel.Pressed += () => Visible = false;
-        ButtonCancel.Pressed += () => OnGameCancel?.Invoke();
+        _buttonCancel.Pressed += () => Visible = false;
+        _buttonReset.Pressed += () => OnGameReset?.Invoke();
+        _buttonCancel.Pressed += () => OnGameCancel?.Invoke();
+        // Connect sound effects
+        _buttonPlay.Pressed += () => PlaySfx(_sfxButtonPress);
+        _buttonQuit.Pressed += () => PlaySfx(_sfxButtonPress);
+        _buttonCancel.Pressed += () => PlaySfx(_sfxButtonPress);
+        _buttonReset.Pressed += () => PlaySfx(_sfxButtonPress);
+        VisibilityChanged += () =>
+        {
+            if (Visible)
+                PlaySfx(_sfxMenuOpen);
+        };
+        // Connect slider signals to update labels
         _gameTimeSlider.ValueChanged += (double value) => _labelGameTime.Text = ((int)value).ToString("D4");
         _sliderBall.ValueChanged += (double value) => _labelBallSpeed.Text = ((int)value).ToString("D2");
         _sliderPaddle1Size.ValueChanged += (double value) => _labelPaddle1Size.Text = ((int)value).ToString("D2");
@@ -56,6 +74,17 @@ public partial class Menu : Control
         _labelPaddle2Speed.Text = ((int)_sliderPaddle2Speed.Value).ToString("D2");
         _labelMaxScore.Text = ((int)_maxScoreSlider.Value).ToString("D2");
     }
+    /// <summary>
+    /// Toggles the visibility of the Reset and Cancel buttons.
+    /// </summary>
+    public void ToggleButtons()
+    {
+        _buttonReset.Visible = !_buttonReset.Visible;
+        _buttonCancel.Visible = !_buttonCancel.Visible;
+    }
+    /// <summary>
+    /// Handles the Play button press event. Sends the menu settings to start a new game.
+    /// </summary>
     private void OnButtonPlayPressed()
     {
         GD.Print("Play button pressed");
@@ -74,5 +103,14 @@ public partial class Menu : Control
             (int)_maxScoreSlider.Value
         );
         GD.Print($"Controllers selected: P1 - {(PlayerType)_optionPaddle1.GetSelectedId()}, P2 - {(PlayerType)_optionPaddle2.GetSelectedId()}");
+    }
+    /// <summary>
+    /// Plays a sound effect.
+    /// </summary>
+    /// <param name="sfx"></param>
+    private void PlaySfx(AudioStream sfx)
+    {
+        _audioPlayer.Stream = sfx;
+        _audioPlayer.Play();
     }
 }

@@ -1,6 +1,5 @@
 namespace Pong;
 
-
 using Godot;
 public class PaddleAI : IController
 {
