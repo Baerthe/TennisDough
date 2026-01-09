@@ -1,16 +1,17 @@
-[gd_scene load_steps=8 format=3 uid="uid://o4bhpha3fwb4"]
+[gd_scene load_steps=9 format=3 uid="uid://o4bhpha3fwb4"]
 
 [ext_resource type="Theme" uid="uid://c5b38epkeox6b" path="res://assets/themes/tennis_game_main.tres" id="1_q33qw"]
 [ext_resource type="Script" uid="uid://bfp7radqu12n8" path="res://scripts/tennis_game/Menu.cs" id="1_wut2e"]
 [ext_resource type="Texture2D" uid="uid://c8nrigv8n7dc8" path="res://assets/interface/icon_play_light.png" id="3_l1anq"]
-[ext_resource type="Texture2D" uid="uid://cj7irj6myj87f" path="res://assets/interface/icon_repeat_light.png" id="4_bh513"]
+[ext_resource type="AudioStream" uid="uid://dm33a7syuxv3q" path="res://assets/sounds/switch-a.ogg" id="3_ogmyl"]
+[ext_resource type="AudioStream" uid="uid://cn04jvmk3i1m8" path="res://assets/sounds/sfx_select.ogg" id="4_6j17o"]
 [ext_resource type="Texture2D" uid="uid://bujgserp3xxm0" path="res://assets/interface/input_square.png" id="5_htdr4"]
 [ext_resource type="Texture2D" uid="uid://b2tmegq7tdaf5" path="res://assets/interface/icon_arrow_up_light.png" id="6_gpx4e"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_l1anq"]
 font_size = 36
 
-[node name="tennis_gameMenu" type="Control" node_paths=PackedStringArray("ButtonReset", "ButtonCancel", "_buttonPlay", "_buttonQuit", "_optionPaddle1", "_optionPaddle2", "_sliderBall", "_labelBallSpeed", "_sliderPaddle1Size", "_labelPaddle1Size", "_sliderPaddle2Size", "_labelPaddle2Size", "_sliderPaddle1Speed", "_labelPaddle1Speed", "_sliderPaddle2Speed", "_labelPaddle2Speed", "_colorPickerPaddle1", "_colorPickerPaddle2")]
+[node name="tennis_gameMenu" type="Control" node_paths=PackedStringArray("_buttonCancel", "_buttonPlay", "_buttonQuit", "_optionPaddle1", "_optionPaddle2", "_sliderBall", "_labelBallSpeed", "_sliderPaddle1Size", "_labelPaddle1Size", "_sliderPaddle2Size", "_labelPaddle2Size", "_sliderPaddle1Speed", "_labelPaddle1Speed", "_sliderPaddle2Speed", "_labelPaddle2Speed", "_colorPickerPaddle1", "_colorPickerPaddle2", "_colorPickerBall", "_gameTimeSlider", "_labelGameTime", "_maxScoreSlider", "_labelMaxScore")]
 top_level = true
 z_index = 255
 texture_filter = 1
@@ -18,8 +19,9 @@ layout_mode = 3
 anchors_preset = 0
 theme = ExtResource("1_q33qw")
 script = ExtResource("1_wut2e")
-ButtonReset = NodePath("ButtonReset")
-ButtonCancel = NodePath("ButtonCancel")
+_sfxButtonPress = ExtResource("3_ogmyl")
+_sfxMenuOpen = ExtResource("4_6j17o")
+_buttonCancel = NodePath("ButtonCancel")
 _buttonPlay = NodePath("ButtonPlay")
 _buttonQuit = NodePath("ButtonQuit")
 _optionPaddle1 = NodePath("OptionPaddle1")
@@ -36,6 +38,11 @@ _sliderPaddle2Speed = NodePath("Slider 5/SliderP2Speed")
 _labelPaddle2Speed = NodePath("Slider 5/LabelP2Speed")
 _colorPickerPaddle1 = NodePath("Color 1/ColorPickerButton")
 _colorPickerPaddle2 = NodePath("Color 2/ColorPickerButton")
+_colorPickerBall = NodePath("Color 3/ColorPickerButton")
+_gameTimeSlider = NodePath("Slider 6/Slider")
+_labelGameTime = NodePath("Slider 6/Numbers")
+_maxScoreSlider = NodePath("Slider 7/Slider")
+_labelMaxScore = NodePath("Slider 7/Numbers")
 metadata/_edit_horizontal_guides_ = [78.0]
 
 [node name="Control" type="Control" parent="."]
@@ -113,22 +120,6 @@ theme_override_colors/icon_hover_color = Color(1, 1, 1, 0.78431374)
 theme_override_font_sizes/font_size = 32
 text = "Play"
 icon = ExtResource("3_l1anq")
-flat = true
-icon_alignment = 1
-expand_icon = true
-
-[node name="ButtonReset" type="Button" parent="."]
-layout_mode = 0
-offset_left = 496.0
-offset_top = 168.0
-offset_right = 640.0
-offset_bottom = 236.0
-theme_override_colors/icon_normal_color = Color(1, 1, 1, 0.23529412)
-theme_override_colors/icon_pressed_color = Color(1, 1, 1, 0.98039216)
-theme_override_colors/icon_hover_color = Color(1, 1, 1, 0.78431374)
-theme_override_font_sizes/font_size = 32
-text = "Reset"
-icon = ExtResource("4_bh513")
 flat = true
 icon_alignment = 1
 expand_icon = true
@@ -414,6 +405,88 @@ rounded = true
 tick_count = 25
 ticks_on_borders = true
 
+[node name="Slider 6" type="Control" parent="."]
+anchors_preset = 0
+offset_top = 56.0
+offset_bottom = 56.0
+
+[node name="Label" type="Label" parent="Slider 6"]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 200.0
+offset_right = 256.0
+offset_bottom = 224.0
+text = "Match Time"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Numbers" type="Label" parent="Slider 6"]
+layout_mode = 0
+offset_left = 229.0
+offset_top = 216.0
+offset_right = 259.0
+offset_bottom = 248.0
+text = "0000"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+autowrap_trim_flags = 0
+justification_flags = 128
+
+[node name="Slider" type="HSlider" parent="Slider 6"]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 224.0
+offset_right = 200.0
+offset_bottom = 240.0
+min_value = 5.0
+max_value = 960.0
+step = 5.0
+value = 5.0
+rounded = true
+tick_count = 5
+ticks_on_borders = true
+
+[node name="Slider 7" type="Control" parent="."]
+anchors_preset = 0
+offset_top = 104.0
+offset_bottom = 104.0
+
+[node name="Label" type="Label" parent="Slider 7"]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 200.0
+offset_right = 256.0
+offset_bottom = 224.0
+text = "Max Score"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Numbers" type="Label" parent="Slider 7"]
+layout_mode = 0
+offset_left = 229.0
+offset_top = 216.0
+offset_right = 259.0
+offset_bottom = 248.0
+text = "0000"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+autowrap_trim_flags = 0
+justification_flags = 128
+
+[node name="Slider" type="HSlider" parent="Slider 7"]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 224.0
+offset_right = 200.0
+offset_bottom = 240.0
+min_value = 1.0
+value = 6.0
+rounded = true
+tick_count = 5
+ticks_on_borders = true
+
 [node name="Color 1" type="Control" parent="."]
 anchors_preset = 0
 offset_left = 224.0
@@ -461,6 +534,35 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ColorPickerButton" type="ColorPickerButton" parent="Color 2"]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 226.0
+offset_right = 268.0
+offset_bottom = 255.0
+text = "Color Paddle 2"
+flat = true
+color = Color(1, 1, 1, 1)
+edit_alpha = false
+edit_intensity = false
+
+[node name="Color 3" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 224.0
+offset_top = 181.0
+offset_right = 224.0
+offset_bottom = 181.0
+
+[node name="Label4" type="Label" parent="Color 3"]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 200.0
+offset_right = 256.0
+offset_bottom = 224.0
+text = "Ball Color"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="Color 3"]
 layout_mode = 0
 offset_left = 72.0
 offset_top = 226.0

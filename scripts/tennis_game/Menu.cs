@@ -12,7 +12,6 @@ public partial class Menu : Control
     [Export] private AudioStream _sfxButtonPress;
     [Export] private AudioStream _sfxMenuOpen;
     [ExportGroup("Buttons")]
-    [Export] private Button _buttonReset;
     [Export] private Button _buttonCancel;
     [Export] private Button _buttonPlay;
     [Export] private Button _buttonQuit;
@@ -40,19 +39,16 @@ public partial class Menu : Control
     {
         _audioPlayer = new AudioStreamPlayer();
         AddChild(_audioPlayer);
-        _buttonReset.Visible = false;
         _buttonCancel.Visible = false;
         // Connect button signals
         _buttonPlay.Pressed += OnButtonPlayPressed;
         _buttonQuit.Pressed += () => GetTree().Quit();
         _buttonCancel.Pressed += () => Visible = false;
-        _buttonReset.Pressed += () => OnGameReset?.Invoke();
         _buttonCancel.Pressed += () => OnGameCancel?.Invoke();
         // Connect sound effects
         _buttonPlay.Pressed += () => PlaySfx(_sfxButtonPress);
         _buttonQuit.Pressed += () => PlaySfx(_sfxButtonPress);
         _buttonCancel.Pressed += () => PlaySfx(_sfxButtonPress);
-        _buttonReset.Pressed += () => PlaySfx(_sfxButtonPress);
         VisibilityChanged += () =>
         {
             if (Visible)
@@ -84,7 +80,6 @@ public partial class Menu : Control
     /// </summary>
     public void ToggleButtons()
     {
-        _buttonReset.Visible = !_buttonReset.Visible;
         _buttonCancel.Visible = !_buttonCancel.Visible;
     }
     /// <summary>

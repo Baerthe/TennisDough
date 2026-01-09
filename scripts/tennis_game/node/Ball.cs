@@ -78,22 +78,9 @@ public sealed partial class Ball : CharacterBody2D
         _trailParticles.ProcessMaterial.Set("color", color);
     }
     /// <summary>
-    /// Toggles whether the ball is enabled (moving) or not.
-    /// </summary>
-    public void ToggleEnable() => _isEnabled = !_isEnabled;
-    /// <summary>
-    /// Plays a sound effect.
-    /// </summary>
-    /// <param name="sfx"></param>
-    private void PlaySfx(AudioStream sfx)
-    {
-        _audioPlayer.Stream = sfx;
-        _audioPlayer.Play();
-    }
-    /// <summary>
     /// Resets the ball position and velocity when it goes out of bounds.
     /// </summary>
-    private void ResetBall()
+    public void ResetBall()
     {
         var winner = GlobalPosition.X < 0 ? false : true;
         PlaySfx(AudioScore);
@@ -114,5 +101,18 @@ public sealed partial class Ball : CharacterBody2D
             Velocity = new Vector2( -8000, GD.RandRange(-512, 512));
         else
             Velocity = new Vector2( 8000, GD.RandRange(-512, 512));
+    }
+    /// <summary>
+    /// Toggles whether the ball is enabled (moving) or not.
+    /// </summary>
+    public void ToggleEnable() => _isEnabled = !_isEnabled;
+    /// <summary>
+    /// Plays a sound effect.
+    /// </summary>
+    /// <param name="sfx"></param>
+    private void PlaySfx(AudioStream sfx)
+    {
+        _audioPlayer.Stream = sfx;
+        _audioPlayer.Play();
     }
 }
