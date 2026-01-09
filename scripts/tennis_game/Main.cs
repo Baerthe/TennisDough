@@ -37,10 +37,8 @@ public partial class Main : Node2D
     // -> Godot Overrides
     public override void _Ready()
     {
-        _audioManager = new AudioManager();
-        _pauseWatcher = new PauseWatcher();
-        AddChild(_audioManager);
-        AddChild(_pauseWatcher);
+        _audioManager = this.AddNode<AudioManager>();
+        _pauseWatcher = this.AddNode<PauseWatcher>();
         _scoreP1 = new Score(ScoreP1Label);
         _scoreP2 = new Score(ScoreP2Label);
         Menu.OnGameCancel += GamePause;
