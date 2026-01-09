@@ -1,10 +1,10 @@
 namespace tennis_game;
 
+using Godot;
 /// <summary>
 /// Represents the paddle in the tennis_game.
 /// Handles movement, resizing, and color changes.
 /// </summary>
-using Godot;
 [GlobalClass]
 public sealed partial class Paddle : CharacterBody2D
 {

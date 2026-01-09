@@ -1,11 +1,10 @@
 namespace tennis_game;
 
+using System;
+using Godot;
 /// <summary>
 /// Watches for pause input and triggers pause events.
 /// </summary>
-using System;
-using Godot;
-[GlobalClass]
 public sealed partial class PauseWatcher : Node
 {
     public event Action OnTogglePause;

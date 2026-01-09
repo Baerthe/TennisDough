@@ -2,12 +2,16 @@ namespace tennis_game;
 
 using System;
 using Godot;
+/// <summary>
+/// Represents the menu in the tennis_game.
+/// Handles user input for game settings and starts/cancels games.
+/// </summary>
 public partial class Menu : Control
 {
     public event Action<PlayerType, PlayerType, int, int, int, int, int, Color, Color, Color,int, int> OnGameStart;
     public event Action OnGameCancel;
     public event Action OnGameReset;
-    private AudioStreamPlayer _audioPlayer;
+    private AudioManager _audioManager;
     [ExportGroup("Sound Effects")]
     [Export] private AudioStream _sfxButtonPress;
     [Export] private AudioStream _sfxMenuOpen;
@@ -37,8 +41,7 @@ public partial class Menu : Control
     [Export] private Label _labelMaxScore;
     public override void _Ready()
     {
-        _audioPlayer = new AudioStreamPlayer();
-        AddChild(_audioPlayer);
+        _audioManager = AudioManager.Instance;
         _buttonCancel.Visible = false;
         // Connect button signals
         _buttonPlay.Pressed += OnButtonPlayPressed;
@@ -46,13 +49,15 @@ public partial class Menu : Control
         _buttonCancel.Pressed += () => Visible = false;
         _buttonCancel.Pressed += () => OnGameCancel?.Invoke();
         // Connect sound effects
-        _buttonPlay.Pressed += () => PlaySfx(_sfxButtonPress);
-        _buttonQuit.Pressed += () => PlaySfx(_sfxButtonPress);
-        _buttonCancel.Pressed += () => PlaySfx(_sfxButtonPress);
+        _audioManager.AddAudioClip("button_press", _sfxButtonPress);
+        _audioManager.AddAudioClip("menu_open", _sfxMenuOpen);
+        _buttonPlay.Pressed += () => _audioManager.PlayAudioClip("button_press");
+        _buttonQuit.Pressed += () => _audioManager.PlayAudioClip("button_press");
+        _buttonCancel.Pressed += () => _audioManager.PlayAudioClip("button_press");
         VisibilityChanged += () =>
         {
             if (Visible)
-                PlaySfx(_sfxMenuOpen);
+                _audioManager.PlayAudioClip("menu_open");
         };
         // Connect slider signals to update labels
         _gameTimeSlider.ValueChanged += (double value) => _labelGameTime.Text = ((int)value).ToString("D4");
@@ -104,15 +109,6 @@ public partial class Menu : Control
             (int)_maxScoreSlider.Value
         );
         GD.Print($"Controllers selected: P1 - {(PlayerType)_optionPaddle1.GetSelectedId()}, P2 - {(PlayerType)_optionPaddle2.GetSelectedId()}");
-    }
-    /// <summary>
-    /// Plays a sound effect.
-    /// </summary>
-    /// <param name="sfx"></param>
-    private void PlaySfx(AudioStream sfx)
-    {
-        _audioPlayer.Stream = sfx;
-        _audioPlayer.Play();
     }
     /// <summary>
     /// Configures the appearance and behavior of a ColorPickerButton.

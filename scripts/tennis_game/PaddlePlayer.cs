@@ -1,10 +1,10 @@
 namespace tennis_game;
 
+using Godot;
 /// <summary>
 /// AI controller for the paddle in the tennis_game.
 /// Determines paddle movement based on ball position.
 /// </summary>
-using Godot;
 public class PaddlePlayer : IController
 {
     public Ball Ball { get; private set; }

@@ -10,7 +10,6 @@ public partial class Main : Node2D
 {
     [ExportGroup("References")]
     [Export] public Menu Menu { get; private set; }
-    [Export] public PauseWatcher PauseWatcher { get; private set; }
     [Export] public Timer GameTimer {get; private set; }
     [Export] public Paddle PaddleP1 { get; private set; }
     [Export] public Paddle PaddleP2 { get; private set; }
@@ -26,6 +25,8 @@ public partial class Main : Node2D
     private bool _isGameOver = true;
     private bool _isPaused = false;
     private bool _isRainbowEffectActive = false;
+    private AudioManager _audioManager;
+    private PauseWatcher _pauseWatcher;
     private IController _controller1;
     private IController _controller2;
     private Score _scoreP1;
@@ -36,12 +37,16 @@ public partial class Main : Node2D
     // -> Godot Overrides
     public override void _Ready()
     {
+        _audioManager = new AudioManager();
+        _pauseWatcher = new PauseWatcher();
+        AddChild(_audioManager);
+        AddChild(_pauseWatcher);
         _scoreP1 = new Score(ScoreP1Label);
         _scoreP2 = new Score(ScoreP2Label);
         Menu.OnGameCancel += GamePause;
         Menu.OnGameStart += GameStart;
         GameTimer.Timeout += TimerUpdate;
-        PauseWatcher.OnTogglePause += GamePause;
+        _pauseWatcher.OnTogglePause += GamePause;
     }
     public override void _Process(double delta)
     {

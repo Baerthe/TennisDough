@@ -1,11 +1,11 @@
 namespace tennis_game;
 
+using System;
+using Godot;
 /// <summary>
 /// Represents the ball in the tennis_game.
 /// Handles movement, collisions, scoring, and visual effects.
 /// </summary>
-using System;
-using Godot;
 [GlobalClass]
 public sealed partial class Ball : CharacterBody2D
 {
@@ -15,7 +15,7 @@ public sealed partial class Ball : CharacterBody2D
     [Export] AudioStream AudioScore;
     [Export(PropertyHint.Range, "1,100")] public byte Acceleration { get; private set; } = 25;
     [Export(PropertyHint.Range, "1,100")] public byte Size { get; private set; } = 8;
-    private AudioStreamPlayer2D _audioPlayer;
+    private AudioManager _audioManager;
     private bool _isEnabled = false;
     private CollisionShape2D _collisionShape;
     private ColorRect _colorRect;
@@ -25,7 +25,9 @@ public sealed partial class Ball : CharacterBody2D
     private float _speedFactor;
     public override void _Ready()
     {
-        _audioPlayer = GetNode<AudioStreamPlayer2D>("AudioStreamPlayer2D");
+        _audioManager = AudioManager.Instance;
+        _audioManager.AddAudioClip("hit", AudioHit);
+        _audioManager.AddAudioClip("score", AudioScore);
         _collisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
         _colorRect = GetNode<ColorRect>("ColorRect");
         _trailParticles = GetNode<GpuParticles2D>("GPUParticles2D");
@@ -44,7 +46,7 @@ public sealed partial class Ball : CharacterBody2D
         var collision = MoveAndCollide(Velocity * (float)delta * _speedFactor);
         if (collision != null)
         {
-            PlaySfx(AudioHit);
+            _audioManager.PlayAudioClip("hit");
             var normal = collision.GetNormal();
             Velocity = Velocity.Bounce(normal);
             _speedFactor += _speedFactor * (Acceleration / 200.0f);
@@ -83,7 +85,7 @@ public sealed partial class Ball : CharacterBody2D
     public void ResetBall()
     {
         var winner = GlobalPosition.X < 0 ? false : true;
-        PlaySfx(AudioScore);
+        _audioManager.PlayAudioClip("score");
         OnOutOfBounds?.Invoke(winner);
         Velocity = Vector2.Zero;
         GlobalPosition = _initialPosition;
@@ -106,13 +108,4 @@ public sealed partial class Ball : CharacterBody2D
     /// Toggles whether the ball is enabled (moving) or not.
     /// </summary>
     public void ToggleEnable() => _isEnabled = !_isEnabled;
-    /// <summary>
-    /// Plays a sound effect.
-    /// </summary>
-    /// <param name="sfx"></param>
-    private void PlaySfx(AudioStream sfx)
-    {
-        _audioPlayer.Stream = sfx;
-        _audioPlayer.Play();
-    }
 }
