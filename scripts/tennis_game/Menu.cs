@@ -41,7 +41,6 @@ public partial class Menu : Control
     [Export] private Label _labelMaxScore;
     public override void _Ready()
     {
-        _audioManager = AudioManager.Instance;
         _buttonCancel.Visible = false;
         // Connect button signals
         _buttonPlay.Pressed += OnButtonPlayPressed;
@@ -49,8 +48,6 @@ public partial class Menu : Control
         _buttonCancel.Pressed += () => Visible = false;
         _buttonCancel.Pressed += () => OnGameCancel?.Invoke();
         // Connect sound effects
-        _audioManager.AddAudioClip("button_press", _sfxButtonPress);
-        _audioManager.AddAudioClip("menu_open", _sfxMenuOpen);
         _buttonPlay.Pressed += () => _audioManager.PlayAudioClip("button_press");
         _buttonQuit.Pressed += () => _audioManager.PlayAudioClip("button_press");
         _buttonCancel.Pressed += () => _audioManager.PlayAudioClip("button_press");
@@ -79,6 +76,13 @@ public partial class Menu : Control
         ConfigureColorPicker(_colorPickerPaddle1);
         ConfigureColorPicker(_colorPickerPaddle2);
         ConfigureColorPicker(_colorPickerBall);
+    }
+    public void Inject(AudioManager audioManager)
+    {
+        _audioManager = audioManager;
+        _audioManager = AudioManager.Instance;
+        _audioManager.AddAudioClip("button_press", _sfxButtonPress);
+        _audioManager.AddAudioClip("menu_open", _sfxMenuOpen);
     }
     /// <summary>
     /// Toggles the visibility of the Reset and Cancel buttons.

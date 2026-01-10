@@ -1,8 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://bnvht5v51wkfj"]
+[gd_scene load_steps=9 format=3 uid="uid://bnvht5v51wkfj"]
 
 [ext_resource type="Script" uid="uid://ldf13dgujunn" path="res://scripts/tennis_game/Main.cs" id="1_242ye"]
 [ext_resource type="PackedScene" uid="uid://d0744oosad0d3" path="res://scenes/tennis_game_paddle.tscn" id="2_242ye"]
-[ext_resource type="Script" uid="uid://bjws67o000lvq" path="res://scripts/tennis_game/node/PauseWatcher.cs" id="2_g2830"]
 [ext_resource type="PackedScene" uid="uid://rd5g3vdir2e2" path="res://scenes/prefab_ball.tscn" id="3_wwidt"]
 [ext_resource type="Theme" uid="uid://c5b38epkeox6b" path="res://assets/themes/tennis_game_main.tres" id="4_ufty6"]
 [ext_resource type="PackedScene" uid="uid://o4bhpha3fwb4" path="res://scenes/tennis_game_menu.tscn" id="5_pja5u"]
@@ -16,10 +15,9 @@ b = Vector2(660, 0)
 font = ExtResource("6_4l81j")
 font_size = 48
 
-[node name="tennis_gameMain" type="Node2D" node_paths=PackedStringArray("Menu", "PauseWatcher", "GameTimer", "PaddleP1", "PaddleP2", "Ball", "CrossRect", "DividerRect", "ScoreP1Label", "ScoreP2Label", "TimerLabel", "MiddleScreenLabel")]
+[node name="tennis_gameMain" type="Node2D" node_paths=PackedStringArray("Menu", "GameTimer", "PaddleP1", "PaddleP2", "Ball", "CrossRect", "DividerRect", "ScoreP1Label", "ScoreP2Label", "TimerLabel", "MiddleScreenLabel")]
 script = ExtResource("1_242ye")
 Menu = NodePath("tennis_gameMenu")
-PauseWatcher = NodePath("PauseWatcher")
 GameTimer = NodePath("Timer")
 PaddleP1 = NodePath("Paddle1")
 PaddleP2 = NodePath("Paddle2")
@@ -30,9 +28,6 @@ ScoreP1Label = NodePath("HUD/P1Score")
 ScoreP2Label = NodePath("HUD/P2Score")
 TimerLabel = NodePath("HUD/LabelTime")
 MiddleScreenLabel = NodePath("MiddleText")
-
-[node name="PauseWatcher" type="Node" parent="."]
-script = ExtResource("2_g2830")
 
 [node name="Timer" type="Timer" parent="."]
 

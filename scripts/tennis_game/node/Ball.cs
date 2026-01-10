@@ -25,9 +25,6 @@ public sealed partial class Ball : CharacterBody2D
     private float _speedFactor;
     public override void _Ready()
     {
-        _audioManager = AudioManager.Instance;
-        _audioManager.AddAudioClip("hit", AudioHit);
-        _audioManager.AddAudioClip("score", AudioScore);
         _collisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
         _colorRect = GetNode<ColorRect>("ColorRect");
         _trailParticles = GetNode<GpuParticles2D>("GPUParticles2D");
@@ -36,7 +33,6 @@ public sealed partial class Ball : CharacterBody2D
         _initialPosition = GlobalPosition;
         _visibleNotifier.ScreenExited += ResetBall;
         AddToGroup("ball");
-        ResetBall();
     }
     public override void _PhysicsProcess(double delta)
     {
@@ -56,6 +52,16 @@ public sealed partial class Ball : CharacterBody2D
                 Velocity = new Vector2(Velocity.X, GD.RandRange(-512, 512));
             }
         }
+    }
+    /// <summary>
+    /// Injects the AudioManager dependency for playing sound effects.
+    /// </summary>
+    /// <param name="audioManager"></param>
+    public void Inject(AudioManager audioManager)
+    {
+        _audioManager = audioManager;
+        _audioManager.AddAudioClip("hit", AudioHit);
+        _audioManager.AddAudioClip("score", AudioScore);
     }
     /// <summary>
     /// Adjusts the size of the ball and updates related components.

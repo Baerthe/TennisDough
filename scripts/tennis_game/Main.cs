@@ -35,10 +35,15 @@ public partial class Main : Node2D
     private int _maxTimeInSeconds = 9999;
     private byte _maxScore = 255;
     // -> Godot Overrides
-    public override void _Ready()
+    public override void _EnterTree()
     {
         _audioManager = this.AddNode<AudioManager>();
         _pauseWatcher = this.AddNode<PauseWatcher>();
+    }
+    public override void _Ready()
+    {
+        Ball.Inject(_audioManager);
+        Menu.Inject(_audioManager);
         _scoreP1 = new Score(ScoreP1Label);
         _scoreP2 = new Score(ScoreP2Label);
         Menu.OnGameCancel += GamePause;
@@ -192,6 +197,8 @@ public partial class Main : Node2D
             _timeInSeconds = 0;
             GameTimer.Start();
             GD.Print("Game timer started.");
+            Ball.ResetBall();
+            GD.Print("Ball reset.");
         }
     }
     /// <summary>
