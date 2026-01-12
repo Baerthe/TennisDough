@@ -1,5 +1,6 @@
-namespace tennis_game;
+namespace TennisGame;
 
+using Common;
 using System;
 using Godot;
 /// <summary>

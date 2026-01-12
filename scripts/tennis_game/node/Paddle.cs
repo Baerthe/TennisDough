@@ -1,5 +1,6 @@
-namespace tennis_game;
+namespace TennisGame;
 
+using Common;
 using Godot;
 /// <summary>
 /// Represents the paddle in the tennis_game.

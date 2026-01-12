@@ -1,4 +1,4 @@
-namespace tennis_game;
+namespace Common;
 
 using Godot;
 using System;

@@ -1,5 +1,4 @@
-namespace tennis_game;
-
+namespace Common;
 /// <summary>
 /// Direction enum for paddle movement.
 /// </summary>

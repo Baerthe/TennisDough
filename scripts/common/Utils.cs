@@ -1,7 +1,6 @@
-namespace tennis_game;
+namespace Common;
 
 using Godot;
-using System;
 /// <summary>
 /// Utility extension methods for Godot Nodes.
 /// </summary>

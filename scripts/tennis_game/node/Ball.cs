@@ -1,43 +1,23 @@
-namespace tennis_game;
+namespace TennisGame;
 
-using System;
+using Common;
 using Godot;
+using System;
 /// <summary>
 /// Represents the ball in the tennis_game.
 /// Handles movement, collisions, scoring, and visual effects.
 /// </summary>
 [GlobalClass]
-public sealed partial class Ball : CharacterBody2D
+/// TODO: Interface instead.
+public sealed partial class Ball : BallBase
 {
-    public event Action<bool> OnOutOfBounds;
-    [ExportGroup("Properties")]
-    [Export] AudioStream AudioHit;
-    [Export] AudioStream AudioScore;
-    [Export(PropertyHint.Range, "1,100")] public byte Acceleration { get; private set; } = 25;
-    [Export(PropertyHint.Range, "1,100")] public byte Size { get; private set; } = 8;
-    private AudioManager _audioManager;
-    private bool _isEnabled = false;
-    private CollisionShape2D _collisionShape;
-    private ColorRect _colorRect;
-    private GpuParticles2D _trailParticles;
-    private Vector2 _initialPosition;
-    private VisibleOnScreenNotifier2D _visibleNotifier;
-    private float _speedFactor;
     public override void _Ready()
     {
-        _collisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
-        _colorRect = GetNode<ColorRect>("ColorRect");
-        _trailParticles = GetNode<GpuParticles2D>("GPUParticles2D");
-        _visibleNotifier = GetNode<VisibleOnScreenNotifier2D>("VisibleOnScreenNotifier2D");
-        AdjustSize(Size);
-        _visibleNotifier.ScreenExited += ResetBall;
-        _initialPosition = GlobalPosition;
-        AddToGroup("ball");
+        base._Ready();
     }
     public override void _PhysicsProcess(double delta)
     {
-        if (!_isEnabled)
-            return;
+        base._PhysicsProcess(delta);
         Velocity = Velocity.Clamp(new Vector2(-12000,-12000), new Vector2(12000, 12000));
         var collision = MoveAndCollide(Velocity * (float)delta * _speedFactor);
         if (collision != null)
@@ -106,7 +86,7 @@ public sealed partial class Ball : CharacterBody2D
         {
             var winner = GlobalPosition.X < 0 ? false : true;
             _audioManager.PlayAudioClip("score");
-            OnOutOfBounds?.Invoke(winner);
+            OnOutOfBounds?.Invoke();
             if (winner)
                 Velocity = new Vector2( -8000, GD.RandRange(-512, 512));
             else

@@ -1,12 +1,13 @@
-namespace tennis_game;
+namespace Common;
 
+using TennisGame;
 /// <summary>
 /// Interface for a controller that manages paddle movement and scoring.
 /// </summary>
 public interface IController
 {
     Ball Ball { get; }
-    bool IsLeftSide { get; }
+    PlayerType PlayerType { get; }
     Paddle Paddle { get; }
     Score Score { get; }
     Direction GetInputDirection();
@@ -18,9 +19,10 @@ public interface IController
     {
         Ball.OnOutOfBounds -= OnPointScore;
     }
-    public void OnPointScore(bool isLeftSide)
+    public void OnPointScore()
     {
-        if (isLeftSide && IsLeftSide || !isLeftSide && !IsLeftSide)
+        if (PlayerType == PlayerType.Player1 && Ball.GlobalPosition.X > 0 ||
+            PlayerType == PlayerType.Player2 && Ball.GlobalPosition.X < 0)
             Score.AddPoint();
     }
     public void Update()
