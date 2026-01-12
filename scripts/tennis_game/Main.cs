@@ -96,7 +96,7 @@ public partial class Main : Node2D
             "Player 2 Wins!" :
             "It's a Tie!";
         MiddleScreenLabel.Visible = true;
-        RainbowColorEffect();
+        ToggleRainbowColorEffect();
         Menu.ToggleButtons();
         Ball.ToggleEnable();
         GameTimer.Stop();
@@ -104,7 +104,7 @@ public partial class Main : Node2D
         await ToSignal(GetTree().CreateTimer(6.0), "timeout");
         MiddleScreenLabel.Visible = false;
         Menu.Visible = true;
-        RainbowColorEffect();
+        ToggleRainbowColorEffect();
         GameReset();
     }
     /// <summary>
@@ -198,7 +198,9 @@ public partial class Main : Node2D
             GameTimer.Start();
             GD.Print("Game timer started.");
             Ball.ResetBall();
-            GD.Print("Ball reset.");
+            _scoreP1.Reset();
+            _scoreP2.Reset();
+            GD.Print("Ball and Score reset.");
         }
     }
     /// <summary>
@@ -219,7 +221,7 @@ public partial class Main : Node2D
     /// <summary>
     /// Applies a rainbow color effect to various game elements.
     /// </summary>
-    private async void RainbowColorEffect()
+    private async void ToggleRainbowColorEffect()
     {
         _isRainbowEffectActive = !_isRainbowEffectActive;
         while (_isRainbowEffectActive)

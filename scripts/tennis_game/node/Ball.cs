@@ -30,8 +30,8 @@ public sealed partial class Ball : CharacterBody2D
         _trailParticles = GetNode<GpuParticles2D>("GPUParticles2D");
         _visibleNotifier = GetNode<VisibleOnScreenNotifier2D>("VisibleOnScreenNotifier2D");
         AdjustSize(Size);
-        _initialPosition = GlobalPosition;
         _visibleNotifier.ScreenExited += ResetBall;
+        _initialPosition = GlobalPosition;
         AddToGroup("ball");
     }
     public override void _PhysicsProcess(double delta)
@@ -90,9 +90,6 @@ public sealed partial class Ball : CharacterBody2D
     /// </summary>
     public void ResetBall()
     {
-        var winner = GlobalPosition.X < 0 ? false : true;
-        _audioManager.PlayAudioClip("score");
-        OnOutOfBounds?.Invoke(winner);
         Velocity = Vector2.Zero;
         GlobalPosition = _initialPosition;
         _speedFactor = 0.05f;
@@ -105,10 +102,16 @@ public sealed partial class Ball : CharacterBody2D
                 Velocity = new Vector2( 8000, GD.RandRange(-512, 512));
             return;
         }
-        if (winner)
-            Velocity = new Vector2( -8000, GD.RandRange(-512, 512));
-        else
-            Velocity = new Vector2( 8000, GD.RandRange(-512, 512));
+        if (GlobalPosition.X != 0)
+        {
+            var winner = GlobalPosition.X < 0 ? false : true;
+            _audioManager.PlayAudioClip("score");
+            OnOutOfBounds?.Invoke(winner);
+            if (winner)
+                Velocity = new Vector2( -8000, GD.RandRange(-512, 512));
+            else
+                Velocity = new Vector2( 8000, GD.RandRange(-512, 512));
+        }
     }
     /// <summary>
     /// Toggles whether the ball is enabled (moving) or not.
