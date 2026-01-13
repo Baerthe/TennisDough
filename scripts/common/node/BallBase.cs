@@ -63,5 +63,9 @@ public abstract partial class BallBase : CharacterBody2D
     /// <summary>
     /// Toggles whether the ball is enabled (moving) or not.
     /// </summary>
-    public void ToggleEnable() => IsEnabled = !IsEnabled;
+    public void ToggleEnable()
+    {
+        IsEnabled = !IsEnabled;
+        TrailParticles.Emitting = IsEnabled;
+    }
 }
