@@ -9,17 +9,17 @@ using Godot;
 public class PaddleAI : IController
 {
     public Ball Ball { get; private set; }
-    public PlayerType PlayerType { get; private set; }
+    public bool IsLeftSide { get; private set; }
     public Paddle Paddle { get; private set; }
     public Score Score { get; private set; }
     private Direction _lastDirection = Direction.None;
-    public PaddleAI(Paddle paddle, Score score, PlayerType playerType)
+    public PaddleAI(Paddle paddle, Ball ball, Score score, bool isLeftSide)
     {
-        PlayerType = playerType;
+        IsLeftSide = isLeftSide;
         Paddle = paddle;
         Score = score;
-        Ball = Paddle.GetTree().GetNodesInGroup("ball")[0] as Ball;
-        GD.Print($"PaddleAI created for {(playerType == PlayerType.Player1 ? "Player 1" : "Player 2")}");
+        Ball = ball;
+        GD.Print($"PaddleAI created for {(IsLeftSide ? "Player 1" : "Player 2")}");
     }
     public Direction GetInputDirection()
     {

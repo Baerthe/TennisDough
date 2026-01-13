@@ -1,10 +1,12 @@
 namespace Common;
 
 using Godot;
-using System;
+/// <summary>
+/// Base class for the ball in the tennis games.
+/// Contains common properties and methods for ball behavior.
+/// </summary>
 public abstract partial class BallBase : CharacterBody2D
 {
-    public event Action OnOutOfBounds;
     [ExportGroup("Properties")]
     [Export] AudioStream AudioHit;
     [Export] AudioStream AudioScore;
@@ -15,22 +17,15 @@ public abstract partial class BallBase : CharacterBody2D
     [Export] public ColorRect ColorRect { get; private set; }
     [Export] public GpuParticles2D TrailParticles { get; private set; }
     [Export] public VisibleOnScreenNotifier2D VisibleNotifier { get; private set; }
+    public AudioManager AudioManager { get; private set; }
+    public Vector2 InitialPosition { get; private set; }
     public bool IsEnabled { get; private set; } = false;
-    private AudioManager _audioManager;
-    private Vector2 _initialPosition;
-    private VisibleOnScreenNotifier2D _visibleNotifier;
-    private float _speedFactor;
+    public float SpeedFactor = 0.05f;
     public override void _Ready()
     {
         AdjustSize(Size);
-        _visibleNotifier.ScreenExited += ResetBall;
-        _initialPosition = GlobalPosition;
-        AddToGroup("ball");
-    }
-    public override void _PhysicsProcess(double delta)
-    {
-        if (!IsEnabled)
-            return;
+        VisibleNotifier.ScreenExited += ResetBall;
+        InitialPosition = GlobalPosition;
     }
     /// <summary>
     /// Injects the AudioManager dependency for playing sound effects.
@@ -38,9 +33,9 @@ public abstract partial class BallBase : CharacterBody2D
     /// <param name="audioManager"></param>
     public void Inject(AudioManager audioManager)
     {
-        _audioManager = audioManager;
-        _audioManager.AddAudioClip("hit", AudioHit);
-        _audioManager.AddAudioClip("score", AudioScore);
+        AudioManager = audioManager;
+        AudioManager.AddAudioClip("hit", AudioHit);
+        AudioManager.AddAudioClip("score", AudioScore);
     }
     /// <summary>
     /// Adjusts the size of the ball and updates related components.
@@ -64,16 +59,9 @@ public abstract partial class BallBase : CharacterBody2D
         ColorRect.Color = color;
         TrailParticles.ProcessMaterial.Set("color", color);
     }
-    /// <summary>
-    /// Resets the ball position and velocity when it goes out of bounds.
-    /// </summary>
-    public void ResetBall()
-    {
-        Velocity = Vector2.Zero;
-        GlobalPosition = _initialPosition;
-    }
+    public abstract void ResetBall();
     /// <summary>
     /// Toggles whether the ball is enabled (moving) or not.
     /// </summary>
-    public void ToggleEnable() => _isEnabled = !_isEnabled;
+    public void ToggleEnable() => IsEnabled = !IsEnabled;
 }

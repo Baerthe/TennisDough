@@ -8,7 +8,7 @@ using System.Collections.Generic;
 /// </summary>
 public sealed partial class AudioManager : Node
 {
-    public static AudioManager Instance { get; private set; }
+    private static AudioManager _instance;
     private AudioStreamPlayer _audioPlayerChannel1;
     private AudioStreamPlayer _audioPlayerChannel2;
     private Dictionary<string, AudioStream> _audioClips;
@@ -18,9 +18,9 @@ public sealed partial class AudioManager : Node
     private bool _isChannel2Playing = false;
     public override void _Ready()
     {
-        if (Instance != null)
+        if (_instance != null)
             throw new Exception("AudioManager instance already exists.");
-        Instance = this;
+        _instance = this;
         _audioPlayerChannel1 = new AudioStreamPlayer();
         _audioPlayerChannel2 = new AudioStreamPlayer();
         AddChild(_audioPlayerChannel1);

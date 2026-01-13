@@ -81,7 +81,6 @@ public partial class Menu : Control
     public void Inject(AudioManager audioManager)
     {
         _audioManager = audioManager;
-        _audioManager = AudioManager.Instance;
         _audioManager.AddAudioClip("button_press", _sfxButtonPress);
         _audioManager.AddAudioClip("menu_open", _sfxMenuOpen);
     }

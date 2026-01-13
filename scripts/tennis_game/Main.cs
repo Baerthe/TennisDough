@@ -146,17 +146,17 @@ public partial class Main : Node2D
             _controller2.Detach();
         _controller1 = player1Type switch
         {
-            PlayerType.Player1 => new PaddlePlayer(PaddleP1, _scoreP1, true, true),
-            PlayerType.Player2 => new PaddlePlayer(PaddleP1, _scoreP1, true, false),
-            PlayerType.AI => new PaddleAI(PaddleP1, _scoreP1, true),
+            PlayerType.Player1 => new PaddlePlayer(PaddleP1, Ball, _scoreP1, true, true),
+            PlayerType.Player2 => new PaddlePlayer(PaddleP1, Ball, _scoreP1, true, false),
+            PlayerType.AI => new PaddleAI(PaddleP1, Ball, _scoreP1, true),
             _ => throw new ArgumentOutOfRangeException(nameof(player1Type), "Invalid player type")
         };
         GD.Print("Controller 1 created.");
         _controller2 = player2Type switch
         {
-            PlayerType.Player1 => new PaddlePlayer(PaddleP2, _scoreP2, false, true),
-            PlayerType.Player2 => new PaddlePlayer(PaddleP2, _scoreP2, false, false),
-            PlayerType.AI => new PaddleAI(PaddleP2, _scoreP2, false),
+            PlayerType.Player1 => new PaddlePlayer(PaddleP2, Ball, _scoreP2, false, true),
+            PlayerType.Player2 => new PaddlePlayer(PaddleP2, Ball, _scoreP2, false, false),
+            PlayerType.AI => new PaddleAI(PaddleP2, Ball, _scoreP2, false),
             _ => throw new ArgumentOutOfRangeException(nameof(player2Type), "Invalid player type")
         };
         GD.Print("Controller 2 created.");
