@@ -7,14 +7,14 @@ using System;
 /// Main game controller for tennis_game. tennis_game is a pretty simple game, so we will have Main being the controller and orchestrator of the game.
 /// It will manage the paddles and the ball, and handle the game logic.
 /// </summary>
-public partial class Main : Node2D
+public partial class MainTennis : Node2D
 {
     [ExportGroup("References")]
-    [Export] public Menu Menu { get; private set; }
+    [Export] public MenuTennis Menu { get; private set; }
     [Export] public Timer GameTimer {get; private set; }
     [Export] public Paddle PaddleP1 { get; private set; }
     [Export] public Paddle PaddleP2 { get; private set; }
-    [Export] public Ball Ball { get; private set; }
+    [Export] public BallTennis Ball { get; private set; }
     [ExportGroup("Rects")]
     [Export] public ColorRect CrossRect { get; private set; }
     [Export] public ColorRect DividerRect { get; private set; }

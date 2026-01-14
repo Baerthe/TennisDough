@@ -8,19 +8,13 @@ using System;
 /// Handles movement, collisions, scoring, and visual effects.
 /// </summary>
 [GlobalClass]
-public sealed partial class Ball : BallBase
+public sealed partial class BallTennis : BallBase
 {
     public event Action<bool> OnOutOfBounds;
-    public override void _Ready()
-    {
-        base._Ready();
-        AddToGroup("ball");
-    }
     public override void _PhysicsProcess(double delta)
     {
         if (!IsEnabled)
             return;
-        base._PhysicsProcess(delta);
         Velocity = Velocity.Clamp(new Vector2(-12000,-12000), new Vector2(12000, 12000));
         var collision = MoveAndCollide(Velocity * (float)delta * SpeedFactor);
         if (collision != null)
@@ -29,15 +23,13 @@ public sealed partial class Ball : BallBase
             var normal = collision.GetNormal();
             Velocity = Velocity.Bounce(normal);
             SpeedFactor += SpeedFactor * (Acceleration / 200.0f);
-            SpeedFactor = Mathf.Clamp(SpeedFactor, 0f, 1.2f);
-            if (Velocity.Y > -128 && Velocity.Y < 128)
-            {
+            SpeedFactor = Mathf.Clamp(SpeedFactor, 0f, 0.8f);
+            if (Velocity.Y > -256 && Velocity.Y < 256)
                 Velocity = new Vector2(Velocity.X, GD.RandRange(-512, 512));
-            }
         }
     }
     /// <summary>
-    /// Resets the ball position and velocity when it goes out of bounds.
+    /// Resets the ball position and velocity.
     /// </summary>
     public override void ResetBall()
     {

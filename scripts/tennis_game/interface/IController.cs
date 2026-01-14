@@ -6,18 +6,18 @@ using Common;
 /// </summary>
 public interface IController
 {
-    Ball Ball { get; }
+    BallTennis BallTennis { get; }
     bool IsLeftSide { get; }
     Paddle Paddle { get; }
     Score Score { get; }
     Direction GetInputDirection();
     public void Attach()
     {
-        Ball.OnOutOfBounds += OnPointScore;
+        BallTennis.OnOutOfBounds += OnPointScore;
     }
     public void Detach()
     {
-        Ball.OnOutOfBounds -= OnPointScore;
+        BallTennis.OnOutOfBounds -= OnPointScore;
     }
     public void OnPointScore(bool isLeftSide)
     {

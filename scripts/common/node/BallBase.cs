@@ -26,12 +26,13 @@ public abstract partial class BallBase : CharacterBody2D
         AdjustSize(Size);
         VisibleNotifier.ScreenExited += ResetBall;
         InitialPosition = GlobalPosition;
+        AddToGroup("ball");
     }
     /// <summary>
     /// Injects the AudioManager dependency for playing sound effects.
     /// </summary>
     /// <param name="audioManager"></param>
-    public void Inject(AudioManager audioManager)
+    public virtual void Inject(AudioManager audioManager)
     {
         AudioManager = audioManager;
         AudioManager.AddAudioClip("hit", AudioHit);

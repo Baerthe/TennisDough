@@ -8,18 +8,18 @@ using Godot;
 /// </summary>
 public class PaddlePlayer : IController
 {
-    public Ball Ball { get; private set; }
+    public BallTennis BallTennis { get; private set; }
     public bool IsLeftSide { get; private set; }
     public Paddle Paddle { get; private set; }
     public Score Score { get; private set; }
     private string _inputPrefix;
-    public PaddlePlayer(Paddle paddle, Ball ball,Score score, bool isLeftSide, bool isPlayer1)
+    public PaddlePlayer(Paddle paddle, BallTennis ball,Score score, bool isLeftSide, bool isPlayer1)
     {
         IsLeftSide = isLeftSide;
         _inputPrefix = isPlayer1 ? "p1_" : "p2_";
         Paddle = paddle;
         Score = score;
-        Ball = ball;
+        BallTennis = ball;
         GD.Print($"PaddlePlayer created for {(IsLeftSide ? "Player 1" : "Player 2")}");
     }
     public Direction GetInputDirection()

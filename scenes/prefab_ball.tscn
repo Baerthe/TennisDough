@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://rd5g3vdir2e2"]
 
-[ext_resource type="Script" uid="uid://dgbhun6vlrb4i" path="res://scripts/tennis_game/node/Ball.cs" id="1_q74i4"]
+[ext_resource type="Script" uid="uid://dgbhun6vlrb4i" path="res://scripts/tennis_game/node/BallTennis.cs" id="1_q74i4"]
 [ext_resource type="AudioStream" uid="uid://d4ihouk4557te" path="res://assets/sounds/sfx_jump.ogg" id="2_35srh"]
 [ext_resource type="AudioStream" uid="uid://buu16y6mn8h87" path="res://assets/sounds/sfx_gem.ogg" id="3_q74i4"]
 

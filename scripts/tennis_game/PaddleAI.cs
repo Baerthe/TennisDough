@@ -8,17 +8,17 @@ using Godot;
 /// </summary>
 public class PaddleAI : IController
 {
-    public Ball Ball { get; private set; }
+    public BallTennis BallTennis { get; private set; }
     public bool IsLeftSide { get; private set; }
     public Paddle Paddle { get; private set; }
     public Score Score { get; private set; }
     private Direction _lastDirection = Direction.None;
-    public PaddleAI(Paddle paddle, Ball ball, Score score, bool isLeftSide)
+    public PaddleAI(Paddle paddle, BallTennis ball, Score score, bool isLeftSide)
     {
         IsLeftSide = isLeftSide;
         Paddle = paddle;
         Score = score;
-        Ball = ball;
+        BallTennis = ball;
         GD.Print($"PaddleAI created for {(IsLeftSide ? "Player 1" : "Player 2")}");
     }
     public Direction GetInputDirection()
@@ -28,9 +28,9 @@ public class PaddleAI : IController
         Direction direction = Direction.None;
         if (flip < 20)
         {
-            if (Ball.GlobalPosition.Y < Paddle.GlobalPosition.Y - detectionZone)
+            if (BallTennis.GlobalPosition.Y < Paddle.GlobalPosition.Y - detectionZone)
                 direction = Direction.Up;
-            else if (Ball.GlobalPosition.Y > Paddle.GlobalPosition.Y + detectionZone)
+            else if (BallTennis.GlobalPosition.Y > Paddle.GlobalPosition.Y + detectionZone)
                 direction = Direction.Down;
         }
         switch (_lastDirection)

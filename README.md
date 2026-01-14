@@ -12,14 +12,14 @@ This is a tennis style game inspired by the classic Atari Pong. It features both
 The game is feature complete but may need polish or bug fixes.
 
 ### Core Components
-#### Game Loop & Management (`Main.cs`)
+#### Game Loop & Management (`MainTennis.cs`)
 The `Main` class serves as the central orchestrator. It is a `Node2D` that:
 - Manages the game state (`Playing`, `Paused`, `GameOver`).
 - Instantiates and updates Player/AI controllers.
 - Connects signals from the `Menu` and `PauseWatcher`.
 - Handles the core game timer and score tracking using `Score` objects.
 
-#### Menu System (`Menu.cs`)
+#### Menu System (`MenuTennis.cs`)
 The `Menu` class (`Control`) handles all UI interactions and game configuration. Pressing `ESC` opens this menu. It allows users to set:
 - Player Types (Human vs AI).
 - Paddle properties (Speed, Size, Color).
@@ -29,7 +29,7 @@ The `Menu` class (`Control`) handles all UI interactions and game configuration.
 
 It emits events like `OnGameStart`, `OnGameReset`, and `OnGameCancel` which `Main` subscribes to.
 
-#### Entities (`Paddle.cs`, `Ball.cs`)
+#### Entities (`Paddle.cs`, `BallTennis.cs`)
 - **Paddle**: A `CharacterBody2D` that handles physics-based movement with friction. It supports dynamic resizing and color changes.
 - **Ball**: A `CharacterBody2D` that handles bouncing physics, speed acceleration over time, and audio feedback. It detects out-of-bounds events to trigger scoring.
 
