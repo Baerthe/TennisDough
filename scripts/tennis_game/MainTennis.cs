@@ -7,7 +7,7 @@ using System;
 /// Main game controller for tennis_game. tennis_game is a pretty simple game, so we will have Main being the controller and orchestrator of the game.
 /// It will manage the paddles and the ball, and handle the game logic.
 /// </summary>
-public partial class MainTennis : Node2D
+public sealed partial class MainTennis : Node2D
 {
     [ExportGroup("References")]
     [Export] public MenuTennis Menu { get; private set; }
@@ -23,15 +23,18 @@ public partial class MainTennis : Node2D
     [Export] public Label ScoreP2Label { get; private set; }
     [Export] public Label TimerLabel { get; private set; }
     [Export] public Label MiddleScreenLabel { get; private set; }
+    // -> Switches
     private bool _isGameOver = true;
     private bool _isPaused = false;
     private bool _isRainbowEffectActive = false;
+    // -> Components
     private AudioManager _audioManager;
     private PauseWatcher _pauseWatcher;
     private IController _controller1;
     private IController _controller2;
     private Score _scoreP1;
     private Score _scoreP2;
+    // -> Fields
     private int _timeInSeconds = 0;
     private int _maxTimeInSeconds = 9999;
     private byte _maxScore = 255;

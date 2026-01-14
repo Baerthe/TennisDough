@@ -3,6 +3,9 @@ namespace BlockGame;
 using Common;
 using Godot;
 using System;
+/// <summary>
+/// Ball node for BlockGame.
+/// </summary>
 [GlobalClass]
 public sealed partial class BallBlock : BallBase
 {

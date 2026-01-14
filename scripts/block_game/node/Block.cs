@@ -1,9 +1,11 @@
 namespace BlockGame;
 
-using System;
-using Common;
 using Godot;
-public partial class Block : Area2D
+/// <summary>
+/// Represents a block in the BlockGame that can be hit by the ball.
+/// Handles hit points, color changes, and destruction effects.
+/// </summary>
+public sealed partial class Block : Area2D
 {
     [Export] public CollisionShape2D CollisionShape { get; private set; }
     [Export] public ColorRect ColorRect { get; private set; }

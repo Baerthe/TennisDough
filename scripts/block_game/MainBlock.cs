@@ -3,7 +3,10 @@ namespace BlockGame;
 using Common;
 using Godot;
 using System;
-public partial class MainBlock : Node2D
+/// <summary>
+/// Main game controller for BlockGame. BlockGame is a breakout-style game, so we will have MainBlock being the controller and orchestrator of the game.
+/// </summary>
+public sealed partial class MainBlock : Node2D
 {
     [ExportGroup("References")]
     [Export] public Timer GameTimer {get; private set; }
