@@ -7,14 +7,12 @@ using System;
 public sealed partial class BallBlock : BallBase
 {
     [Export] public AudioStream AudioOutOfBounds { get; private set; }
-    [Export] public AudioStream AudioBlockHit { get; private set; }
-    public event Action OnBlockHit;
+    public event Action<Block> OnBlockHit;
     public event Action OnOutOfBounds;
     public override void _Ready()
     {
         base._Ready();
         AudioManager.AddAudioClip("out_of_bounds", AudioOutOfBounds);
-        AudioManager.AddAudioClip("block_hit", AudioBlockHit);
     }
     public override void _PhysicsProcess(double delta)
     {
@@ -24,8 +22,8 @@ public sealed partial class BallBlock : BallBase
         var collision = MoveAndCollide(Velocity * (float)delta * SpeedFactor);
         if (collision != null)
         {
-            if (collision.GetCollider() is Block)
-                OnBlockHit?.Invoke();
+            if (collision.GetCollider() is Block block)
+                OnBlockHit?.Invoke(block);
             else
                 AudioManager.PlayAudioClip("hit");
             var normal = collision.GetNormal();
@@ -44,7 +42,6 @@ public sealed partial class BallBlock : BallBase
     {
         base.Inject(audioManager);
         AudioManager.AddAudioClip("out_of_bounds", AudioOutOfBounds);
-        AudioManager.AddAudioClip("block_hit", AudioBlockHit);
     }
     /// <summary>
     /// Resets the ball position and velocity.
