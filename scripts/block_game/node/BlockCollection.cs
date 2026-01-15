@@ -10,7 +10,7 @@ using System;
 public sealed partial class BlockCollection : Node2D
 {
     [Export] public PackedScene BlockScene { get; private set; }
-    public Vector2 BlockSize { get; private set; } = new Vector2(20, 14);
+    public Vector2 BlockSize { get; private set; } = new Vector2(24, 18);
     public Block[,] BlockArray { get; private set; }
     public Vector2 Spacing { get; private set; } = new Vector2(2, 2);
     private LevelData _currentLevel;
@@ -34,10 +34,9 @@ public sealed partial class BlockCollection : Node2D
     public void GenerateLevel(LevelData level)
     {
         _currentLevel = level;
-        BlockArray = new Block[0, 0];
         var lines = level.LevelGrid.Split("\n", StringSplitOptions.RemoveEmptyEntries);
         var height = lines.Length;
-        var width = 20;
+        var width = 24;
         BlockArray = new Block[width, height];
         for (int y = 0; y < height; y++)
         {

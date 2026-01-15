@@ -1,15 +1,27 @@
-[gd_scene load_steps=5 format=3 uid="uid://cn1qm41bj6eni"]
+[gd_scene load_steps=10 format=3 uid="uid://cn1qm41bj6eni"]
 
 [ext_resource type="Script" uid="uid://dl06k2r0qccyn" path="res://scripts/block_game/MainBlock.cs" id="1_wy0oj"]
 [ext_resource type="Script" uid="uid://c5lupxpxi5e8i" path="res://scripts/block_game/node/BlockCollection.cs" id="2_5mgrt"]
+[ext_resource type="AudioStream" uid="uid://ddw46xao4de6c" path="res://assets/sounds/sfx_bump.ogg" id="2_b78ed"]
+[ext_resource type="Resource" uid="uid://db1ixypq58ld0" path="res://assets/resources/test_level.tres" id="2_p6ga7"]
 [ext_resource type="PackedScene" uid="uid://cxqatfsk8ccsj" path="res://scenes/block_game/block_game_block.tscn" id="3_b78ed"]
+[ext_resource type="AudioStream" uid="uid://buu16y6mn8h87" path="res://assets/sounds/sfx_gem.ogg" id="3_bs432"]
+[ext_resource type="PackedScene" uid="uid://biin4ot03tbmh" path="res://scenes/block_game/block_game_ball.tscn" id="4_bs432"]
+[ext_resource type="AudioStream" uid="uid://c1jk0mq358qh" path="res://assets/sounds/sfx_hurt.ogg" id="5_3ir7k"]
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_pmr2s"]
 a = Vector2(-20, 0)
 b = Vector2(660, 0)
 
-[node name="BlockGameMain" type="Node2D"]
+[node name="BlockGameMain" type="Node2D" node_paths=PackedStringArray("Ball", "BlockCollection", "GameTimer")]
 script = ExtResource("1_wy0oj")
+Ball = NodePath("PrefabBall")
+BlockCollection = NodePath("BlockCollection")
+GameTimer = NodePath("Timer")
+TestLevel = ExtResource("2_p6ga7")
+AudioBlockHit = ExtResource("2_b78ed")
+AudioBlockDestroy = ExtResource("3_bs432")
+AudioOutOfBounds = ExtResource("5_3ir7k")
 
 [node name="World" type="Node2D" parent="."]
 
@@ -48,7 +60,12 @@ position = Vector2(0, 24)
 shape = SubResource("SegmentShape2D_pmr2s")
 
 [node name="BlockCollection" type="Node2D" parent="."]
-position = Vector2(0, 24)
+position = Vector2(18, 24)
 script = ExtResource("2_5mgrt")
 BlockScene = ExtResource("3_b78ed")
 metadata/_custom_type_script = "uid://c5lupxpxi5e8i"
+
+[node name="PrefabBall" parent="." instance=ExtResource("4_bs432")]
+position = Vector2(72, 96)
+
+[node name="Timer" type="Timer" parent="."]
