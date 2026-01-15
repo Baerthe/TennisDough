@@ -1,13 +1,13 @@
-namespace TennisGame;
+namespace BlockGame;
 
 using Common;
 using Godot;
 /// <summary>
-/// Represents the paddle in the tennis_game.
+/// Represents the paddle in the block_game.
 /// Handles movement, resizing, and color changes.
 /// </summary>
 [GlobalClass]
-public sealed partial class Paddle : CharacterBody2D
+public sealed partial class PaddleBlock : CharacterBody2D
 {
     [ExportGroup("Properties")]
     [Export(PropertyHint.Range, "1,100")] public byte Friction { get; private set; } = 25;
@@ -46,7 +46,7 @@ public sealed partial class Paddle : CharacterBody2D
     }
     public void Move(Direction direction)
     {
-        Velocity = direction == Direction.Up || direction == Direction.Left ? new Vector2(0, -Speed) : new Vector2(0, Speed);
+        Velocity = direction == Direction.Left || direction == Direction.Up ? new Vector2(0, -Speed) : new Vector2(0, Speed);
     }
     public void Resize(byte size)
     {

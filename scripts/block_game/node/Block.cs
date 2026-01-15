@@ -5,6 +5,7 @@ using Godot;
 /// Represents a block in the BlockGame that can be hit by the ball.
 /// Handles hit points, color changes, and destruction effects. Blocks must be 24 x 18 px.
 /// </summary>
+[GlobalClass]
 public sealed partial class Block : Area2D
 {
 	[Export] public CollisionShape2D CollisionShape { get; private set; }
