@@ -3,18 +3,22 @@ namespace BlockGame;
 using Common;
 using Godot;
 using System;
+using System.Reflection.Metadata;
+
 /// <summary>
 /// Main game controller for BlockGame. BlockGame is a breakout-style game, so we will have MainBlock being the controller and orchestrator of the game.
 /// </summary>
 public sealed partial class MainBlock : Node2D
 {
     [ExportGroup("References")]
+    [Export] public BlockCollection BlockCollection { get; private set; }
     [Export] public Timer GameTimer {get; private set; }
     // [Export] public Paddle PaddleP1 { get; private set; }
     [Export] public BallBlock Ball { get; private set; }
     [ExportGroup("Sounds")]
     [Export] public AudioStream AudioBlockHit { get; private set; }
     [Export] public AudioStream AudioBlockDestroy { get; private set; }
+    [Export] public AudioStream AudioOutOfBounds { get; private set; }
     [ExportGroup("Rects")]
     [Export] public ColorRect CrossRect { get; private set; }
     [Export] public ColorRect LeftWallRect { get; private set; }
@@ -47,7 +51,9 @@ public sealed partial class MainBlock : Node2D
         Ball.Inject(_audioManager);
         _audioManager.AddAudioClip("block_hit", AudioBlockHit);
         _audioManager.AddAudioClip("block_destroy", AudioBlockDestroy);
+        _audioManager.AddAudioClip("out_of_bounds", AudioOutOfBounds);
         Ball.OnBlockHit += HandleBlockHit;
+        Ball.OnOutOfBounds += HandleBallOutOfBounds;
     }
     // -> Game State Functions
     /// <summary>
@@ -80,4 +86,5 @@ public sealed partial class MainBlock : Node2D
         _audioManager.PlayAudioClip("block_hit");
         block.OnBlockHit();
     }
+    private void HandleBallOutOfBounds() => _audioManager.PlayAudioClip("out_of_bounds");
 }

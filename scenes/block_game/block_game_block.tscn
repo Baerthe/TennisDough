@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=3 uid="uid://cxqatfsk8ccsj"]
+
+[ext_resource type="Script" uid="uid://7ee6frmw3fcr" path="res://scripts/block_game/node/Block.cs" id="1_lthtf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fh6cj"]
+size = Vector2(20, 14)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nk250"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 98, 0)
+
+[node name="BlockGameBlock" type="CharacterBody2D" node_paths=PackedStringArray("CollisionShape", "ColorRect", "HitParticles")]
+script = ExtResource("1_lthtf")
+CollisionShape = NodePath("CollisionShape2D")
+ColorRect = NodePath("ColorRect")
+HitParticles = NodePath("GPUParticles2D")
+metadata/_custom_type_script = "uid://n1dle2s53omk"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_fh6cj")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(20, 14)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+process_material = SubResource("ParticleProcessMaterial_nk250")

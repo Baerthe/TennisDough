@@ -1,0 +1,54 @@
+[gd_scene load_steps=5 format=3 uid="uid://cn1qm41bj6eni"]
+
+[ext_resource type="Script" uid="uid://dl06k2r0qccyn" path="res://scripts/block_game/MainBlock.cs" id="1_wy0oj"]
+[ext_resource type="Script" uid="uid://c5lupxpxi5e8i" path="res://scripts/block_game/node/BlockCollection.cs" id="2_5mgrt"]
+[ext_resource type="PackedScene" uid="uid://cxqatfsk8ccsj" path="res://scenes/block_game/block_game_block.tscn" id="3_b78ed"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_pmr2s"]
+a = Vector2(-20, 0)
+b = Vector2(660, 0)
+
+[node name="BlockGameMain" type="Node2D"]
+script = ExtResource("1_wy0oj")
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="Background" type="ColorRect" parent="World"]
+z_index = -20
+offset_right = 640.0
+offset_bottom = 480.0
+color = Color(0, 0, 0, 1)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="World"]
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/StaticBody2D"]
+position = Vector2(0, 24)
+shape = SubResource("SegmentShape2D_pmr2s")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="World"]
+position = Vector2(24, -8)
+rotation = 1.5707964
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/StaticBody2D3"]
+position = Vector2(0, 24)
+shape = SubResource("SegmentShape2D_pmr2s")
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="World"]
+position = Vector2(664, -8)
+rotation = 1.5707964
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/StaticBody2D4"]
+position = Vector2(0, 24)
+shape = SubResource("SegmentShape2D_pmr2s")
+
+[node name="BlockCollection" type="Node2D" parent="."]
+position = Vector2(0, 24)
+script = ExtResource("2_5mgrt")
+BlockScene = ExtResource("3_b78ed")
+metadata/_custom_type_script = "uid://c5lupxpxi5e8i"

@@ -11,7 +11,7 @@
 [sub_resource type="LabelSettings" id="LabelSettings_l1anq"]
 font_size = 36
 
-[node name="tennis_gameMenu" type="Control" node_paths=PackedStringArray("_buttonCancel", "_buttonPlay", "_buttonQuit", "_optionPaddle1", "_optionPaddle2", "_sliderBall", "_labelBallSpeed", "_sliderPaddle1Size", "_labelPaddle1Size", "_sliderPaddle2Size", "_labelPaddle2Size", "_sliderPaddle1Speed", "_labelPaddle1Speed", "_sliderPaddle2Speed", "_labelPaddle2Speed", "_colorPickerPaddle1", "_colorPickerPaddle2", "_colorPickerBall", "_gameTimeSlider", "_labelGameTime", "_maxScoreSlider", "_labelMaxScore")]
+[node name="TenisGameMenu" type="Control" node_paths=PackedStringArray("_buttonCancel", "_buttonPlay", "_buttonQuit", "_optionPaddle1", "_optionPaddle2", "_sliderBall", "_labelBallSpeed", "_sliderPaddle1Size", "_labelPaddle1Size", "_sliderPaddle2Size", "_labelPaddle2Size", "_sliderPaddle1Speed", "_labelPaddle1Speed", "_sliderPaddle2Speed", "_labelPaddle2Speed", "_colorPickerPaddle1", "_colorPickerPaddle2", "_colorPickerBall", "_gameTimeSlider", "_labelGameTime", "_maxScoreSlider", "_labelMaxScore")]
 top_level = true
 z_index = 255
 texture_filter = 1

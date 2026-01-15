@@ -6,7 +6,8 @@ using System;
 /// <summary>
 /// Manages a collection of blocks in the BlockGame.
 /// </summary>
-public sealed partial class BlockCollection : Area2D
+[GlobalClass]
+public sealed partial class BlockCollection : Node2D
 {
     [Export] public PackedScene BlockScene { get; private set; }
     public Vector2 BlockSize { get; private set; } = new Vector2(20, 14);

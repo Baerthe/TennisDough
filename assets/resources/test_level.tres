@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="LevelData" load_steps=2 format=3 uid="uid://db1ixypq58ld0"]
+
+[ext_resource type="Script" uid="uid://b3wahynwgc3rg" path="res://scripts/block_game/resource/LevelData.cs" id="1_m8ceq"]
+
+[resource]
+script = ExtResource("1_m8ceq")
+LevelGrid = "00000000000000000000
+00000023211100000000
+00000000000100000000
+00000220000100000000
+00000000000200000030"
+metadata/_custom_type_script = "uid://b3wahynwgc3rg"
