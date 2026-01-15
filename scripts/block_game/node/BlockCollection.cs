@@ -6,27 +6,37 @@ using System;
 /// <summary>
 /// Manages a collection of blocks in the BlockGame.
 /// </summary>
-public sealed partial class BlockCollection : Node2D
+public sealed partial class BlockCollection : Area2D
 {
     [Export] public PackedScene BlockScene { get; private set; }
-    public Vector2 BlockSize { get; private set; } = new Vector2(32, 16);
+    public Vector2 BlockSize { get; private set; } = new Vector2(20, 14);
     public Block[,] BlockArray { get; private set; }
     public Vector2 Spacing { get; private set; } = new Vector2(2, 2);
+    private LevelData _currentLevel;
     /// <summary>
-    /// Generates a level based on the provided LevelData.
+    /// Cleans up all blocks from the current level.
+    /// </summary>
+    public void ClearLevel()
+    {
+        foreach (var block in GetTree().GetNodesInGroup("block"))
+        {
+            if (block is Block b)
+                b.QueueFree();
+        }
+        BlockArray = new Block[0, 0];
+        _currentLevel = null;
+    }
+    /// <summary>
+    /// Generates a level based on the provided LevelData. It adds them within the BlockCollection node space.
     /// </summary>
     /// <param name="level"></param>
     public void GenerateLevel(LevelData level)
     {
+        _currentLevel = level;
         BlockArray = new Block[0, 0];
         var lines = level.LevelGrid.Split("\n", StringSplitOptions.RemoveEmptyEntries);
         var height = lines.Length;
-        var width = 0;
-        foreach (var line in lines)
-        {
-            if (line.Length > width)
-                width = line.Length;
-        }
+        var width = 20;
         BlockArray = new Block[width, height];
         for (int y = 0; y < height; y++)
         {
@@ -47,6 +57,17 @@ public sealed partial class BlockCollection : Node2D
                     }
                 }
             }
+        }
+    }
+    /// <summary>
+    /// Resets the current level by clearing and regenerating it.
+    /// </summary>
+    public void ResetLevel()
+    {
+        if (_currentLevel != null)
+        {
+            ClearLevel();
+            GenerateLevel(_currentLevel);
         }
     }
 }

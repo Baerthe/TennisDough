@@ -3,7 +3,7 @@ namespace BlockGame;
 using Godot;
 /// <summary>
 /// Represents a block in the BlockGame that can be hit by the ball.
-/// Handles hit points, color changes, and destruction effects.
+/// Handles hit points, color changes, and destruction effects. Blocks must be 20 x 14 px in size to accommodate the BlockCollection layout (20 per row, 14 rows, 2px spacing).
 /// </summary>
 public sealed partial class Block : Area2D
 {
