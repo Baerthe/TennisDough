@@ -65,6 +65,8 @@ public sealed partial class MainBlock : Node2D
         _ball.OnOutOfBounds += HandleBallOutOfBounds;
         _gameTimer.Timeout += HandleTimerUpdate;
         _pauseWatcher.OnTogglePause += GamePause;
+        // Connect Audio Events
+        _menu.OnGameStart += () => _audioManager.PlayAudioClip("menu_close");
         // ! Debug init
         _blockCollection.GenerateLevel();
         // ! End Debug init
