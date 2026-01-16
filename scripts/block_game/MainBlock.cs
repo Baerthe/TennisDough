@@ -2,32 +2,34 @@ namespace BlockGame;
 
 using Common;
 using Godot;
-using System;
-using System.Reflection.Metadata;
-
 /// <summary>
 /// Main game controller for BlockGame. BlockGame is a breakout-style game, so we will have MainBlock being the controller and orchestrator of the game.
 /// </summary>
 public sealed partial class MainBlock : Node2D
 {
     [ExportGroup("References")]
-    [Export] public BallBlock Ball { get; private set; }
-    [Export] public BlockCollection BlockCollection { get; private set; }
-    [Export] public Timer GameTimer {get; private set; }
-    [Export] public LevelData TestLevel { get; private set; }
+    [Export] private MenuBlock _menu;
+    [Export] private BallBlock _ball;
+    [Export] private BlockCollection _blockCollection;
+    [Export] private Timer _gameTimer;
+    [Export] private LevelData _testLevel;
     // [Export] public Paddle PaddleP1 { get; private set; }
     [ExportGroup("Sounds")]
-    [Export] public AudioStream AudioBlockHit { get; private set; }
-    [Export] public AudioStream AudioBlockDestroy { get; private set; }
-    [Export] public AudioStream AudioOutOfBounds { get; private set; }
+    [Export] private AudioStream _audioBlockHit;
+    [Export] private AudioStream _audioBlockDestroy;
+    [Export] private AudioStream _audioOutOfBounds;
+    [Export] private AudioStream _sfxButtonPress;
+    [Export] private AudioStream _sfxMenuOpen;
+    [Export] private AudioStream _sfxMenuClose;
+    [Export] private AudioStream _sfxGameOver;
     [ExportGroup("Rects")]
-    [Export] public ColorRect CrossRect { get; private set; }
-    [Export] public ColorRect LeftWallRect { get; private set; }
-    [Export] public ColorRect RightWallRect { get; private set; }
+    [Export] private ColorRect _crossRect;
+    [Export] private ColorRect _leftWallRect;
+    [Export] private ColorRect _rightWallRect;
     [ExportGroup("HUD Properties")]
-    [Export] public Label ScoreLabel { get; private set; }
-    [Export] public Label TimerLabel { get; private set; }
-    [Export] public Label MiddleScreenLabel { get; private set; }
+    [Export] private Label _scoreLabel;
+    [Export] private Label _timerLabel;
+    [Export] private Label _middleScreenLabel;
     // -> Switches
     private bool _isGameOver = false;
     private bool _isPaused = false;
@@ -45,17 +47,27 @@ public sealed partial class MainBlock : Node2D
     {
         _audioManager = this.AddNode<AudioManager>();
         _pauseWatcher = this.AddNode<PauseWatcher>();
-        //_score = new Score(ScoreLabel);
     }
     public override void _Ready()
     {
-        Ball.Inject(_audioManager);
-        _audioManager.AddAudioClip("block_hit", AudioBlockHit);
-        _audioManager.AddAudioClip("block_destroy", AudioBlockDestroy);
-        _audioManager.AddAudioClip("out_of_bounds", AudioOutOfBounds);
-        Ball.OnBlockHit += HandleBlockHit;
-        Ball.OnOutOfBounds += HandleBallOutOfBounds;
-        BlockCollection.GenerateLevel(TestLevel);
+        _score = new Score(_scoreLabel);
+        _ball.Inject(_audioManager);
+        // Setup AudioManager
+        _audioManager.AddAudioClip("block_hit", _audioBlockHit);
+        _audioManager.AddAudioClip("block_destroy", _audioBlockDestroy);
+        _audioManager.AddAudioClip("out_of_bounds", _audioOutOfBounds);
+        _audioManager.AddAudioClip("button_press", _sfxButtonPress);
+        _audioManager.AddAudioClip("menu_open", _sfxMenuOpen);
+        _audioManager.AddAudioClip("menu_close", _sfxMenuClose);
+        _audioManager.AddAudioClip("game_over", _sfxGameOver);
+        // Connect Events
+        _ball.OnBlockHit += HandleBlockHit;
+        _ball.OnOutOfBounds += HandleBallOutOfBounds;
+        _gameTimer.Timeout += HandleTimerUpdate;
+        _pauseWatcher.OnTogglePause += GamePause;
+        // ! Debug init
+        _blockCollection.GenerateLevel(_testLevel);
+        // ! End Debug init
     }
     // -> Game State Functions
     /// <summary>
@@ -67,26 +79,47 @@ public sealed partial class MainBlock : Node2D
             return;
         if (_isPaused)
         {
-            if (GameTimer.IsStopped())
-                GameTimer.Start();
-            GameTimer.Paused = false;
-            Ball.ToggleEnable();
-           // Menu.Visible = false;
+            if (_gameTimer.IsStopped())
+                _gameTimer.Start();
+            _gameTimer.Paused = false;
+            _ball.ToggleEnable();
+            _menu.Visible = false;
             _isPaused = false;
         }
         else
         {
-            GameTimer.Paused = true;
-            Ball.ToggleEnable();
-           // Menu.Visible = true;
+            _gameTimer.Paused = true;
+            _ball.ToggleEnable();
+            _menu.Visible = true;
             _isPaused = true;
         }
     }
     // -> Event Handlers
+    /// <summary>
+    /// Handles the block being hit by the ball.
+    /// </summary>
+    /// <param name="block"></param>
     private void HandleBlockHit(Block block)
     {
         _audioManager.PlayAudioClip("block_hit");
         block.OnBlockHit();
+        _score.AddPoint();
     }
+    /// <summary>
+    /// Handles the ball going out of bounds.
+    /// </summary>
     private void HandleBallOutOfBounds() => _audioManager.PlayAudioClip("out_of_bounds");
+    /// <summary>
+    /// Updates the game timer each second. Calls GameOver if the max time (or score) is reached.
+    /// </summary>
+    private async void HandleTimerUpdate()
+    {
+        if (_timeInSeconds < _maxTimeInSeconds)
+        {
+            _timeInSeconds++;
+            int time = _maxTimeInSeconds - _timeInSeconds;
+            _timerLabel.Text = time.ToString("D4");
+        } //else
+            //GameOver();
+    }
 }

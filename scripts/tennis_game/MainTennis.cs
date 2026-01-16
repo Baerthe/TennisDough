@@ -10,19 +10,19 @@ using System;
 public sealed partial class MainTennis : Node2D
 {
     [ExportGroup("References")]
-    [Export] public MenuTennis Menu { get; private set; }
-    [Export] public Timer GameTimer {get; private set; }
-    [Export] public Paddle PaddleP1 { get; private set; }
-    [Export] public Paddle PaddleP2 { get; private set; }
-    [Export] public BallTennis Ball { get; private set; }
+    [Export] private MenuTennis _menu;
+    [Export] private Timer _gameTimer;
+    [Export] private Paddle _paddleP1;
+    [Export] private Paddle _paddleP2;
+    [Export] private BallTennis _ball;
     [ExportGroup("Rects")]
-    [Export] public ColorRect CrossRect { get; private set; }
-    [Export] public ColorRect DividerRect { get; private set; }
+    [Export] private ColorRect _crossRect;
+    [Export] private ColorRect _dividerRect;
     [ExportGroup("HUD Properties")]
-    [Export] public Label ScoreP1Label { get; private set; }
-    [Export] public Label ScoreP2Label { get; private set; }
-    [Export] public Label TimerLabel { get; private set; }
-    [Export] public Label MiddleScreenLabel { get; private set; }
+    [Export] private Label _scoreP1Label;
+    [Export] private Label _scoreP2Label;
+    [Export] private Label _timerLabel;
+    [Export] private Label _middleScreenLabel;
     // -> Switches
     private bool _isGameOver = true;
     private bool _isPaused = false;
@@ -46,13 +46,13 @@ public sealed partial class MainTennis : Node2D
     }
     public override void _Ready()
     {
-        Ball.Inject(_audioManager);
-        Menu.Inject(_audioManager);
-        _scoreP1 = new Score(ScoreP1Label);
-        _scoreP2 = new Score(ScoreP2Label);
-        Menu.OnGameCancel += GamePause;
-        Menu.OnGameStart += GameStart;
-        GameTimer.Timeout += TimerUpdate;
+        _ball.Inject(_audioManager);
+        _menu.Inject(_audioManager);
+        _scoreP1 = new Score(_scoreP1Label);
+        _scoreP2 = new Score(_scoreP2Label);
+        _menu.OnGameCancel += GamePause;
+        _menu.OnGameStart += GameStart;
+        _gameTimer.Timeout += TimerUpdate;
         _pauseWatcher.OnTogglePause += GamePause;
     }
     public override void _Process(double delta)
@@ -72,18 +72,18 @@ public sealed partial class MainTennis : Node2D
             return;
         if (_isPaused)
         {
-            if (GameTimer.IsStopped())
-                GameTimer.Start();
-            GameTimer.Paused = false;
-            Ball.ToggleEnable();
-            Menu.Visible = false;
+            if (_gameTimer.IsStopped())
+                _gameTimer.Start();
+            _gameTimer.Paused = false;
+            _ball.ToggleEnable();
+            _menu.Visible = false;
             _isPaused = false;
         }
         else
         {
-            GameTimer.Paused = true;
-            Ball.ToggleEnable();
-            Menu.Visible = true;
+            _gameTimer.Paused = true;
+            _ball.ToggleEnable();
+            _menu.Visible = true;
             _isPaused = true;
         }
     }
@@ -93,21 +93,21 @@ public sealed partial class MainTennis : Node2D
     private async void GameOver()
     {
         _isGameOver = true;
-        MiddleScreenLabel.Text =
+        _middleScreenLabel.Text =
             _scoreP1.CurrentScore > _scoreP2.CurrentScore ?
             "Player 1 Wins!" :
             _scoreP2.CurrentScore > _scoreP1.CurrentScore ?
             "Player 2 Wins!" :
             "It's a Tie!";
-        MiddleScreenLabel.Visible = true;
+        _middleScreenLabel.Visible = true;
         ToggleRainbowColorEffect();
-        Menu.ToggleButtons();
-        Ball.ToggleEnable();
-        GameTimer.Stop();
-        MiddleScreenLabel.Visible = true;
+        _menu.ToggleButtons();
+        _ball.ToggleEnable();
+        _gameTimer.Stop();
+        _middleScreenLabel.Visible = true;
         await ToSignal(GetTree().CreateTimer(6.0), "timeout");
-        MiddleScreenLabel.Visible = false;
-        Menu.Visible = true;
+        _middleScreenLabel.Visible = false;
+        _menu.Visible = true;
         ToggleRainbowColorEffect();
         GameReset();
     }
@@ -116,10 +116,10 @@ public sealed partial class MainTennis : Node2D
     /// </summary>
     private void GameReset()
     {
-        GameTimer.Stop();
-        PaddleP1.ResetPosition();
-        PaddleP2.ResetPosition();
-        Ball.ResetBall();
+        _gameTimer.Stop();
+        _paddleP1.ResetPosition();
+        _paddleP2.ResetPosition();
+        _ball.ResetBall();
         _scoreP1.Reset();
         _scoreP2.Reset();
         _timeInSeconds = 0;
@@ -149,17 +149,17 @@ public sealed partial class MainTennis : Node2D
             _controller2.Detach();
         _controller1 = player1Type switch
         {
-            PlayerType.Player1 => new PaddlePlayer(PaddleP1, Ball, _scoreP1, true, true),
-            PlayerType.Player2 => new PaddlePlayer(PaddleP1, Ball, _scoreP1, true, false),
-            PlayerType.AI => new PaddleAI(PaddleP1, Ball, _scoreP1, true),
+            PlayerType.Player1 => new PaddlePlayer(_paddleP1, _ball, _scoreP1, true, true),
+            PlayerType.Player2 => new PaddlePlayer(_paddleP1, _ball, _scoreP1, true, false),
+            PlayerType.AI => new PaddleAI(_paddleP1, _ball, _scoreP1, true),
             _ => throw new ArgumentOutOfRangeException(nameof(player1Type), "Invalid player type")
         };
         GD.Print("Controller 1 created.");
         _controller2 = player2Type switch
         {
-            PlayerType.Player1 => new PaddlePlayer(PaddleP2, Ball, _scoreP2, false, true),
-            PlayerType.Player2 => new PaddlePlayer(PaddleP2, Ball, _scoreP2, false, false),
-            PlayerType.AI => new PaddleAI(PaddleP2, Ball, _scoreP2, false),
+            PlayerType.Player1 => new PaddlePlayer(_paddleP2, _ball, _scoreP2, false, true),
+            PlayerType.Player2 => new PaddlePlayer(_paddleP2, _ball, _scoreP2, false, false),
+            PlayerType.AI => new PaddleAI(_paddleP2, _ball, _scoreP2, false),
             _ => throw new ArgumentOutOfRangeException(nameof(player2Type), "Invalid player type")
         };
         GD.Print("Controller 2 created.");
@@ -168,18 +168,18 @@ public sealed partial class MainTennis : Node2D
         if (_isGameOver)
             _isGameOver = false;
         GD.Print("Controllers attached.");
-        MiddleScreenLabel.Visible = false;
-        Ball.AdjustSize((byte)ballSize);
-        Ball.AdjustColor(ballColor);
+        _middleScreenLabel.Visible = false;
+        _ball.AdjustSize((byte)ballSize);
+        _ball.AdjustColor(ballColor);
         GD.Print("Ball adjusted.");
-        PaddleP1.Resize((byte)paddle1Size);
-        PaddleP2.Resize((byte)paddle2Size);
+        _paddleP1.Resize((byte)paddle1Size);
+        _paddleP2.Resize((byte)paddle2Size);
         GD.Print("Paddles resized.");
-        PaddleP1.ChangeSpeed((uint)paddle1Speed);
-        PaddleP2.ChangeSpeed((uint)paddle2Speed);
+        _paddleP1.ChangeSpeed((uint)paddle1Speed);
+        _paddleP2.ChangeSpeed((uint)paddle2Speed);
         GD.Print("Paddles speed changed.");
-        PaddleP1.AdjustColor(paddle1Color);
-        PaddleP2.AdjustColor(paddle2Color);
+        _paddleP1.AdjustColor(paddle1Color);
+        _paddleP2.AdjustColor(paddle2Color);
         GD.Print("Paddles color adjusted.");
         _maxTimeInSeconds = gameTime;
         GD.Print("Game time set.");
@@ -193,15 +193,15 @@ public sealed partial class MainTennis : Node2D
         if (!_isGameOver)
         {
             GD.Print("Game already in progress.");
-            Menu.ToggleButtons();
+            _menu.ToggleButtons();
             GD.Print("Buttons toggled.");
-            Ball.ToggleEnable();
+            _ball.ToggleEnable();
             GD.Print("Ball enabled.");
-            GameTimer.WaitTime = 1.0;
+            _gameTimer.WaitTime = 1.0;
             _timeInSeconds = 0;
-            GameTimer.Start();
+            _gameTimer.Start();
             GD.Print("Game timer started.");
-            Ball.ResetBall();
+            _ball.ResetBall();
             _scoreP1.Reset();
             _scoreP2.Reset();
             GD.Print("Ball and Score reset.");
@@ -218,7 +218,7 @@ public sealed partial class MainTennis : Node2D
         {
             _timeInSeconds++;
             int time = _maxTimeInSeconds - _timeInSeconds;
-            TimerLabel.Text = time.ToString("D4");
+            _timerLabel.Text = time.ToString("D4");
         } else
             GameOver();
     }
@@ -231,26 +231,26 @@ public sealed partial class MainTennis : Node2D
         while (_isRainbowEffectActive)
         {
             Color color = new Color(GD.Randf(), GD.Randf(), GD.Randf());
-            CrossRect.Color = color;
-            DividerRect.Color = color;
-            ScoreP1Label.AddThemeColorOverride("font_color", color);
-            ScoreP2Label.AddThemeColorOverride("font_color", color);
-            TimerLabel.AddThemeColorOverride("font_color", color);
-            MiddleScreenLabel.AddThemeColorOverride("font_color", color);
-            PaddleP1.AdjustColor(color);
-            PaddleP2.AdjustColor(color);
-            Ball.AdjustColor(color);
+            _crossRect.Color = color;
+            _dividerRect.Color = color;
+            _scoreP1Label.AddThemeColorOverride("font_color", color);
+            _scoreP2Label.AddThemeColorOverride("font_color", color);
+            _timerLabel.AddThemeColorOverride("font_color", color);
+            _middleScreenLabel.AddThemeColorOverride("font_color", color);
+            _paddleP1.AdjustColor(color);
+            _paddleP2.AdjustColor(color);
+            _ball.AdjustColor(color);
             await ToSignal(GetTree().CreateTimer(0.1f), "timeout");
         }
         Color white = new Color(1, 1, 1);
-        CrossRect.Color = white;
-        DividerRect.Color = white;
-        ScoreP1Label.AddThemeColorOverride("font_color", white);
-        ScoreP2Label.AddThemeColorOverride("font_color", white);
-        TimerLabel.AddThemeColorOverride("font_color", white);
-        MiddleScreenLabel.AddThemeColorOverride("font_color", white);
-        PaddleP1.AdjustColor(white);
-        PaddleP2.AdjustColor(white);
-        Ball.AdjustColor(white);
+        _crossRect.Color = white;
+        _dividerRect.Color = white;
+        _scoreP1Label.AddThemeColorOverride("font_color", white);
+        _scoreP2Label.AddThemeColorOverride("font_color", white);
+        _timerLabel.AddThemeColorOverride("font_color", white);
+        _middleScreenLabel.AddThemeColorOverride("font_color", white);
+        _paddleP1.AdjustColor(white);
+        _paddleP2.AdjustColor(white);
+        _ball.AdjustColor(white);
     }
 }
