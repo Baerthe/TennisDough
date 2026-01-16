@@ -34,20 +34,33 @@ public sealed partial class PaddleBlock : CharacterBody2D
         Velocity = Velocity * _fixedFriction;
         MoveAndCollide(Velocity * (float)delta);
     }
-    public void AdjustColor(Color color)
-    {
-        _colorRect.Color = color;
-    }
+    /// <summary>
+    /// Adjusts the color of the paddle.
+    /// </summary>
+    /// <param name="color"></param>
+    public void AdjustColor(Color color) => _colorRect.Color = color;
+    /// <summary>
+    /// Changes the speed of the paddle.
+    /// </summary>
+    /// <param name="speed"></param>
     public void ChangeSpeed(uint speed)
     {
         if (speed < 100 || speed > 10000)
             return;
         Speed = speed;
     }
+    /// <summary>
+    /// Moves the paddle in the specified direction.
+    /// </summary>
+    /// <param name="direction"></param>
     public void Move(Direction direction)
     {
         Velocity = direction == Direction.Left || direction == Direction.Up ? new Vector2(0, -Speed) : new Vector2(0, Speed);
     }
+    /// <summary>
+    /// Resizes the paddle.
+    /// </summary>
+    /// <param name="size"></param>
     public void Resize(byte size)
     {
         Size = size;
@@ -55,6 +68,9 @@ public sealed partial class PaddleBlock : CharacterBody2D
         _colorRect.Size = new Vector2(24, Size);
         _colorRect.Position = new Vector2(-12, -Size / 2);
     }
+    /// <summary>
+    /// Resets the paddle to its initial position.
+    /// </summary>
     public void ResetPosition()
     {
         Velocity = Vector2.Zero;

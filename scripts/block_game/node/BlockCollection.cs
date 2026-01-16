@@ -29,14 +29,31 @@ public sealed partial class BlockCollection : Node2D
     }
     /// <summary>
     /// Generates a level based on the provided LevelData. It adds them within the BlockCollection node space.
+    /// Leave level as null to generate a random level.
     /// </summary>
     /// <param name="level"></param>
-    public void GenerateLevel(LevelData level)
+    public void GenerateLevel(LevelData level = null)
     {
         _currentLevel = level;
-        var lines = level.LevelGrid.Split("\n", StringSplitOptions.RemoveEmptyEntries);
-        var height = lines.Length;
+        var lines = null as string[];
         var width = 24;
+        if (level == null)
+        {
+            byte randLines = (byte)GD.RandRange(5, 15);
+            lines = new string[randLines];
+            for (byte i = 0; i < randLines; i++)
+            {
+                string line = "";
+                for (byte j = 0; j < width; j++)
+                {
+                     line += GD.RandRange(0, 4).ToString();
+                }
+                lines[i] = line;
+            }
+        }
+        else
+            lines = level.LevelGrid.Split("\n", StringSplitOptions.RemoveEmptyEntries);
+        var height = lines.Length;
         BlockArray = new Block[width, height];
         for (int y = 0; y < height; y++)
         {

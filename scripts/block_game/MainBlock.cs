@@ -13,7 +13,7 @@ public sealed partial class MainBlock : Node2D
     [Export] private BlockCollection _blockCollection;
     [Export] private Timer _gameTimer;
     [Export] private LevelData _testLevel;
-    // [Export] public Paddle PaddleP1 { get; private set; }
+    [Export] public PaddleBlock _paddle;
     [ExportGroup("Sounds")]
     [Export] private AudioStream _audioBlockHit;
     [Export] private AudioStream _audioBlockDestroy;
@@ -30,19 +30,19 @@ public sealed partial class MainBlock : Node2D
     [Export] private Label _scoreLabel;
     [Export] private Label _timerLabel;
     [Export] private Label _middleScreenLabel;
-    // -> Switches
+    // *-> Switches
     private bool _isGameOver = false;
     private bool _isPaused = false;
     private bool _isRainbowEffectActive = false;
-    // -> Components
+    // *-> Components
     private AudioManager _audioManager;
     private PauseWatcher _pauseWatcher;
     private Score _score;
-    // -> Fields
+    // *-> Fields
     private int _timeInSeconds = 0;
     private int _maxTimeInSeconds = 9999;
     private byte _maxScore = 255;
-    // -> Godot Overrides
+    // *-> Godot Overrides
     public override void _EnterTree()
     {
         _audioManager = this.AddNode<AudioManager>();
@@ -66,10 +66,10 @@ public sealed partial class MainBlock : Node2D
         _gameTimer.Timeout += HandleTimerUpdate;
         _pauseWatcher.OnTogglePause += GamePause;
         // ! Debug init
-        _blockCollection.GenerateLevel(_testLevel);
+        _blockCollection.GenerateLevel();
         // ! End Debug init
     }
-    // -> Game State Functions
+    // *-> Game State Functions
     /// <summary>
     /// Pauses or unpauses the current game.
     /// </summary>
@@ -94,7 +94,7 @@ public sealed partial class MainBlock : Node2D
             _isPaused = true;
         }
     }
-    // -> Event Handlers
+    // *-> Event Handlers
     /// <summary>
     /// Handles the block being hit by the ball.
     /// </summary>
