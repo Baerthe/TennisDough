@@ -6,8 +6,24 @@
 size = Vector2(24, 14)
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nk250"]
+lifetime_randomness = 0.2
 particle_flag_disable_z = true
-gravity = Vector3(0, 98, 0)
+emission_shape = 1
+emission_sphere_radius = 16.64
+angle_min = -24.99999
+angle_max = 25.000011
+angular_velocity_min = 719.99994
+angular_velocity_max = 719.99994
+gravity = Vector3(0, 0, 0)
+linear_accel_min = -2.2351742e-06
+linear_accel_max = 52.939995
+radial_accel_min = 44.119995
+radial_accel_max = 56.469997
+damping_max = 8.0
+turbulence_enabled = true
+turbulence_noise_strength = 0.0
+turbulence_initial_displacement_min = 1.490116e-06
+turbulence_initial_displacement_max = 100.0
 
 [node name="BlockGameBlock" type="Area2D" node_paths=PackedStringArray("CollisionShape", "ColorRect", "HitParticles")]
 script = ExtResource("1_lthtf")
@@ -29,4 +45,12 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 245
+amount_ratio = 0.5
+lifetime = 2.0
+one_shot = true
+speed_scale = 2.0
+explosiveness = 0.8
+randomness = 0.6
 process_material = SubResource("ParticleProcessMaterial_nk250")

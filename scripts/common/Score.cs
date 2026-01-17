@@ -15,18 +15,24 @@ public sealed class Score
         _points = 0;
         UpdateLabel();
     }
+    /// <summary>
+    /// Adds a point to the current score and updates the label.
+    /// </summary>
     public void AddPoint()
     {
         _points++;
         UpdateLabel();
     }
+    /// <summary>
+    /// Resets the score to zero and updates the label.
+    /// </summary>
     public void Reset()
     {
         _points = 0;
         UpdateLabel();
     }
-    private void UpdateLabel()
-    {
-        _scoreLabel.Text = _points.ToString("D8");
-    }
+    /// <summary>
+    /// Updates the score label with the current points.
+    /// </summary>
+    private void UpdateLabel() =>_scoreLabel.Text = _points.ToString("D8");
 }

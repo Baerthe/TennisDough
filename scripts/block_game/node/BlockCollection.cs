@@ -14,6 +14,12 @@ public sealed partial class BlockCollection : Node2D
     public Block[,] BlockArray { get; private set; }
     public Vector2 Spacing { get; private set; } = new Vector2(2, 2);
     private LevelData _currentLevel;
+    private bool _debugMode = true;
+    public override void _Process(double delta)
+    {
+        if (_debugMode)
+            DebugDraw();
+    }
     /// <summary>
     /// Cleans up all blocks from the current level.
     /// </summary>
@@ -67,9 +73,9 @@ public sealed partial class BlockCollection : Node2D
                     {
                         var hitPoints = (byte)(charValue - '0');
                         var blockInstance = BlockScene.Instantiate<Block>();
-                        blockInstance.SetHitPoints(hitPoints);
                         blockInstance.Position = new Vector2(x * (BlockSize.X + Spacing.X), y * (BlockSize.Y + Spacing.Y));
                         AddChild(blockInstance);
+                        blockInstance.SetHitPoints(hitPoints);
                         BlockArray[x, y] = blockInstance;
                     }
                 }
@@ -86,5 +92,18 @@ public sealed partial class BlockCollection : Node2D
             ClearLevel();
             GenerateLevel(_currentLevel);
         }
+    }
+    /// <summary>
+    /// Debug function to randomly hit blocks and regenerate level if all blocks are destroyed. Used to make sure both this and blocks logic worked.
+    /// </summary>
+    private void DebugDraw()
+    {
+        var rand = GD.RandRange(0, 1);
+        if (rand > 0.999f)
+        {
+            GetTree().GetNodesInGroup("block")[GD.RandRange(0, GetTree().GetNodesInGroup("block").Count)].Call("OnBlockHit");
+        }
+        if (GetTree().GetNodesInGroup("block").Count == 0)
+            GenerateLevel();
     }
 }

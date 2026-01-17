@@ -1,5 +1,6 @@
 namespace Common;
 
+using System;
 using Godot;
 /// <summary>
 /// Utility extension methods for Godot Nodes.

@@ -56,6 +56,6 @@ BlockScene = ExtResource("3_b78ed")
 metadata/_custom_type_script = "uid://c5lupxpxi5e8i"
 
 [node name="PrefabBall" parent="." instance=ExtResource("4_bs432")]
-position = Vector2(72, 96)
+position = Vector2(-128, 124)
 
 [node name="Timer" type="Timer" parent="."]

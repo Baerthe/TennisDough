@@ -18,7 +18,7 @@ public sealed partial class Block : Area2D
 	public override void _Ready()
 	{
 		AddToGroup("block");
-		ColorRect.Color = _blockColorMap.ColorMap[HitPoints];
+		HitParticles.Emitting = false;
 	}
 	public override void _Process(double delta)
 	{
@@ -44,12 +44,12 @@ public sealed partial class Block : Area2D
 	/// </summary>
 	public void OnBlockHit()
 	{
-		HitPoints--;
-		HitParticles.Emitting = true;
+		if (_isDestroyed)
+			return;
+		SetHitPoints((byte)(HitPoints - 1));
 		if (HitPoints <= 0)
 			_isDestroyed = true;
-		else
-			ColorRect.Color = _blockColorMap.ColorMap[HitPoints];
+		HitParticles.Emitting = true;
 	}
 	/// <summary>
 	/// Sets the hit points of the block and updates its color.
@@ -58,6 +58,11 @@ public sealed partial class Block : Area2D
 	public void SetHitPoints(byte hitPoints)
 	{
 		HitPoints = hitPoints;
-		ColorRect.Color = _blockColorMap.ColorMap[HitPoints];
+		byte color = HitPoints > 0 ? HitPoints : (byte)1;
+		GD.Print($"Setting block hit points to {HitPoints}, color {color}");
+		ColorRect.Color = _blockColorMap.ColorMap[color];
+		if (!_blockColorMap.ParticleColorMap.ContainsKey(color))
+			_blockColorMap.AddParticleMaterial(color, HitParticles.ProcessMaterial as ParticleProcessMaterial);
+		HitParticles.ProcessMaterial = _blockColorMap.ParticleColorMap[color];
 	}
 }

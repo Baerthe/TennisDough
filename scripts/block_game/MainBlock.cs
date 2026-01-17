@@ -50,23 +50,22 @@ public sealed partial class MainBlock : Node2D
     }
     public override void _Ready()
     {
-        _score = new Score(_scoreLabel);
-        _ball.Inject(_audioManager);
-        // Setup AudioManager
-        _audioManager.AddAudioClip("block_hit", _audioBlockHit);
-        _audioManager.AddAudioClip("block_destroy", _audioBlockDestroy);
-        _audioManager.AddAudioClip("out_of_bounds", _audioOutOfBounds);
-        _audioManager.AddAudioClip("button_press", _sfxButtonPress);
-        _audioManager.AddAudioClip("menu_open", _sfxMenuOpen);
-        _audioManager.AddAudioClip("menu_close", _sfxMenuClose);
-        _audioManager.AddAudioClip("game_over", _sfxGameOver);
-        // Connect Events
-        _ball.OnBlockHit += HandleBlockHit;
-        _ball.OnOutOfBounds += HandleBallOutOfBounds;
-        _gameTimer.Timeout += HandleTimerUpdate;
-        _pauseWatcher.OnTogglePause += GamePause;
-        // Connect Audio Events
-        _menu.OnGameStart += () => _audioManager.PlayAudioClip("menu_close");
+        // _score = new Score(_scoreLabel);
+        // _ball.Inject(_audioManager);
+        // _menu.Inject(_audioManager);
+        // // Setup AudioManager
+        // _audioManager.AddAudioClip("block_hit", _audioBlockHit);
+        // _audioManager.AddAudioClip("block_destroy", _audioBlockDestroy);
+        // _audioManager.AddAudioClip("out_of_bounds", _audioOutOfBounds);
+        // _audioManager.AddAudioClip("button_press", _sfxButtonPress);
+        // _audioManager.AddAudioClip("menu_open", _sfxMenuOpen);
+        // _audioManager.AddAudioClip("menu_close", _sfxMenuClose);
+        // _audioManager.AddAudioClip("game_over", _sfxGameOver);
+        // // Connect Events
+        // _ball.OnBlockHit += HandleBlockHit;
+        // _ball.OnOutOfBounds += HandleBallOutOfBounds;
+        // _gameTimer.Timeout += HandleTimerUpdate;
+        // _pauseWatcher.OnTogglePause += GamePause;
         // ! Debug init
         _blockCollection.GenerateLevel();
         // ! End Debug init

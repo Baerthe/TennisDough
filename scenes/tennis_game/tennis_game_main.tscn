@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://d0744oosad0d3" path="res://scenes/tennis_game/tennis_game_paddle.tscn" id="2_242ye"]
 [ext_resource type="PackedScene" uid="uid://rd5g3vdir2e2" path="res://scenes/tennis_game/tennis_game_ball.tscn" id="3_wwidt"]
 [ext_resource type="Theme" uid="uid://c5b38epkeox6b" path="res://assets/themes/tennis_game_main.tres" id="4_ufty6"]
-[ext_resource type="PackedScene" uid="uid://o4bhpha3fwb4" path="res://scenes/tennis_game/tennis_game_menu.tscn" id="5_pja5u"]
+[ext_resource type="PackedScene" uid="uid://buv6q6pr7ocpi" path="res://scenes/tennis_game/tennis_game_menu.tscn" id="5_pja5u"]
 [ext_resource type="FontFile" uid="uid://bpyvhrqs3tbf8" path="res://assets/fonts/Kenney Future Narrow.ttf" id="6_4l81j"]
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_242ye"]
@@ -15,19 +15,19 @@ b = Vector2(660, 0)
 font = ExtResource("6_4l81j")
 font_size = 48
 
-[node name="tennis_gameMain" type="Node2D" node_paths=PackedStringArray("Menu", "GameTimer", "PaddleP1", "PaddleP2", "Ball", "CrossRect", "DividerRect", "ScoreP1Label", "ScoreP2Label", "TimerLabel", "MiddleScreenLabel")]
+[node name="TennisGameMain" type="Node2D" node_paths=PackedStringArray("_menu", "_gameTimer", "_paddleP1", "_paddleP2", "_ball", "_crossRect", "_dividerRect", "_scoreP1Label", "_scoreP2Label", "_timerLabel", "_middleScreenLabel")]
 script = ExtResource("1_242ye")
-Menu = NodePath("tennis_gameMenu")
-GameTimer = NodePath("Timer")
-PaddleP1 = NodePath("Paddle1")
-PaddleP2 = NodePath("Paddle2")
-Ball = NodePath("PrefabBall")
-CrossRect = NodePath("HUD/ColorRect")
-DividerRect = NodePath("HUD/Divider")
-ScoreP1Label = NodePath("HUD/P1Score")
-ScoreP2Label = NodePath("HUD/P2Score")
-TimerLabel = NodePath("HUD/LabelTime")
-MiddleScreenLabel = NodePath("MiddleText")
+_menu = NodePath("TenisGameMenu")
+_gameTimer = NodePath("Timer")
+_paddleP1 = NodePath("Paddle1")
+_paddleP2 = NodePath("Paddle2")
+_ball = NodePath("PrefabBall")
+_crossRect = NodePath("HUD/ColorRect")
+_dividerRect = NodePath("HUD/Divider")
+_scoreP1Label = NodePath("HUD/P1Score")
+_scoreP2Label = NodePath("HUD/P2Score")
+_timerLabel = NodePath("HUD/LabelTime")
+_middleScreenLabel = NodePath("MiddleText")
 
 [node name="Timer" type="Timer" parent="."]
 
@@ -153,4 +153,4 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="tennis_gameMenu" parent="." instance=ExtResource("5_pja5u")]
+[node name="TenisGameMenu" parent="." instance=ExtResource("5_pja5u")]

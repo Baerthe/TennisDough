@@ -1,49 +1,21 @@
-[gd_scene load_steps=9 format=3 uid="uid://buv6q6pr7ocpi"]
+[gd_scene load_steps=6 format=3 uid="uid://bo8k2u5yds5pj"]
 
 [ext_resource type="Theme" uid="uid://c5b38epkeox6b" path="res://assets/themes/tennis_game_main.tres" id="1_q33qw"]
-[ext_resource type="Script" uid="uid://bfp7radqu12n8" path="res://scripts/tennis_game/MenuTennis.cs" id="1_wut2e"]
 [ext_resource type="Texture2D" uid="uid://c8nrigv8n7dc8" path="res://assets/interface/icon_play_light.png" id="3_l1anq"]
-[ext_resource type="AudioStream" uid="uid://dm33a7syuxv3q" path="res://assets/sounds/switch-a.ogg" id="3_ogmyl"]
-[ext_resource type="AudioStream" uid="uid://cn04jvmk3i1m8" path="res://assets/sounds/sfx_select.ogg" id="4_6j17o"]
 [ext_resource type="Texture2D" uid="uid://bujgserp3xxm0" path="res://assets/interface/input_square.png" id="5_htdr4"]
 [ext_resource type="Texture2D" uid="uid://b2tmegq7tdaf5" path="res://assets/interface/icon_arrow_up_light.png" id="6_gpx4e"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_l1anq"]
+[sub_resource type="LabelSettings" id="LabelSettings_ls7bi"]
 font_size = 36
 
-[node name="TenisGameMenu" type="Control" node_paths=PackedStringArray("_buttonCancel", "_buttonPlay", "_buttonQuit", "_optionPaddle1", "_optionPaddle2", "_sliderBall", "_labelBallSpeed", "_sliderPaddle1Size", "_labelPaddle1Size", "_sliderPaddle2Size", "_labelPaddle2Size", "_sliderPaddle1Speed", "_labelPaddle1Speed", "_sliderPaddle2Speed", "_labelPaddle2Speed", "_colorPickerPaddle1", "_colorPickerPaddle2", "_colorPickerBall", "_gameTimeSlider", "_labelGameTime", "_maxScoreSlider", "_labelMaxScore")]
-top_level = true
-z_index = 255
-texture_filter = 1
+[node name="BlockGameMenu" type="Control"]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme = ExtResource("1_q33qw")
-script = ExtResource("1_wut2e")
-_sfxButtonPress = ExtResource("3_ogmyl")
-_sfxMenuOpen = ExtResource("4_6j17o")
-_buttonCancel = NodePath("ButtonCancel")
-_buttonPlay = NodePath("ButtonPlay")
-_buttonQuit = NodePath("ButtonQuit")
-_optionPaddle1 = NodePath("OptionPaddle1")
-_optionPaddle2 = NodePath("OptionPaddle2")
-_sliderBall = NodePath("Slider 1/SliderBall")
-_labelBallSpeed = NodePath("Slider 1/LabelBall")
-_sliderPaddle1Size = NodePath("Slider 2/SliderP1Size")
-_labelPaddle1Size = NodePath("Slider 2/LabelP1Size")
-_sliderPaddle2Size = NodePath("Slider 3/SliderP2Size")
-_labelPaddle2Size = NodePath("Slider 3/LabelP2Size")
-_sliderPaddle1Speed = NodePath("Slider 4/SliderP1Speed")
-_labelPaddle1Speed = NodePath("Slider 4/LabelP1Speed")
-_sliderPaddle2Speed = NodePath("Slider 5/SliderP2Speed")
-_labelPaddle2Speed = NodePath("Slider 5/LabelP2Speed")
-_colorPickerPaddle1 = NodePath("Color 1/ColorPickerButton")
-_colorPickerPaddle2 = NodePath("Color 2/ColorPickerButton")
-_colorPickerBall = NodePath("Color 3/ColorPickerButton")
-_gameTimeSlider = NodePath("Slider 6/Slider")
-_labelGameTime = NodePath("Slider 6/Numbers")
-_maxScoreSlider = NodePath("Slider 7/Slider")
-_labelMaxScore = NodePath("Slider 7/Numbers")
-metadata/_edit_horizontal_guides_ = [78.0]
 
 [node name="Control" type="Control" parent="."]
 anchors_preset = 0
@@ -83,8 +55,8 @@ offset_bottom = 65.0
 layout_mode = 0
 offset_right = 640.0
 offset_bottom = 64.0
-text = "tennis_game."
-label_settings = SubResource("LabelSettings_l1anq")
+text = "Block_game"
+label_settings = SubResource("LabelSettings_ls7bi")
 horizontal_alignment = 1
 vertical_alignment = 1
 
