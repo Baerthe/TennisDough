@@ -14,8 +14,8 @@ public sealed partial class Block : Area2D
 	[Export] public ColorRect ColorRect { get; private set; }
 	[Export] public GpuParticles2D HitParticles { get; private set; }
 	public byte HitPoints { get; private set; } = 1;
-	public byte XPOS { get; set; }
-	public byte YPOS { get; set; }
+	public byte XPOS { get; set; } //!!! This is an unsafe way of doing this; Debugging purposes only
+	public byte YPOS { get; set; } //!!! This is an unsafe way of doing this; Debugging purposes only
 	private bool _isDestroyed = false;
 	private float _delta;
 	private static readonly BlockColorMap _blockColorMap = BlockColorMap.Instance;

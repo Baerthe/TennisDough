@@ -66,9 +66,9 @@ public sealed partial class MainBlock : Node2D
         // _ball.OnOutOfBounds += HandleBallOutOfBounds;
         // _gameTimer.Timeout += HandleTimerUpdate;
         // _pauseWatcher.OnTogglePause += GamePause;
-        // ! Debug init
+        // ! Debug init !
         _blockCollection.GenerateLevel();
-        // ! End Debug init
+        // ! End Debug init !
     }
     // *-> Game State Functions
     /// <summary>

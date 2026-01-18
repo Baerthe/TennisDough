@@ -18,8 +18,25 @@ public static class Utils
     public static T AddNode<T>(this Node parent) where T : Node, new()
     {
         var child = new T();
+        if (child == null)
+            throw new InvalidOperationException($"Failed to create instance of type {typeof(T).Name}");
         GD.Print($"Adding node of type {typeof(T).Name} to parent {parent.Name}");
         parent.AddChild(child);
         return child;
+    }
+    /// <summary>
+    /// Instantiates a PackedScene and adds it as a child to the specified parent node.
+    /// </summary>
+    /// <param name="parent">The parent node to which the instantiated scene will be added as a child.</param>
+    /// <param name="scene">The PackedScene to instantiate.</param>
+    /// <returns>The root node of the instantiated scene.</returns>
+    public static Node InstantScene(this Node parent, PackedScene scene)
+    {
+        var instance = scene.Instantiate();
+        if (instance == null)
+            throw new InvalidOperationException($"Failed to instantiate scene of type {scene.ResourceName}");
+        GD.Print($"Instancing scene of type {instance.GetType().Name} to parent {parent.Name}");
+        parent.AddChild(instance);
+        return instance;
     }
 }

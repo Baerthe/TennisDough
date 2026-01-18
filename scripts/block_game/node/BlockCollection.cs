@@ -3,6 +3,8 @@ namespace BlockGame;
 using Common;
 using Godot;
 using System;
+using System.Collections.Generic;
+
 /// <summary>
 /// Manages a collection of blocks in the BlockGame.
 /// </summary>
@@ -11,7 +13,7 @@ public sealed partial class BlockCollection : Node2D
 {
     [Export] public PackedScene BlockScene { get; private set; }
     public Vector2 BlockSize { get; private set; } = new Vector2(24, 18);
-    public Block[,] BlockArray { get; private set; }
+    public List<(Block , byte, byte)> BlockList { get; private set; }
     public Vector2 Spacing { get; private set; } = new Vector2(2, 2);
     private LevelData _currentLevel;
     private bool _debugMode = true;
@@ -30,7 +32,7 @@ public sealed partial class BlockCollection : Node2D
             if (block is Block b)
                 b.QueueFree();
         }
-        BlockArray = new Block[0, 0];
+        BlockList = new List<(Block, byte, byte)>();
         _currentLevel = null;
     }
     /// <summary>
@@ -60,7 +62,7 @@ public sealed partial class BlockCollection : Node2D
         else
             lines = level.LevelGrid.Split("\n", StringSplitOptions.RemoveEmptyEntries);
         var height = lines.Length;
-        BlockArray = new Block[width, height];
+        BlockList = new List<(Block, byte, byte)>();
         for (int y = 0; y < height; y++)
         {
             var line = lines[y];
@@ -72,14 +74,13 @@ public sealed partial class BlockCollection : Node2D
                     if (charValue >= '1' && charValue <= '9')
                     {
                         var hitPoints = (byte)(charValue - '0');
-                        var blockInstance = BlockScene.Instantiate<Block>();
+                        var blockInstance = this.InstantScene(BlockScene) as Block;
                         blockInstance.Position = new Vector2(x * (BlockSize.X + Spacing.X), y * (BlockSize.Y + Spacing.Y));
                         blockInstance.XPOS = (byte)x;
                         blockInstance.YPOS = (byte)y;
-                        AddChild(blockInstance);
                         blockInstance.BlockDestroyed += OnBlockDestroyed;
                         blockInstance.SetHitPoints(hitPoints);
-                        BlockArray[x, y] = blockInstance;
+                        BlockList.Add((blockInstance, (byte)x, (byte)y));
                     }
                 }
             }
@@ -104,9 +105,8 @@ public sealed partial class BlockCollection : Node2D
         var rand = GD.RandRange(0, 1);
         if (rand > 0.8f)
         {
-            int x = (int)GD.RandRange(0, BlockArray.GetLength(0) - 1);
-            int y = (int)GD.RandRange(0, BlockArray.GetLength(1) - 1);
-            Block block = BlockArray[x, y];
+            byte item = (byte)GD.RandRange(0, BlockList.Count - 1);
+            Block block = BlockList[item].Item1;
             if (block != null)
                 block?.Call("OnBlockHit");
         }
@@ -114,11 +114,11 @@ public sealed partial class BlockCollection : Node2D
             GenerateLevel();
     }
     /// <summary>
-    /// Handles the block destroyed event to remove it from the BlockArray.
+    /// Handles the block destroyed event to remove it from the BlockList.
     /// </summary>
     private void OnBlockDestroyed(Block block)
     {
         block.BlockDestroyed -= OnBlockDestroyed;
-        BlockArray[block.XPOS, block.YPOS] = null;
+        BlockList.RemoveAll(item => item.Item1 == block);
     }
 }
