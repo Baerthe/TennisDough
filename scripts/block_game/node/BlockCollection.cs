@@ -45,6 +45,7 @@ public sealed partial class BlockCollection : Node2D
         _currentLevel = level;
         var lines = null as string[];
         var width = 24;
+        byte[] weightedPoints = { 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 4 };
         if (level == null)
         {
             byte randLines = (byte)GD.RandRange(5, 15);
@@ -54,7 +55,8 @@ public sealed partial class BlockCollection : Node2D
                 string line = "";
                 for (byte j = 0; j < width; j++)
                 {
-                     line += GD.RandRange(0, 4).ToString();
+                    byte points = weightedPoints[(byte)GD.RandRange(0, weightedPoints.Length - 1)];
+                    line += points.ToString();
                 }
                 lines[i] = line;
             }
@@ -103,10 +105,10 @@ public sealed partial class BlockCollection : Node2D
     private void DebugDraw()
     {
         var rand = GD.RandRange(0, 1);
-        if (rand > 0.8f)
+        if (rand > 0.8f && BlockList != null && BlockList.Count > 0)
         {
             byte item = (byte)GD.RandRange(0, BlockList.Count - 1);
-            Block block = BlockList[item].Item1;
+            Block block = BlockList[item].Item1 ?? null;
             if (block != null)
                 block?.Call("OnBlockHit");
         }

@@ -36,6 +36,7 @@ public sealed partial class MainBlock : Node2D
     private bool _isRainbowEffectActive = false;
     // *-> Components
     private AudioManager _audioManager;
+    private IController _controller;
     private PauseWatcher _pauseWatcher;
     private Score _score;
     // *-> Fields
@@ -50,17 +51,20 @@ public sealed partial class MainBlock : Node2D
     }
     public override void _Ready()
     {
-        // _score = new Score(_scoreLabel);
-        // _ball.Inject(_audioManager);
-        // _menu.Inject(_audioManager);
         // // Setup AudioManager
-        // _audioManager.AddAudioClip("block_hit", _audioBlockHit);
-        // _audioManager.AddAudioClip("block_destroy", _audioBlockDestroy);
-        // _audioManager.AddAudioClip("out_of_bounds", _audioOutOfBounds);
+        // TODO: Add a soundWatcher to listen to audio events instead of direct calls
+        _audioManager.AddAudioClip("block_hit", _audioBlockHit);
+        _audioManager.AddAudioClip("block_destroy", _audioBlockDestroy);
+        _audioManager.AddAudioClip("out_of_bounds", _audioOutOfBounds);
         // _audioManager.AddAudioClip("button_press", _sfxButtonPress);
         // _audioManager.AddAudioClip("menu_open", _sfxMenuOpen);
         // _audioManager.AddAudioClip("menu_close", _sfxMenuClose);
         // _audioManager.AddAudioClip("game_over", _sfxGameOver);
+        // // Initialize Score and Controller
+        _score = new Score(_scoreLabel);
+        _controller = new PaddlePlayer(_paddle, _ball, _score);
+        _ball.Inject(_audioManager);
+        // _menu.Inject(_audioManager);
         // // Connect Events
         // _ball.OnBlockHit += HandleBlockHit;
         // _ball.OnOutOfBounds += HandleBallOutOfBounds;
@@ -69,6 +73,12 @@ public sealed partial class MainBlock : Node2D
         // ! Debug init !
         _blockCollection.GenerateLevel();
         // ! End Debug init !
+    }
+    public override void _Process(double delta)
+    {
+        if (_isGameOver || _isPaused)
+            return;
+        _controller.Update();
     }
     // *-> Game State Functions
     /// <summary>

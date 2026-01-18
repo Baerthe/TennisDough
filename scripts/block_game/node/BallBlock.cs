@@ -11,18 +11,22 @@ public sealed partial class BallBlock : BallBase
 {
     public event Action<Block> OnBlockHit;
     public event Action OnOutOfBounds;
+    public override void _Ready()
+    {
+        Velocity = new Vector2( GD.RandRange(-512, 512), 800);
+        ToggleEnable();
+        SpeedFactor = 0.05f;
+    }
     public override void _PhysicsProcess(double delta)
     {
-        if (!IsEnabled)
-            return;
+        // if (!IsEnabled)
+        //     return;
         Velocity = Velocity.Clamp(new Vector2(-12000,-12000), new Vector2(12000, 12000));
         var collision = MoveAndCollide(Velocity * (float)delta * SpeedFactor);
         if (collision != null)
         {
             if (collision.GetCollider() is Block block)
                 OnBlockHit?.Invoke(block);
-            else
-                AudioManager.PlayAudioClip("hit");
             var normal = collision.GetNormal();
             Velocity = Velocity.Bounce(normal);
             SpeedFactor += SpeedFactor * (Acceleration / 200.0f);
@@ -41,7 +45,6 @@ public sealed partial class BallBlock : BallBase
         SpeedFactor = 0.05f;
         if (GlobalPosition.Y < -640)
         {
-            AudioManager.PlayAudioClip("out_of_bounds");
             OnOutOfBounds?.Invoke();
         }
     }

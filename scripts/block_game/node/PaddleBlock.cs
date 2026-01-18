@@ -21,9 +21,9 @@ public sealed partial class PaddleBlock : CharacterBody2D
     {
         _collisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
         _colorRect = GetNode<ColorRect>("ColorRect");
-        _collisionShape.Shape = new RectangleShape2D() { Size = new Vector2(24, Size) };
-        _colorRect.Size = new Vector2(24, Size);
-        _colorRect.Position = new Vector2(-12, -Size / 2);
+        _collisionShape.Shape = new RectangleShape2D() { Size = new Vector2(Size, 24) };
+        _colorRect.Size = new Vector2(Size, 24);
+        _colorRect.Position = new Vector2(-Size / 2, -12);
         _initialPosition = GlobalPosition;
         _fixedFriction = 1.0f / (Friction / 15.0f);
     }
@@ -55,7 +55,7 @@ public sealed partial class PaddleBlock : CharacterBody2D
     /// <param name="direction"></param>
     public void Move(Direction direction)
     {
-        Velocity = direction == Direction.Left || direction == Direction.Up ? new Vector2(0, -Speed) : new Vector2(0, Speed);
+        Velocity = direction == Direction.Left || direction == Direction.Up ? new Vector2(-Speed, 0) : new Vector2(Speed, 0);
     }
     /// <summary>
     /// Resizes the paddle.
@@ -64,9 +64,9 @@ public sealed partial class PaddleBlock : CharacterBody2D
     public void Resize(byte size)
     {
         Size = size;
-        _collisionShape.Shape = new RectangleShape2D() { Size = new Vector2(24, Size) };
-        _colorRect.Size = new Vector2(24, Size);
-        _colorRect.Position = new Vector2(-12, -Size / 2);
+        _collisionShape.Shape = new RectangleShape2D() { Size = new Vector2(size, 24) };
+        _colorRect.Size = new Vector2(size, 24);
+        _colorRect.Position = new Vector2(-Size / 2, -12);
     }
     /// <summary>
     /// Resets the paddle to its initial position.

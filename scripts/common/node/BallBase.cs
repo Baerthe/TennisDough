@@ -4,12 +4,11 @@ using Godot;
 /// <summary>
 /// Base class for the ball in the tennis games.
 /// Contains common properties and methods for ball behavior.
+/// TODO: Refactor BallBase to use signals instead of direct AudioManager calls.
 /// </summary>
 public abstract partial class BallBase : CharacterBody2D
 {
     [ExportGroup("Properties")]
-    [Export] AudioStream AudioHit;
-    [Export] AudioStream AudioScore;
     [Export(PropertyHint.Range, "1,100")] public byte Acceleration { get; private set; } = 25;
     [Export(PropertyHint.Range, "1,100")] public byte Size { get; private set; } = 8;
     [ExportGroup("Components")]
@@ -35,8 +34,6 @@ public abstract partial class BallBase : CharacterBody2D
     public virtual void Inject(AudioManager audioManager)
     {
         AudioManager = audioManager;
-        AudioManager.AddAudioClip("hit", AudioHit);
-        AudioManager.AddAudioClip("score", AudioScore);
     }
     /// <summary>
     /// Adjusts the size of the ball and updates related components.
