@@ -74,7 +74,10 @@ public sealed partial class BlockCollection : Node2D
                         var hitPoints = (byte)(charValue - '0');
                         var blockInstance = BlockScene.Instantiate<Block>();
                         blockInstance.Position = new Vector2(x * (BlockSize.X + Spacing.X), y * (BlockSize.Y + Spacing.Y));
+                        blockInstance.XPOS = (byte)x;
+                        blockInstance.YPOS = (byte)y;
                         AddChild(blockInstance);
+                        blockInstance.BlockDestroyed += OnBlockDestroyed;
                         blockInstance.SetHitPoints(hitPoints);
                         BlockArray[x, y] = blockInstance;
                     }
@@ -99,11 +102,23 @@ public sealed partial class BlockCollection : Node2D
     private void DebugDraw()
     {
         var rand = GD.RandRange(0, 1);
-        if (rand > 0.999f)
+        if (rand > 0.8f)
         {
-            GetTree().GetNodesInGroup("block")[GD.RandRange(0, GetTree().GetNodesInGroup("block").Count)].Call("OnBlockHit");
+            int x = (int)GD.RandRange(0, BlockArray.GetLength(0) - 1);
+            int y = (int)GD.RandRange(0, BlockArray.GetLength(1) - 1);
+            Block block = BlockArray[x, y];
+            if (block != null)
+                block?.Call("OnBlockHit");
         }
         if (GetTree().GetNodesInGroup("block").Count == 0)
             GenerateLevel();
+    }
+    /// <summary>
+    /// Handles the block destroyed event to remove it from the BlockArray.
+    /// </summary>
+    private void OnBlockDestroyed(Block block)
+    {
+        block.BlockDestroyed -= OnBlockDestroyed;
+        BlockArray[block.XPOS, block.YPOS] = null;
     }
 }

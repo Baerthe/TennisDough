@@ -14,10 +14,10 @@ public sealed class BlockColorMap
     {
         ColorMap = new Dictionary<byte, Color>
         {
-            { 1, new Color(1, 0, 0) },
-            { 2, new Color(0, 1, 0) },
-            { 3, new Color(0, 0, 1) },
-            { 4, new Color(1, 1, 0) }
+            { 1, new Color(0.2f, 0.2f, 1) },
+            { 2, new Color(0.4f, 0.4f, 1) },
+            { 3, new Color(0.6f, 0.6f, 1) },
+            { 4, new Color(0.8f, 0.8f, 1) }
         };
         ParticleColorMap = new Dictionary<byte, ParticleProcessMaterial>{};
     }

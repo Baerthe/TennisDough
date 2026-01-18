@@ -1,5 +1,6 @@
 namespace BlockGame;
 
+using System;
 using Godot;
 /// <summary>
 /// Represents a block in the BlockGame that can be hit by the ball.
@@ -8,10 +9,13 @@ using Godot;
 [GlobalClass]
 public sealed partial class Block : Area2D
 {
+	public event Action<Block> BlockDestroyed;
 	[Export] public CollisionShape2D CollisionShape { get; private set; }
 	[Export] public ColorRect ColorRect { get; private set; }
 	[Export] public GpuParticles2D HitParticles { get; private set; }
 	public byte HitPoints { get; private set; } = 1;
+	public byte XPOS { get; set; }
+	public byte YPOS { get; set; }
 	private bool _isDestroyed = false;
 	private float _delta;
 	private static readonly BlockColorMap _blockColorMap = BlockColorMap.Instance;
@@ -24,6 +28,7 @@ public sealed partial class Block : Area2D
 	{
 		if (!_isDestroyed)
 			return;
+		RemoveFromGroup("block");
 		var duration = 0.05f;
 		_delta += (float)delta;
 		if (_delta >= duration)
@@ -34,11 +39,6 @@ public sealed partial class Block : Area2D
 				QueueFree();
 		}
 	}
-	public override void _ExitTree()
-	{
-		RemoveFromGroup("block");
-		ColorRect.Color = Colors.Transparent;
-	}
 	/// <summary>
 	/// Handles the block being hit by the ball.
 	/// </summary>
@@ -46,10 +46,14 @@ public sealed partial class Block : Area2D
 	{
 		if (_isDestroyed)
 			return;
+		HitParticles.Emitting = true;
 		SetHitPoints((byte)(HitPoints - 1));
 		if (HitPoints <= 0)
+		{
 			_isDestroyed = true;
-		HitParticles.Emitting = true;
+			CollisionShape.Disabled = true;
+			BlockDestroyed?.Invoke(this);
+		}
 	}
 	/// <summary>
 	/// Sets the hit points of the block and updates its color.
@@ -59,7 +63,7 @@ public sealed partial class Block : Area2D
 	{
 		HitPoints = hitPoints;
 		byte color = HitPoints > 0 ? HitPoints : (byte)1;
-		GD.Print($"Setting block hit points to {HitPoints}, color {color}");
+		GD.Print($"Setting block ({XPOS},{YPOS}) hit points to {HitPoints}, color {color}");
 		ColorRect.Color = _blockColorMap.ColorMap[color];
 		if (!_blockColorMap.ParticleColorMap.ContainsKey(color))
 			_blockColorMap.AddParticleMaterial(color, HitParticles.ProcessMaterial as ParticleProcessMaterial);
