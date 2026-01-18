@@ -62,11 +62,10 @@ public sealed partial class MainBlock : Node2D
         // _audioManager.AddAudioClip("game_over", _sfxGameOver);
         // // Initialize Score and Controller
         _score = new Score(_scoreLabel);
-        _controller = new PaddlePlayer(_paddle, _ball, _score);
-        _ball.Inject(_audioManager);
+        _controller = new PaddleAI(_paddle, _ball, _score);
         // _menu.Inject(_audioManager);
         // // Connect Events
-        // _ball.OnBlockHit += HandleBlockHit;
+        _ball.OnBlockHit += HandleBlockHit;
         // _ball.OnOutOfBounds += HandleBallOutOfBounds;
         // _gameTimer.Timeout += HandleTimerUpdate;
         // _pauseWatcher.OnTogglePause += GamePause;

@@ -19,8 +19,10 @@ b = Vector2(660, 0)
 font = ExtResource("7_p6ga7")
 font_size = 48
 
-[node name="BlockGameMain" type="Node2D" node_paths=PackedStringArray("_blockCollection", "_gameTimer", "_paddle", "_crossRect", "_leftWallRect", "_rightWallRect", "_scoreLabel", "_timerLabel", "_middleScreenLabel")]
+[node name="BlockGameMain" type="Node2D" node_paths=PackedStringArray("_ball", "_blockCollection", "_gameTimer", "_paddle", "_crossRect", "_leftWallRect", "_rightWallRect", "_scoreLabel", "_timerLabel", "_middleScreenLabel")]
+position = Vector2(-3, -1)
 script = ExtResource("1_wy0oj")
+_ball = NodePath("PrefabBall")
 _blockCollection = NodePath("BlockCollection")
 _gameTimer = NodePath("Timer")
 _paddle = NodePath("Paddle1")
@@ -30,7 +32,7 @@ _audioOutOfBounds = ExtResource("4_jhm30")
 _crossRect = NodePath("HUD/ColorRect")
 _leftWallRect = NodePath("HUD/Left")
 _rightWallRect = NodePath("HUD/Right")
-_scoreLabel = NodePath("HUD/LabelScore")
+_scoreLabel = NodePath("HUD/P1Score")
 _timerLabel = NodePath("HUD/LabelTime")
 _middleScreenLabel = NodePath("HUD/MiddleText")
 

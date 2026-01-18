@@ -25,7 +25,9 @@ turbulence_noise_strength = 0.0
 turbulence_initial_displacement_min = 1.490116e-06
 turbulence_initial_displacement_max = 100.0
 
-[node name="BlockGameBlock" type="Area2D" node_paths=PackedStringArray("CollisionShape", "ColorRect", "HitParticles")]
+[node name="BlockGameBlock" type="StaticBody2D" node_paths=PackedStringArray("CollisionShape", "ColorRect", "HitParticles")]
+collision_layer = 4
+collision_mask = 4
 script = ExtResource("1_lthtf")
 CollisionShape = NodePath("CollisionShape2D")
 ColorRect = NodePath("ColorRect")

@@ -16,7 +16,7 @@ public sealed partial class BlockCollection : Node2D
     public List<(Block , byte, byte)> BlockList { get; private set; }
     public Vector2 Spacing { get; private set; } = new Vector2(2, 2);
     private LevelData _currentLevel;
-    private bool _debugMode = true;
+    private bool _debugMode = false;
     public override void _Process(double delta)
     {
         if (_debugMode)
