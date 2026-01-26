@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cn1qm41bj6eni"]
+[gd_scene load_steps=15 format=3 uid="uid://cn1qm41bj6eni"]
 
 [ext_resource type="Script" uid="uid://dl06k2r0qccyn" path="res://scripts/block_game/MainBlock.cs" id="1_wy0oj"]
 [ext_resource type="AudioStream" uid="uid://di2ephaedtpea" path="res://assets/sounds/tap-b.ogg" id="2_3yiwl"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://yfuw16cd03jl" path="res://scenes/block_game/block_game_paddle.tscn" id="5_pmr2s"]
 [ext_resource type="Theme" uid="uid://c5b38epkeox6b" path="res://assets/themes/tennis_game_main.tres" id="6_2loq5"]
 [ext_resource type="FontFile" uid="uid://bpyvhrqs3tbf8" path="res://assets/fonts/Kenney Future Narrow.ttf" id="7_p6ga7"]
+[ext_resource type="Shader" uid="uid://cnudfwxibdlxn" path="res://assets/shaders/crt.gdshader" id="11_vmkoe"]
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_pmr2s"]
 a = Vector2(-20, 0)
@@ -18,6 +19,23 @@ b = Vector2(660, 0)
 [sub_resource type="LabelSettings" id="LabelSettings_3ir7k"]
 font = ExtResource("7_p6ga7")
 font_size = 48
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jhm30"]
+shader = ExtResource("11_vmkoe")
+shader_parameter/resolution = Vector2(640, 480)
+shader_parameter/scan_line_amount = 0.50000002375
+shader_parameter/warp_amount = 0.400000019
+shader_parameter/noise_amount = 0.03
+shader_parameter/interference_amount = 1.0
+shader_parameter/grille_amount = 0.1
+shader_parameter/grille_size = 1.0
+shader_parameter/vignette_amount = 0.400000019
+shader_parameter/vignette_intensity = 0.4
+shader_parameter/aberation_amount = 0.2000000095
+shader_parameter/roll_line_amount = 0.3
+shader_parameter/roll_speed = 0.94000042465
+shader_parameter/scan_line_strength = -8.0
+shader_parameter/pixel_strength = -2.0
 
 [node name="BlockGameMain" type="Node2D" node_paths=PackedStringArray("_ball", "_blockCollection", "_gameTimer", "_paddle", "_crossRect", "_leftWallRect", "_rightWallRect", "_scoreLabel", "_timerLabel", "_middleScreenLabel")]
 position = Vector2(-3, -1)
@@ -37,6 +55,7 @@ _timerLabel = NodePath("HUD/LabelTime")
 _middleScreenLabel = NodePath("HUD/MiddleText")
 
 [node name="World" type="Node2D" parent="."]
+position = Vector2(3, 1)
 
 [node name="Background" type="ColorRect" parent="World"]
 z_index = -20
@@ -73,18 +92,18 @@ position = Vector2(0, 24)
 shape = SubResource("SegmentShape2D_pmr2s")
 
 [node name="BlockCollection" type="Node2D" parent="."]
-position = Vector2(22, 48)
+position = Vector2(25, 49)
 script = ExtResource("2_5mgrt")
 BlockScene = ExtResource("3_b78ed")
 metadata/_custom_type_script = "uid://c5lupxpxi5e8i"
 
 [node name="PrefabBall" parent="." instance=ExtResource("4_bs432")]
-position = Vector2(288, 432)
+position = Vector2(291, 433)
 
 [node name="Timer" type="Timer" parent="."]
 
 [node name="Paddle1" parent="." instance=ExtResource("5_pmr2s")]
-position = Vector2(284, 478)
+position = Vector2(287, 479)
 
 [node name="HUD" type="Control" parent="."]
 texture_filter = 1
@@ -92,6 +111,10 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 1.0
+offset_right = 3.0
+offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -163,3 +186,10 @@ label_settings = SubResource("LabelSettings_3ir7k")
 horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
+
+[node name="CRT Shader" type="ColorRect" parent="HUD"]
+material = SubResource("ShaderMaterial_jhm30")
+custom_minimum_size = Vector2(640, 480)
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 480.0
