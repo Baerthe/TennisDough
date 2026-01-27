@@ -1,0 +1,150 @@
+[gd_scene load_steps=10 format=3 uid="uid://c3lck2cuuntgh"]
+
+[ext_resource type="Theme" uid="uid://bni6k434tem63" path="res://resources/user_interface_theme.tres" id="1_0wfyh"]
+[ext_resource type="Texture2D" uid="uid://c26vuo5mykg5n" path="res://resources/user_interface_crt.png" id="2_sugp2"]
+[ext_resource type="Texture2D" uid="uid://donyvloynnh21" path="res://resources/user_interface_com_btn.png" id="3_jyhfs"]
+[ext_resource type="Texture2D" uid="uid://b2v83xfx4rh7s" path="res://resources/user_interface_com.png" id="3_sugp2"]
+[ext_resource type="Shader" uid="uid://cnudfwxibdlxn" path="res://assets/shaders/crt.gdshader" id="5_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://cn1qm41bj6eni" path="res://scenes/block_game/block_game_main.tscn" id="5_tefeu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tbgi4"]
+atlas = ExtResource("3_jyhfs")
+region = Rect2(0, 0, 60, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tefeu"]
+atlas = ExtResource("3_jyhfs")
+region = Rect2(64, 0, 60, 64)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tefeu"]
+shader = ExtResource("5_tbgi4")
+shader_parameter/resolution = Vector2(1152, 864)
+shader_parameter/scan_line_amount = 0.800000038
+shader_parameter/warp_amount = 0.400000019
+shader_parameter/noise_amount = 0.0400000019
+shader_parameter/interference_amount = 0.0800000038
+shader_parameter/grille_amount = 0.14000000665
+shader_parameter/grille_size = 4.000000142499999
+shader_parameter/vignette_amount = 1.6000000760000002
+shader_parameter/vignette_intensity = 0.4750000225625
+shader_parameter/aberation_amount = 0.9600000456
+shader_parameter/roll_line_amount = 0.0400000019
+shader_parameter/roll_speed = 1.0
+shader_parameter/scan_line_strength = -8.0
+shader_parameter/pixel_strength = -0.3599998271000002
+
+[node name="Main" type="Control"]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme = ExtResource("1_0wfyh")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1880.0
+offset_bottom = -1040.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Control"]
+z_index = -10
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 48.000004
+anchor_bottom = 27.000002
+offset_left = -1216.0
+offset_right = 1215.9999
+offset_bottom = 697.0665
+color = Color(0, 0, 0, 1)
+metadata/_edit_lock_ = true
+
+[node name="com" type="NinePatchRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 300.0
+offset_top = 952.0
+offset_right = 1580.0
+offset_bottom = 1040.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("3_sugp2")
+region_rect = Rect2(0, 0, 48, 32)
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 8
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+
+[node name="TextureButton" type="TextureButton" parent="Control/com"]
+layout_mode = 0
+offset_left = 1176.0
+offset_top = 8.0
+offset_right = 1236.0
+offset_bottom = 72.0
+texture_normal = SubResource("AtlasTexture_tbgi4")
+texture_pressed = SubResource("AtlasTexture_tefeu")
+
+[node name="crt" type="NinePatchRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 300.0
+offset_right = 1580.0
+offset_bottom = 992.0
+grow_horizontal = 2
+mouse_filter = 1
+texture = ExtResource("2_sugp2")
+region_rect = Rect2(0, 0, 320, 320)
+patch_margin_left = 64
+patch_margin_top = 64
+patch_margin_right = 64
+patch_margin_bottom = 64
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+
+[node name="world" type="ColorRect" parent="Control/crt"]
+z_index = -2
+z_as_relative = false
+clip_contents = true
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.032
+anchor_bottom = 0.033
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 1175.04
+offset_bottom = 895.264
+mouse_filter = 1
+color = Color(0, 0.096179135, 0.07974955, 1)
+metadata/_edit_lock_ = true
+
+[node name="BlockGameMain" parent="Control/crt/world" instance=ExtResource("5_tefeu")]
+z_index = 2
+position = Vector2(0.99998474, 3)
+scale = Vector2(1.78, 1.78)
+
+[node name="crt_shader" type="ColorRect" parent="Control/crt"]
+material = SubResource("ShaderMaterial_tefeu")
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.032
+anchor_bottom = 0.033
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 1175.04
+offset_bottom = 895.264
+mouse_filter = 2
+metadata/_edit_lock_ = true

@@ -16,7 +16,7 @@ public sealed partial class BallBlock : BallBase
         base._Ready();
         Velocity = new Vector2( GD.RandRange(-512, 512), 12000);
         ToggleEnable();
-        SpeedFactor = 0.005f;
+        SpeedFactor = 0.015f;
     }
     public override void _PhysicsProcess(double delta)
     {
