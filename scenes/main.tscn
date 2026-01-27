@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c3lck2cuuntgh"]
 
-[ext_resource type="Theme" path="res://resources/user_interface_theme.tres" id="1_0wfyh"]
+[ext_resource type="Theme" uid="uid://c5b38epkeox6b" path="res://assets/themes/tennis_game_main.tres" id="1_tbgi4"]
 [ext_resource type="Texture2D" uid="uid://b2v83xfx4rh7s" path="res://assets/interface/user_interface_com.png" id="2_tefeu"]
 [ext_resource type="Texture2D" uid="uid://c26vuo5mykg5n" path="res://assets/interface/user_interface_crt.png" id="4_o6xl0"]
 [ext_resource type="Shader" uid="uid://cnudfwxibdlxn" path="res://assets/shaders/crt.gdshader" id="5_tbgi4"]
@@ -32,41 +32,30 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-theme = ExtResource("1_0wfyh")
+theme = ExtResource("1_tbgi4")
 
-[node name="Control" type="Control" parent="." unique_id=1403599550]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = -1880.0
-offset_bottom = -1040.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="ColorRect" type="ColorRect" parent="Control" unique_id=2068144816]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2068144816]
 z_index = -10
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 48.000004
 anchor_bottom = 27.000002
 offset_left = -1216.0
-offset_right = 1215.9999
-offset_bottom = 697.0665
+offset_right = 1216.0
+offset_bottom = 697.0664
 color = Color(0, 0, 0, 1)
 metadata/_edit_lock_ = true
 
-[node name="com" type="NinePatchRect" parent="Control" unique_id=218242739]
+[node name="com" type="NinePatchRect" parent="." unique_id=218242739]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 300.0
-offset_top = 952.0
-offset_right = 1580.0
-offset_bottom = 1040.0
+offset_left = -640.0
+offset_top = -88.0
+offset_right = 640.0
 grow_horizontal = 2
 grow_vertical = 0
 texture = ExtResource("2_tefeu")
@@ -78,13 +67,13 @@ patch_margin_bottom = 8
 axis_stretch_horizontal = 2
 axis_stretch_vertical = 2
 
-[node name="crt" type="NinePatchRect" parent="Control" unique_id=544969234]
+[node name="crt" type="NinePatchRect" parent="." unique_id=544969234]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = 300.0
-offset_right = 1580.0
+offset_left = -640.0
+offset_right = 640.0
 offset_bottom = 992.0
 grow_horizontal = 2
 mouse_filter = 1
@@ -97,7 +86,7 @@ patch_margin_bottom = 64
 axis_stretch_horizontal = 2
 axis_stretch_vertical = 2
 
-[node name="world" type="ColorRect" parent="Control/crt" unique_id=1650678906]
+[node name="world" type="ColorRect" parent="crt" unique_id=1650678906]
 z_index = -2
 z_as_relative = false
 clip_contents = true
@@ -113,12 +102,12 @@ mouse_filter = 1
 color = Color(0, 0.096179135, 0.07974955, 1)
 metadata/_edit_lock_ = true
 
-[node name="BlockGameMain" parent="Control/crt/world" unique_id=557169308 instance=ExtResource("5_tefeu")]
+[node name="BlockGameMain" parent="crt/world" unique_id=557169308 instance=ExtResource("5_tefeu")]
 z_index = 2
 position = Vector2(0.99998474, 3)
 scale = Vector2(1.78, 1.78)
 
-[node name="crt_shader" type="ColorRect" parent="Control/crt" unique_id=1995530114]
+[node name="crt_shader" type="ColorRect" parent="crt" unique_id=1995530114]
 material = SubResource("ShaderMaterial_tefeu")
 layout_mode = 1
 anchors_preset = -1
