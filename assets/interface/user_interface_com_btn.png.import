@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c26vuo5mykg5n"
-path="res://.godot/imported/user_interface_crt.png-52f72a28c7274fea23290b0ef0a3300e.ctex"
+uid="uid://donyvloynnh21"
+path="res://.godot/imported/user_interface_com_btn.png-64dfa8d9f61b9efe38d78cf200da14ab.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/user_interface_crt.png"
-dest_files=["res://.godot/imported/user_interface_crt.png-52f72a28c7274fea23290b0ef0a3300e.ctex"]
+source_file="res://assets/interface/user_interface_com_btn.png"
+dest_files=["res://.godot/imported/user_interface_com_btn.png-64dfa8d9f61b9efe38d78cf200da14ab.ctex"]
 
 [params]
 

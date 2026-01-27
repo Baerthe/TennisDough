@@ -1,4 +1,4 @@
-TennisDough is an open-source project, created as a means to learn Godot 4.5 (Godot.NET.Sdk/4.5.1, .net9.0) by recreating Atari's Pong.
+TennisDough is an open-source project, created as a means to learn Godot 4.5 (Godot.NET.Sdk/4.5.1, .net9.0) by recreating Atari's Pong, and then Atari's Breakout, but then I accidently slipped and fell and now we are making a few more little minigames along the way...
 
 # License & Acknowledgements
 This project is under GNU Affero General Public License v3.0 [License](LICENSE.txt) and uses assets from Kenney.nl under the CC0 1.0 Universal (CC0 1.0) Public Domain Dedication [Kenney Assets License](Asset_License.txt).
@@ -10,8 +10,13 @@ Though edited, some graphics, like menu, created by [piiixl](https://piiixl.itch
 # About TennisDough
 This is a tennis style game inspired by the classic Atari Pong. It features both single and multiplayer modes, including with any configuration of human or AI players. The game is designed to be rather simple and fun but provides a variety of configuration options to customize the game. The game features configurations for paddle speed and size, ball speed, max score, max time, and color customization for paddles and ball. This game is provided as is, without warranty of any kind, and is free to use and modify under the terms of the AGPLv3 license. Feel free to learn from it, modify it, and share it with others!
 
-## Progess
-The game is feature complete but may need polish or bug fixes.
+## Progess on Divisions (Games)
+"Menu" - The main menu; no where near complete, in fact it doesn't exist.
+"Tennis" - The game is feature complete but may need polish or bug fixes.
+"Block" - Mostly feature complete, needs testing and polish, menu implementation.
+
+# Tennis Game Overview
+It is akin to Atari's Pong but with features.
 
 ### Core Components
 #### Game Loop & Management (`MainTennis.cs`)
