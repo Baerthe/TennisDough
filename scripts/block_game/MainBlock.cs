@@ -44,6 +44,8 @@ public sealed partial class MainBlock : Node2D
     private int _timeInSeconds = 0;
     private int _maxTimeInSeconds = 9999;
     private byte _maxScore = 255;
+    // *-> Singleton Access
+    private readonly GameMonitor _monitor = GameManager.Monitor;
     // *-> Godot Overrides
     public override void _EnterTree()
     {
@@ -52,8 +54,7 @@ public sealed partial class MainBlock : Node2D
     }
     public override void _Ready()
     {
-        // // Setup AudioManager
-        // TODO: Add a soundWatcher to listen to audio events instead of direct calls
+        // Setup AudioManager
         _audioManager.AddAudioClip("block_hit", _audioBlockHit);
         _audioManager.AddAudioClip("block_destroy", _audioBlockDestroy);
         _audioManager.AddAudioClip("out_of_bounds", _audioOutOfBounds);
