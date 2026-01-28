@@ -3,18 +3,17 @@ TennisDough is an open-source project, created as a means to learn Godot 4.5 (Go
 # License & Acknowledgements
 This project is under GNU Affero General Public License v3.0 [License](LICENSE.txt) and uses assets from Kenney.nl under the CC0 1.0 Universal (CC0 1.0) Public Domain Dedication [Kenney Assets License](Asset_License.txt).
 
-This is inspired by the ["20 Game Challenge"](https://20_games_challenge.gitlab.io/), but is not affiliated with it in any way.
-
-Though edited, some graphics, like menu, created by [piiixl](https://piiixl.itch.io/game-ui) under License: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.en).
-Incorporates a (work in progress) modification of the [space worm theme by softwave](https://softwave.itch.io/godot-retro-theme-space-worm) under the Unlicense.
+- This is inspired by the ["20 Game Challenge"](https://20_games_challenge.gitlab.io/), but is not affiliated with it in any way.
+- Though edited, some graphics, like menu, created by [piiixl](https://piiixl.itch.io/game-ui) under License: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.en).
+- Incorporates a (work in progress) modification of the [space worm theme by softwave](https://softwave.itch.io/godot-retro-theme-space-worm) under the Unlicense.
 
 # About TennisDough
 This is a tennis style game inspired by the classic Atari Pong. It features both single and multiplayer modes, including with any configuration of human or AI players. The game is designed to be rather simple and fun but provides a variety of configuration options to customize the game. The game features configurations for paddle speed and size, ball speed, max score, max time, and color customization for paddles and ball. This game is provided as is, without warranty of any kind, and is free to use and modify under the terms of the AGPLv3 license. Feel free to learn from it, modify it, and share it with others!
 
 ## Progess on Divisions (Games)
-"Menu" - The main menu; no where near complete, in fact it doesn't exist.
-"Tennis" - The game is feature complete but may need polish or bug fixes.
-"Block" - Mostly feature complete, needs testing and polish, menu implementation.
+- "Menu" - The main menu; no where near complete, in fact it doesn't exist.
+- "Tennis" - The game is feature complete but may need polish or bug fixes.
+- "Block" - Mostly feature complete, needs testing and polish, menu implementation.
 
 # Tennis Game Overview
 It is akin to Atari's Pong but with features.
