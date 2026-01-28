@@ -17,9 +17,7 @@ public static class Utils
     /// <returns>The newly created node of type T.</returns>
     public static T AddNode<T>(this Node parent) where T : Node, new()
     {
-        var child = new T();
-        if (child == null)
-            throw new InvalidOperationException($"Failed to create instance of type {typeof(T).Name}");
+        var child = new T() ?? throw new InvalidOperationException($"Failed to create instance of type {typeof(T).Name}");
         GD.Print($"Adding node of type {typeof(T).Name} to parent {parent.Name}");
         parent.AddChild(child);
         return child;
@@ -32,9 +30,7 @@ public static class Utils
     /// <returns>The root node of the instantiated scene.</returns>
     public static Node InstantScene(this Node parent, PackedScene scene)
     {
-        var instance = scene.Instantiate();
-        if (instance == null)
-            throw new InvalidOperationException($"Failed to instantiate scene of type {scene.ResourceName}");
+        var instance = scene.Instantiate() ?? throw new InvalidOperationException($"Failed to instantiate scene of type {scene.ResourceName}");
         GD.Print($"Instancing scene of type {instance.GetType().Name} to parent {parent.Name}");
         parent.AddChild(instance);
         return instance;

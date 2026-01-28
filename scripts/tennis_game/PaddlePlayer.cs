@@ -12,7 +12,7 @@ public class PaddlePlayer : IController
     public bool IsLeftSide { get; private set; }
     public Paddle Paddle { get; private set; }
     public Score Score { get; private set; }
-    private string _inputPrefix;
+    private readonly string _inputPrefix;
     public PaddlePlayer(Paddle paddle, BallTennis ball,Score score, bool isLeftSide, bool isPlayer1)
     {
         IsLeftSide = isLeftSide;

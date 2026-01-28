@@ -31,7 +31,7 @@ public sealed partial class Paddle : CharacterBody2D
     {
         if (Velocity == Vector2.Zero)
             return;
-        Velocity = Velocity * _fixedFriction;
+        Velocity *= _fixedFriction;
         MoveAndCollide(Velocity * (float)delta);
     }
     public void AdjustColor(Color color)

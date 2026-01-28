@@ -7,7 +7,7 @@ using Godot;
 public sealed class Score
 {
     public byte CurrentScore { get { return _points; }}
-    private Label _scoreLabel;
+    private readonly Label _scoreLabel;
     private byte _points;
     public Score(Label scoreLabel)
     {

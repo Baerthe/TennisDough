@@ -3,6 +3,8 @@ namespace BlockGame;
 using Common;
 using Godot;
 using System;
+using System.Linq;
+
 /// <summary>
 /// Menu UI for BlockGame.
 /// </summary>
@@ -32,7 +34,7 @@ public sealed partial class MenuBlock : Control
         _buttonQuit.Pressed += () => GetTree().Quit();
         _buttonCancel.Pressed += () => Visible = false;
         _buttonCancel.Pressed += () => OnGameCancel?.Invoke();
-        foreach (Button button in GetChildren())
+        foreach (Button button in GetChildren().Cast<Button>())
             button.Pressed += OnAnyButtonPressed;
     }
     public void Inject(AudioManager audioManager) => _audioManager = audioManager;

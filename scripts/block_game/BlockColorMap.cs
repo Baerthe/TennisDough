@@ -19,7 +19,7 @@ public sealed class BlockColorMap
             { 3, new Color(0.6f, 0.6f, 1) },
             { 4, new Color(0.8f, 0.8f, 1) }
         };
-        ParticleColorMap = new Dictionary<byte, ParticleProcessMaterial>{};
+        ParticleColorMap = [];
     }
     public void AddParticleMaterial(byte hitPoints, ParticleProcessMaterial material)
     {

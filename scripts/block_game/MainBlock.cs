@@ -31,6 +31,7 @@ public sealed partial class MainBlock : Node2D
     [Export] private Label _timerLabel;
     [Export] private Label _middleScreenLabel;
     // *-> Switches
+    private bool _isRandomLevel = true; // !!! Debug to true.
     private bool _isGameOver = false;
     private bool _isPaused = false;
     private bool _isRainbowEffectActive = false;
@@ -69,9 +70,10 @@ public sealed partial class MainBlock : Node2D
         // _ball.OnOutOfBounds += HandleBallOutOfBounds;
         // _gameTimer.Timeout += HandleTimerUpdate;
         // _pauseWatcher.OnTogglePause += GamePause;
-        // ! Debug init !
-        _blockCollection.GenerateLevel();
-        // ! End Debug init !
+        if (_isRandomLevel)
+            _blockCollection.GenerateLevel();
+        else
+            _blockCollection.GenerateLevel(_testLevel);
     }
     public override void _Process(double delta)
     {

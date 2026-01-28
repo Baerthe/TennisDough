@@ -6,6 +6,7 @@ This project is under GNU Affero General Public License v3.0 [License](LICENSE.t
 This is inspired by the ["20 Game Challenge"](https://20_games_challenge.gitlab.io/), but is not affiliated with it in any way.
 
 Though edited, some graphics, like menu, created by [piiixl](https://piiixl.itch.io/game-ui) under License: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.en).
+Incorporates a (work in progress) modification of the [space worm theme by softwave](https://softwave.itch.io/godot-retro-theme-space-worm) under the Unlicense.
 
 # About TennisDough
 This is a tennis style game inspired by the classic Atari Pong. It features both single and multiplayer modes, including with any configuration of human or AI players. The game is designed to be rather simple and fun but provides a variety of configuration options to customize the game. The game features configurations for paddle speed and size, ball speed, max score, max time, and color customization for paddles and ball. This game is provided as is, without warranty of any kind, and is free to use and modify under the terms of the AGPLv3 license. Feel free to learn from it, modify it, and share it with others!
