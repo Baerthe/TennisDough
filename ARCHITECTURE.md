@@ -119,11 +119,15 @@ A singleton service that manages game resource discovery and access:
 ```csharp
 public sealed class GameRegistry
 {
-    private static GameRegistry _instance;
-    public static GameRegistry Instance => _instance ??= new GameRegistry();
+    // Thread-safe singleton using static readonly initialization
+    private static readonly GameRegistry _instance = new GameRegistry();
+    public static GameRegistry Instance => _instance;
     
     private Dictionary<string, GameResource> _games = new();
     private const string GAMES_RESOURCE_PATH = "res://resources/games/";
+    
+    // Private constructor for singleton pattern
+    private GameRegistry() { }
     
     /// <summary>
     /// Loads all GameResource files from the designated folder
@@ -134,31 +138,43 @@ public sealed class GameRegistry
         
         // Use Godot's DirAccess to scan for .tres files
         using var dir = DirAccess.Open(GAMES_RESOURCE_PATH);
-        if (dir != null)
+        if (dir == null)
         {
-            dir.ListDirBegin();
-            string fileName = dir.GetNext();
-            
-            while (fileName != "")
+            GD.PrintErr($"Failed to open games resource directory: {GAMES_RESOURCE_PATH}");
+            return;
+        }
+        
+        dir.ListDirBegin();
+        string fileName = dir.GetNext();
+        
+        while (fileName != "")
+        {
+            if (!dir.CurrentIsDir() && fileName.EndsWith(".tres"))
             {
-                if (!dir.CurrentIsDir() && fileName.EndsWith(".tres"))
+                string resourcePath = GAMES_RESOURCE_PATH + fileName;
+                var gameResource = GD.Load<GameResource>(resourcePath);
+                
+                if (gameResource != null)
                 {
-                    string resourcePath = GAMES_RESOURCE_PATH + fileName;
-                    var gameResource = GD.Load<GameResource>(resourcePath);
+                    // Use filename (without extension) as GameId
+                    string gameId = fileName.Replace(".tres", "");
+                    gameResource.GameId = gameId;
                     
-                    if (gameResource != null)
+                    // Check for duplicate GameIds
+                    if (_games.ContainsKey(gameId))
                     {
-                        // Use filename (without extension) as GameId
-                        string gameId = fileName.Replace(".tres", "");
-                        gameResource.GameId = gameId;
+                        GD.PrintErr($"Duplicate GameId detected: {gameId}. Skipping.");
+                    }
+                    else
+                    {
                         _games[gameId] = gameResource;
                         GD.Print($"Registered game: {gameId}");
                     }
                 }
-                fileName = dir.GetNext();
             }
-            dir.ListDirEnd();
+            fileName = dir.GetNext();
         }
+        dir.ListDirEnd();
     }
     
     /// <summary>
@@ -226,6 +242,12 @@ public sealed partial class GameManager : Node
         if (gameResource == null)
         {
             GD.PrintErr($"Game not found: {gameId}");
+            return;
+        }
+        
+        if (gameResource.GameScene == null)
+        {
+            GD.PrintErr($"Game scene not set for: {gameId}");
             return;
         }
         
@@ -326,7 +348,6 @@ TennisDough/
 
 [resource]
 script = ExtResource("1")
-GameId = "tennis_game"
 DisplayName = "Tennis"
 Description = "Classic Pong-style tennis game with configurable paddles, ball, and AI opponents."
 Icon = ExtResource("2")
@@ -334,6 +355,8 @@ GameScene = ExtResource("3")
 Category = "Arcade"
 SortOrder = 1
 ```
+
+**Note**: The `GameId` field is intentionally omitted from the resource file as it's automatically set by `GameRegistry.LoadGameResources()` based on the filename. This ensures consistency and prevents mismatches between filename and internal ID.
 
 ---
 
@@ -460,6 +483,57 @@ private static readonly Dictionary<string, GameSelection> IdToEnum = new()
 - ✅ Mod support foundation
 - ✅ Consistent with Godot patterns
 - ✅ Future-proof architecture
+
+---
+
+## Future Extensibility Considerations
+
+### Multiple Resource Directories
+
+The current design uses a single hardcoded path (`res://resources/games/`) for simplicity. Future enhancements could include:
+
+```csharp
+public class GameRegistry
+{
+    private List<string> _searchPaths = new()
+    {
+        "res://resources/games/",      // Built-in games
+        "user://mods/games/",           // User-installed mods
+        "res://dlc/games/"              // DLC content
+    };
+    
+    public void LoadGameResourcesFromAllPaths()
+    {
+        foreach (var path in _searchPaths)
+        {
+            LoadGameResourcesFromPath(path);
+        }
+    }
+}
+```
+
+This would enable:
+- **Mod Support**: Load community-created games from user directory
+- **DLC**: Separate official expansion content
+- **Hot Reload**: Watch directories for new content during development
+
+### Thread Safety
+
+The singleton pattern shown uses static readonly initialization for thread safety. For more complex scenarios (e.g., async loading), consider:
+
+```csharp
+private static readonly Lazy<GameRegistry> _instance = 
+    new Lazy<GameRegistry>(() => new GameRegistry(), 
+    LazyThreadSafetyMode.ExecutionAndPublication);
+```
+
+### Resource Validation
+
+For production use, add comprehensive validation:
+- Ensure all required fields are set
+- Validate PackedScene exists and is instantiable
+- Check for circular dependencies
+- Verify icon resources load correctly
 
 ---
 
