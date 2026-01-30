@@ -25,7 +25,7 @@ public sealed partial class AudioManager : Node
         _audioPlayerChannel2 = new AudioStreamPlayer();
         AddChild(_audioPlayerChannel1);
         AddChild(_audioPlayerChannel2);
-        _audioClips = new Dictionary<string, AudioStream>();
+        _audioClips = [];
     }
     /// <summary>
     /// Adds an audio clip to the manager with the specified name.
@@ -38,15 +38,6 @@ public sealed partial class AudioManager : Node
         {
             _audioClips[name] = clip;
         }
-    }
-    /// <summary>
-    /// Converts a linear volume value (0.0 to 1.0) to decibels.
-    /// </summary>
-    /// <param name="linear"></param>
-    /// <returns></returns>
-    public float LinearToDb(float linear)
-    {
-        return linear <= 0.0f ? -80.0f : 20.0f * Mathf.Log(linear);
     }
     /// <summary>
     /// Plays an audio clip by name on the specified channel.
@@ -93,5 +84,14 @@ public sealed partial class AudioManager : Node
             if (_isChannel2Playing)
                 _audioPlayerChannel2.VolumeDb = LinearToDb(_channel2Volume);
         }
+    }
+    /// <summary>
+    /// Converts a linear volume value (0.0 to 1.0) to decibels.
+    /// </summary>
+    /// <param name="linear"></param>
+    /// <returns></returns>
+    private static float LinearToDb(float linear)
+    {
+        return linear <= 0.0f ? -80.0f : 20.0f * Mathf.Log(linear);
     }
 }

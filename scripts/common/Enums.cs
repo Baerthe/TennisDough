@@ -20,12 +20,14 @@ public enum PlayerType : byte
     AI = 2
 }
 /// <summary>
-/// Game States.
+/// Game States enum for tracking.
 /// </summary>
 public enum GameState : byte
 {
     MainMenu = 0,
-    InGame = 1,
-    Paused = 2,
-    GameOver = 3
+    GameMenu = 1,
+    InGame = 2,
+    Paused = 3,
+    GameOver = 4,
+    Loading = 5
 }
