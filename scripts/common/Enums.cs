@@ -1,6 +1,6 @@
 namespace Common;
 /// <summary>
-/// Direction enum for paddle movement.
+/// Direction enum for player movement.
 /// </summary>
 public enum Direction : byte
 {
@@ -18,4 +18,23 @@ public enum PlayerType : byte
     Player1 = 0,
     Player2 = 1,
     AI = 2
+}
+/// <summary>
+/// Game selection for menu.
+/// </summary>
+public enum GameSelection : byte
+{
+    None = 0,
+    BlockGame = 1,
+    TennisGame = 2
+}
+/// <summary>
+/// Game States.
+/// </summary>
+public enum GameState : byte
+{
+    MainMenu = 0,
+    InGame = 1,
+    Paused = 2,
+    GameOver = 3
 }

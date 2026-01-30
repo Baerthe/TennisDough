@@ -3,7 +3,7 @@ namespace BlockGame;
 using Godot;
 using System.Collections.Generic;
 /// <summary>
-/// Class to hold block color mappings.
+/// Class to hold block color mappings and change particles.
 /// </summary>
 public sealed class BlockColorMap
 {
@@ -21,6 +21,11 @@ public sealed class BlockColorMap
         };
         ParticleColorMap = [];
     }
+    /// <summary>
+    /// Adds/Replaces a particle material for a given hit point value.
+    /// </summary>
+    /// <param name="hitPoints"></param>
+    /// <param name="material"></param>
     public void AddParticleMaterial(byte hitPoints, ParticleProcessMaterial material)
     {
         var copy = material.Duplicate() as ParticleProcessMaterial;
