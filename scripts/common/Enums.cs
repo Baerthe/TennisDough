@@ -20,15 +20,6 @@ public enum PlayerType : byte
     AI = 2
 }
 /// <summary>
-/// Game selection for menu.
-/// </summary>
-public enum GameSelection : byte
-{
-    None = 0,
-    BlockGame = 1,
-    TennisGame = 2
-}
-/// <summary>
 /// Game States.
 /// </summary>
 public enum GameState : byte

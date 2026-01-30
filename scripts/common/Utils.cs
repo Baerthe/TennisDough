@@ -28,7 +28,7 @@ public static class Utils
     /// <param name="parent">The parent node to which the instantiated scene will be added as a child.</param>
     /// <param name="scene">The PackedScene to instantiate.</param>
     /// <returns>The root node of the instantiated scene.</returns>
-    public static Node InstantScene(this Node parent, PackedScene scene)
+    public static Node InstanceScene(this Node parent, PackedScene scene)
     {
         var instance = scene.Instantiate() ?? throw new InvalidOperationException($"Failed to instantiate scene of type {scene.ResourceName}");
         GD.Print($"Instancing scene of type {instance.GetType().Name} to parent {parent.Name}");

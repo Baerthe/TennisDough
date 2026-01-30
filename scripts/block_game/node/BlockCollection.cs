@@ -76,7 +76,7 @@ public sealed partial class BlockCollection : Node2D
                     if (charValue >= '1' && charValue <= '9')
                     {
                         var hitPoints = (byte)(charValue - '0');
-                        var blockInstance = this.InstantScene(BlockScene) as Block;
+                        var blockInstance = this.InstanceScene(BlockScene) as Block;
                         blockInstance.Position = new Vector2(x * (BlockSize.X + Spacing.X), y * (BlockSize.Y + Spacing.Y));
                         blockInstance.XPOS = (byte)x;
                         blockInstance.YPOS = (byte)y;
