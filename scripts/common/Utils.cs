@@ -15,10 +15,12 @@ public static class Utils
     /// <param name="parent">The parent node to which the new node will be added as a child.</param>
     /// <param name="name">The name to assign to the new node.</param>
     /// <returns>The newly created node of type T.</returns>
-    public static T AddNode<T>(this Node parent) where T : Node, new()
+    public static T AddNode<T>(this Node parent, string name = "") where T : Node, new()
     {
         var child = new T() ?? throw new InvalidOperationException($"Failed to create instance of type {typeof(T).Name}");
         GD.Print($"Adding node of type {typeof(T).Name} to parent {parent.Name}");
+        if (!string.IsNullOrEmpty(name))
+            child.Name = name;
         parent.AddChild(child);
         return child;
     }

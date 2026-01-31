@@ -6,27 +6,16 @@ using System.Collections.Generic;
 /// <summary>
 /// Manages audio playback with two channels and volume control.
 /// </summary>
-public sealed partial class AudioManager : Node
+public sealed partial class AudioManager(AudioStreamPlayer audioPlayerChannel1, AudioStreamPlayer audioPlayerChannel2)
 {
-    private static AudioManager _instance;
-    private AudioStreamPlayer _audioPlayerChannel1;
-    private AudioStreamPlayer _audioPlayerChannel2;
-    private Dictionary<string, AudioStream> _audioClips;
+    private readonly AudioStreamPlayer _audioPlayerChannel1 = audioPlayerChannel1;
+    private readonly AudioStreamPlayer _audioPlayerChannel2 = audioPlayerChannel2;
+    private Dictionary<string, AudioStream> _audioClips = [];
     private float _channel1Volume = 1.0f;
     private float _channel2Volume = 1.0f;
     private bool _isChannel1Playing = false;
     private bool _isChannel2Playing = false;
-    public override void _Ready()
-    {
-        if (_instance != null)
-            throw new Exception("AudioManager instance already exists.");
-        _instance = this;
-        _audioPlayerChannel1 = new AudioStreamPlayer();
-        _audioPlayerChannel2 = new AudioStreamPlayer();
-        AddChild(_audioPlayerChannel1);
-        AddChild(_audioPlayerChannel2);
-        _audioClips = [];
-    }
+
     /// <summary>
     /// Adds an audio clip to the manager with the specified name.
     /// </summary>
@@ -35,9 +24,7 @@ public sealed partial class AudioManager : Node
     public void AddAudioClip(string name, AudioStream clip)
     {
         if (!_audioClips.ContainsKey(name))
-        {
             _audioClips[name] = clip;
-        }
     }
     /// <summary>
     /// Plays an audio clip by name on the specified channel.
@@ -86,12 +73,26 @@ public sealed partial class AudioManager : Node
         }
     }
     /// <summary>
+    /// Stops playback on the specified channel.
+    /// </summary>
+    /// <param name="channel"></param>
+    public void StopChannel(int channel)
+    {
+        if (channel == 1 && _isChannel1Playing)
+        {
+            _audioPlayerChannel1.Stop();
+            _isChannel1Playing = false;
+        }
+        else if (channel == 2 && _isChannel2Playing)
+        {
+            _audioPlayerChannel2.Stop();
+            _isChannel2Playing = false;
+        }
+    }
+    /// <summary>
     /// Converts a linear volume value (0.0 to 1.0) to decibels.
     /// </summary>
     /// <param name="linear"></param>
-    /// <returns></returns>
-    private static float LinearToDb(float linear)
-    {
-        return linear <= 0.0f ? -80.0f : 20.0f * Mathf.Log(linear);
-    }
+    /// <returns>float</returns>
+    private static float LinearToDb(float linear) => linear <= 0.0f ? -80.0f : 20.0f * Mathf.Log(linear);
 }

@@ -12,7 +12,7 @@ using System.Reflection.Metadata;
 public sealed partial class GameManager : Node
 {
     public static AudioManager Audio { get; private set; }
-    public static GameMonitor Monitor { get; private set; } = new GameMonitor();
+    public static GameMonitor Monitor { get; private set; }
     [ExportCategory("Scenes")]
     [Export] private PackedScene _mainMenuScene;
     [Export] private PackedScene _loadingScene;
@@ -24,8 +24,11 @@ public sealed partial class GameManager : Node
     public override void _EnterTree()
     {
         GD.Print("GameManager: EnterTree");
-        // Add our sub-systems
-        Audio = this.AddNode<AudioManager>();
+        // Add our sub-nodes
+        Audio = new AudioManager(
+            this.AddNode<AudioStreamPlayer>("AudioChannel1"),
+            this.AddNode<AudioStreamPlayer>("AudioChannel2"));
+        Monitor = new GameMonitor();
         _pauseWatcher = this.AddNode<PauseWatcher>();
         _mainMenu = this.InstanceScene(_mainMenuScene) as MainMenu;
     }
