@@ -9,7 +9,7 @@ using System.Collections.Generic;
 public sealed class PackManager
 {
     public event Action<GamePack> OnPackLoaded;
-    public GamePack[] GamePacks { get; private set; }
+    public Dictionary<string, GamePack> GamePacks { get; private set; }
     public GamePack CurrentPack { get; private set; }
     public PackManager()
     {
@@ -22,7 +22,7 @@ public sealed class PackManager
     /// <param name="pack"></param>
     public void LoadIntoPack(GamePack pack)
     {
-        GD.Print($"PackManager: Starting game with pack: {pack}");
+        GD.Print($"PackManager: Starting game with pack: {pack.GameName}");
         CurrentPack = pack;
         OnPackLoaded?.Invoke(pack);
     }
@@ -30,11 +30,11 @@ public sealed class PackManager
     /// Loads all game packs from the designated resource directory.
     /// </summary>
     /// <returns></returns>
-    private static GamePack[] LoadGamePacks()
+    private static Dictionary<string, GamePack> LoadGamePacks()
     {
         string hardPath = "res://assets/resources/packs";
         var dir = DirAccess.Open(hardPath);
-        var packs = new List<GamePack>();
+        var packs = new Dictionary<string, GamePack>();
         if (dir != null)
         {
             dir.ListDirBegin();
@@ -46,7 +46,7 @@ public sealed class PackManager
                     var packPath = $"{hardPath}/{fileName}";
                     GD.Print($"PackManager: Found pack file at: {packPath}");
                     GamePack pack = GD.Load<GamePack>(packPath);
-                    packs.Add(pack);
+                    packs.Add(pack.GameName, pack);
                     GD.Print($"PackManager: checked pack: {pack.GameName} from {packPath}");
                 }
                 fileName = dir.GetNext();
@@ -54,6 +54,6 @@ public sealed class PackManager
             dir.ListDirEnd();
         } else
             GD.PrintErr("PackManager: Failed to open packs directory.");
-        return [.. packs];
+        return packs;
     }
 }

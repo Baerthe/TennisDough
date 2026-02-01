@@ -14,6 +14,8 @@ public sealed partial class GameManager : Control
     [Export] private MainMenu _mainMenu;
     [Export] private Control _loadingScreen;
     [Export] private Control _gameScreen;
+    [Export] private Control _crtOverlay;
+    private Material _crtMaterial;
     private Node2D _LoadedPackedScene;
     private static PackManager PackManager;
     private static PauseWatcher _pauseWatcher;
@@ -28,6 +30,8 @@ public sealed partial class GameManager : Control
             this.AddNode<AudioStreamPlayer>("AudioChannel2"));
         Monitor = new GameMonitor();
         _pauseWatcher = this.AddNode<PauseWatcher>();
+        // Cache our CRT material
+        _crtMaterial = _crtOverlay.Material;
 //        _loadingScreen.Visible = false;
     }
     public override void _Ready()
@@ -38,7 +42,7 @@ public sealed partial class GameManager : Control
 //        _mainMenu.OnStartGame += HandleStartGame;
         _pauseWatcher.OnTogglePause += HandleTogglePause;
         // ! Debug
-        HandleStartGame(PackManager.GamePacks[0]);
+        HandleStartGame(PackManager.GamePacks["Block Game"]);
     }
     // -> Event Handlers
     /// <summary>

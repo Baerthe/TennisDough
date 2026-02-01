@@ -23,7 +23,7 @@ shader_parameter/roll_speed = 1.0
 shader_parameter/scan_line_strength = -8.0
 shader_parameter/pixel_strength = -0.3599998271000002
 
-[node name="GameManager" type="Control" unique_id=1154646228 node_paths=PackedStringArray("_gameScreen")]
+[node name="GameManager" type="Control" unique_id=1154646228 node_paths=PackedStringArray("_gameScreen", "_crtOverlay")]
 texture_filter = 1
 layout_mode = 3
 anchors_preset = 15
@@ -35,6 +35,7 @@ mouse_filter = 1
 theme = ExtResource("1_tbgi4")
 script = ExtResource("2_o6xl0")
 _gameScreen = NodePath("crt/game_screen")
+_crtOverlay = NodePath("crt/crt_overlay")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=2068144816]
 z_index = -10
@@ -104,7 +105,7 @@ mouse_filter = 1
 color = Color(0, 0.096179135, 0.07974955, 1)
 metadata/_edit_lock_ = true
 
-[node name="crt_shader" type="ColorRect" parent="crt" unique_id=1995530114]
+[node name="crt_overlay" type="ColorRect" parent="crt" unique_id=1995530114]
 material = SubResource("ShaderMaterial_tefeu")
 layout_mode = 1
 anchors_preset = -1
