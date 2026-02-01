@@ -13,6 +13,7 @@ public sealed class PackManager
     public GamePack CurrentPack { get; private set; }
     public PackManager()
     {
+        GD.Print("PackManager: Initializing PackManager and loading game packs.");
         GamePacks = LoadGamePacks();
     }
     /// <summary>
@@ -31,7 +32,7 @@ public sealed class PackManager
     /// <returns></returns>
     private static GamePack[] LoadGamePacks()
     {
-        string hardPath = "res://resources/packs";
+        string hardPath = "res://assets/resources/packs";
         var dir = DirAccess.Open(hardPath);
         var packs = new List<GamePack>();
         if (dir != null)
@@ -43,13 +44,16 @@ public sealed class PackManager
                 if (fileName.EndsWith(".tres"))
                 {
                     var packPath = $"{hardPath}/{fileName}";
+                    GD.Print($"PackManager: Found pack file at: {packPath}");
                     GamePack pack = GD.Load<GamePack>(packPath);
                     packs.Add(pack);
+                    GD.Print($"PackManager: checked pack: {pack.GameName} from {packPath}");
                 }
                 fileName = dir.GetNext();
             }
             dir.ListDirEnd();
-        }
+        } else
+            GD.PrintErr("PackManager: Failed to open packs directory.");
         return [.. packs];
     }
 }

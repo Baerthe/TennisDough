@@ -2,43 +2,43 @@ namespace Common;
 
 using Godot;
 using System;
-using System.Collections.Generic;
-using System.Reflection.Metadata;
-
 /// <summary>
 /// The core game manager responsible for handling game state and transitions. Global Root Node.
 /// Normally we would want some sort of state orchestratior/scene loader, but we will be handling it inline for simplicity.
 /// </summary>
-public sealed partial class GameManager : Node
+public sealed partial class GameManager : Control
 {
     public static AudioManager Audio { get; private set; }
     public static GameMonitor Monitor { get; private set; }
     [ExportCategory("Scenes")]
-    [Export] private PackedScene _mainMenuScene;
-    [Export] private PackedScene _loadingScene;
-    private Node _LoadedPackedScene;
-    private MainMenu _mainMenu;
-    private static readonly PackManager PackManager = new();
+    [Export] private MainMenu _mainMenu;
+    [Export] private Control _loadingScreen;
+    [Export] private Control _gameScreen;
+    private Node2D _LoadedPackedScene;
+    private static PackManager PackManager;
     private static PauseWatcher _pauseWatcher;
     // -> Godot Overrides
     public override void _EnterTree()
     {
         GD.Print("GameManager: EnterTree");
+        PackManager = new PackManager();
         // Add our sub-nodes
         Audio = new AudioManager(
             this.AddNode<AudioStreamPlayer>("AudioChannel1"),
             this.AddNode<AudioStreamPlayer>("AudioChannel2"));
         Monitor = new GameMonitor();
         _pauseWatcher = this.AddNode<PauseWatcher>();
-        _mainMenu = this.InstanceScene(_mainMenuScene) as MainMenu;
+//        _loadingScreen.Visible = false;
     }
     public override void _Ready()
     {
         // Hook up events
         Monitor.OnGameStateChanged += HandleGameStateRequest;
         PackManager.OnPackLoaded += HandlePackLoaded;
-        _mainMenu.OnStartGame += HandleStartGame;
+//        _mainMenu.OnStartGame += HandleStartGame;
         _pauseWatcher.OnTogglePause += HandleTogglePause;
+        // ! Debug
+        HandleStartGame(PackManager.GamePacks[0]);
     }
     // -> Event Handlers
     /// <summary>
@@ -52,25 +52,22 @@ public sealed partial class GameManager : Node
         switch (newState)
         {
             case GameState.MainMenu:
-                // Handle main menu state
                 _LoadedPackedScene?.QueueFree();
                 _LoadedPackedScene = null;
+                _loadingScreen.Visible = false;
                 break;
             case GameState.GameMenu:
-                // Handle game menu state
                 break;
             case GameState.InGame:
-                // Handle in-game state
+//                _loadingScreen.Visible = false;
                 break;
             case GameState.Paused:
                 HandleTogglePause();
                 break;
             case GameState.GameOver:
-                // Handle game over state
                 break;
             case GameState.Loading:
-                // Handle loading state
-                // TODO: _loadingScene.Visible = true;
+//                _loadingScreen.Visible = true;
                 Monitor.ChangeState(GameState.InGame);
                 break;
             default:
@@ -84,12 +81,14 @@ public sealed partial class GameManager : Node
     private void HandlePackLoaded(GamePack pack)
     {
         GD.Print($"GameManager: Pack loaded: {pack.GameName}");
-        _LoadedPackedScene = this.InstanceScene(pack.GameScene);
+        _LoadedPackedScene =  pack.GameScene.Instantiate() as Node2D;
+        _gameScreen.AddChild(_LoadedPackedScene);
+        _LoadedPackedScene.Scale = new Vector2(1.78f, 1.78f);
     }
     /// <summary>
     /// Handles starting a new game based on the selected game type.
     /// </summary>
-    private void HandleStartGame(GamePack selection)
+    private static void HandleStartGame(GamePack selection)
     {
         Monitor.ChangeState(GameState.Loading);
         PackManager.LoadIntoPack(selection);

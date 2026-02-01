@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://biin4ot03tbmh" path="res://scenes/block_game/block_game_ball.tscn" id="4_bs432"]
 [ext_resource type="AudioStream" uid="uid://du82d3h8ccakc" path="res://assets/sounds/sfx_disappear.ogg" id="4_jhm30"]
 [ext_resource type="PackedScene" uid="uid://yfuw16cd03jl" path="res://scenes/block_game/block_game_paddle.tscn" id="5_pmr2s"]
-[ext_resource type="Theme" uid="uid://c5b38epkeox6b" path="res://assets/themes/tennis_game_main.tres" id="6_2loq5"]
+[ext_resource type="Theme" path="res://assets/themes/space_worm_theme.tres" id="6_2loq5"]
 [ext_resource type="FontFile" uid="uid://bpyvhrqs3tbf8" path="res://assets/fonts/Kenney Future Narrow.ttf" id="7_p6ga7"]
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_pmr2s"]

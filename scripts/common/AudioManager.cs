@@ -1,7 +1,6 @@
 namespace Common;
 
 using Godot;
-using System;
 using System.Collections.Generic;
 /// <summary>
 /// Manages audio playback with two channels and volume control.

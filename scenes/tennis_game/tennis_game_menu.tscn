@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://buv6q6pr7ocpi"]
 
-[ext_resource type="Theme" uid="uid://c5b38epkeox6b" path="res://assets/themes/tennis_game_main.tres" id="1_q33qw"]
+[ext_resource type="Theme" uid="uid://c5b38epkeox6b" path="res://assets/themes/space_worm_theme.tres" id="1_q33qw"]
 [ext_resource type="Script" uid="uid://bfp7radqu12n8" path="res://scripts/tennis_game/MenuTennis.cs" id="1_wut2e"]
 [ext_resource type="Texture2D" uid="uid://c8nrigv8n7dc8" path="res://assets/interface/icon_play_light.png" id="3_l1anq"]
 [ext_resource type="AudioStream" uid="uid://dm33a7syuxv3q" path="res://assets/sounds/switch-a.ogg" id="3_ogmyl"]

@@ -32,11 +32,8 @@ public sealed partial class MainBlock : Node2D
     [Export] private Label _middleScreenLabel;
     // *-> Switches
     private bool _isRandomLevel = true; // !!! Debug to true.
-    private bool _isGameOver = false;
-    private bool _isPaused = false;
     private bool _isRainbowEffectActive = false;
     // *-> Components
-    private AudioManager _audioManager;
     private IController _controller;
     private PauseWatcher _pauseWatcher;
     private Score _score;
@@ -45,13 +42,9 @@ public sealed partial class MainBlock : Node2D
     private int _maxTimeInSeconds = 9999;
     private byte _maxScore = 255;
     // *-> Singleton Access
+    private readonly AudioManager _audioManager = GameManager.Audio;
     private readonly GameMonitor _monitor = GameManager.Monitor;
     // *-> Godot Overrides
-    public override void _EnterTree()
-    {
-        _audioManager = this.AddNode<AudioManager>();
-        _pauseWatcher = this.AddNode<PauseWatcher>();
-    }
     public override void _Ready()
     {
         // Setup AudioManager
@@ -78,7 +71,7 @@ public sealed partial class MainBlock : Node2D
     }
     public override void _Process(double delta)
     {
-        if (_isGameOver || _isPaused)
+        if (_monitor.CurrentState != GameState.InGame)
             return;
         _controller.Update();
     }
@@ -88,23 +81,23 @@ public sealed partial class MainBlock : Node2D
     /// </summary>
     private void GamePause()
     {
-        if (_isGameOver)
+        if (_monitor.CurrentState == GameState.GameOver)
             return;
-        if (_isPaused)
+        if (_monitor.CurrentState != GameState.Paused)
         {
             if (_gameTimer.IsStopped())
                 _gameTimer.Start();
             _gameTimer.Paused = false;
             _ball.ToggleEnable();
             _menu.Visible = false;
-            _isPaused = false;
+            _monitor.ChangeState(GameState.InGame);
         }
         else
         {
             _gameTimer.Paused = true;
             _ball.ToggleEnable();
             _menu.Visible = true;
-            _isPaused = true;
+            _monitor.ChangeState(GameState.Paused);
         }
     }
     // *-> Event Handlers

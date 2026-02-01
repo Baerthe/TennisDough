@@ -28,8 +28,6 @@ public sealed partial class MainTennis : Node2D
     private bool _isPaused = false;
     private bool _isRainbowEffectActive = false;
     // -> Components
-    private AudioManager _audioManager;
-    private PauseWatcher _pauseWatcher;
     private IController _controller1;
     private IController _controller2;
     private Score _scoreP1;
@@ -38,12 +36,10 @@ public sealed partial class MainTennis : Node2D
     private int _timeInSeconds = 0;
     private int _maxTimeInSeconds = 9999;
     private byte _maxScore = 255;
+    // *-> Singleton Access
+    private readonly AudioManager _audioManager = GameManager.Audio;
+    private readonly GameMonitor _monitor = GameManager.Monitor;
     // -> Godot Overrides
-    public override void _EnterTree()
-    {
-        _audioManager = this.AddNode<AudioManager>();
-        _pauseWatcher = this.AddNode<PauseWatcher>();
-    }
     public override void _Ready()
     {
         _ball.Inject(_audioManager);
@@ -53,11 +49,10 @@ public sealed partial class MainTennis : Node2D
         _menu.OnGameCancel += GamePause;
         _menu.OnGameStart += GameStart;
         _gameTimer.Timeout += TimerUpdate;
-        _pauseWatcher.OnTogglePause += GamePause;
     }
     public override void _Process(double delta)
     {
-        if (_isGameOver || _isPaused)
+        if (_monitor.CurrentState != GameState.InGame)
             return;
         _controller1.Update();
         _controller2.Update();
@@ -68,23 +63,23 @@ public sealed partial class MainTennis : Node2D
     /// </summary>
     private void GamePause()
     {
-        if (_isGameOver)
+        if (_monitor.CurrentState == GameState.GameOver)
             return;
-        if (_isPaused)
+        if (_monitor.CurrentState == GameState.Paused)
         {
             if (_gameTimer.IsStopped())
                 _gameTimer.Start();
             _gameTimer.Paused = false;
             _ball.ToggleEnable();
             _menu.Visible = false;
-            _isPaused = false;
+            _monitor.ChangeState(GameState.InGame);
         }
         else
         {
             _gameTimer.Paused = true;
             _ball.ToggleEnable();
             _menu.Visible = true;
-            _isPaused = true;
+            _monitor.ChangeState(GameState.Paused);
         }
     }
     /// <summary>
