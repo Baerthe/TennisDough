@@ -23,25 +23,24 @@ public sealed partial class MainTennis : Node2D
     [Export] private Label _scoreP2Label;
     [Export] private Label _timerLabel;
     [Export] private Label _middleScreenLabel;
-    // -> Switches
-    private bool _isGameOver = true;
-    private bool _isPaused = false;
+    // *-> Switches
     private bool _isRainbowEffectActive = false;
-    // -> Components
+    // *-> Components
     private IController _controller1;
     private IController _controller2;
     private Score _scoreP1;
     private Score _scoreP2;
-    // -> Fields
+    // *-> Fields
     private int _timeInSeconds = 0;
     private int _maxTimeInSeconds = 9999;
     private byte _maxScore = 255;
     // *-> Singleton Access
     private readonly AudioManager _audioManager = GameManager.Audio;
     private readonly GameMonitor _monitor = GameManager.Monitor;
-    // -> Godot Overrides
+    // *-> Godot Overrides
     public override void _Ready()
     {
+        // TODO: Really should remove injection and call the global singleton, but it works for now so eh?
         _ball.Inject(_audioManager);
         _menu.Inject(_audioManager);
         _scoreP1 = new Score(_scoreP1Label);
@@ -57,7 +56,7 @@ public sealed partial class MainTennis : Node2D
         _controller1.Update();
         _controller2.Update();
     }
-    // -> Game State Functions
+    // *-> Game State Functions
     /// <summary>
     /// Pauses or unpauses the current game.
     /// </summary>
@@ -87,7 +86,7 @@ public sealed partial class MainTennis : Node2D
     /// </summary>
     private async void GameOver()
     {
-        _isGameOver = true;
+        _monitor.ChangeState(GameState.GameOver);
         _middleScreenLabel.Text =
             _scoreP1.CurrentScore > _scoreP2.CurrentScore ?
             "Player 1 Wins!" :
@@ -118,8 +117,7 @@ public sealed partial class MainTennis : Node2D
         _scoreP1.Reset();
         _scoreP2.Reset();
         _timeInSeconds = 0;
-        if (_isPaused)
-            _isPaused = false;
+        _monitor.ChangeState(GameState.InGame);
     }
     /// <summary>
     /// Starts a new game with the given parameters sent from the Menu.
@@ -138,10 +136,8 @@ public sealed partial class MainTennis : Node2D
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     private void GameStart(PlayerType player1Type, PlayerType player2Type, int ballSize, int paddle1Size, int paddle2Size, int paddle1Speed, int paddle2Speed, Color paddle1Color, Color paddle2Color, Color ballColor, int gameTime, int maxScore)
     {
-        if (_controller1 != null)
-            _controller1.Detach();
-        if (_controller2 != null)
-            _controller2.Detach();
+        _controller1?.Detach();
+        _controller2?.Detach();
         _controller1 = player1Type switch
         {
             PlayerType.Player1 => new PaddlePlayer(_paddleP1, _ball, _scoreP1, true, true),
@@ -160,8 +156,6 @@ public sealed partial class MainTennis : Node2D
         GD.Print("Controller 2 created.");
         _controller1.Attach();
         _controller2.Attach();
-        if (_isGameOver)
-            _isGameOver = false;
         GD.Print("Controllers attached.");
         _middleScreenLabel.Visible = false;
         _ball.AdjustSize((byte)ballSize);
@@ -180,12 +174,12 @@ public sealed partial class MainTennis : Node2D
         GD.Print("Game time set.");
         _maxScore = (byte)maxScore;
         GD.Print("Max score set.");
-        if (_isPaused)
+        if (_monitor.CurrentState == GameState.Paused)
         {
             GamePause();
             return;
         }
-        if (!_isGameOver)
+        if (_monitor.CurrentState == GameState.InGame)
         {
             GD.Print("Game already in progress.");
             _menu.ToggleButtons();
@@ -225,7 +219,7 @@ public sealed partial class MainTennis : Node2D
         _isRainbowEffectActive = !_isRainbowEffectActive;
         while (_isRainbowEffectActive)
         {
-            Color color = new Color(GD.Randf(), GD.Randf(), GD.Randf());
+            Color color = new(GD.Randf(), GD.Randf(), GD.Randf());
             _crossRect.Color = color;
             _dividerRect.Color = color;
             _scoreP1Label.AddThemeColorOverride("font_color", color);
@@ -237,7 +231,7 @@ public sealed partial class MainTennis : Node2D
             _ball.AdjustColor(color);
             await ToSignal(GetTree().CreateTimer(0.1f), "timeout");
         }
-        Color white = new Color(1, 1, 1);
+        Color white = new(1, 1, 1);
         _crossRect.Color = white;
         _dividerRect.Color = white;
         _scoreP1Label.AddThemeColorOverride("font_color", white);

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Manages audio playback with two channels and volume control.
 /// </summary>
-public sealed partial class AudioManager(AudioStreamPlayer audioPlayerChannel1, AudioStreamPlayer audioPlayerChannel2)
+public sealed class AudioManager(AudioStreamPlayer audioPlayerChannel1, AudioStreamPlayer audioPlayerChannel2)
 {
     private readonly AudioStreamPlayer _audioPlayerChannel1 = audioPlayerChannel1;
     private readonly AudioStreamPlayer _audioPlayerChannel2 = audioPlayerChannel2;

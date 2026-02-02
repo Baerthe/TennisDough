@@ -15,11 +15,12 @@ public sealed partial class GameManager : Control
     [Export] private Control _loadingScreen;
     [Export] private Control _gameScreen;
     [Export] private Control _crtOverlay;
+    // *-> Fields
     private Material _crtMaterial;
     private Node2D _LoadedPackedScene;
     private static PackManager PackManager;
     private static PauseWatcher _pauseWatcher;
-    // -> Godot Overrides
+    // *-> Godot Overrides
     public override void _EnterTree()
     {
         GD.Print("GameManager: EnterTree");
@@ -41,10 +42,10 @@ public sealed partial class GameManager : Control
         PackManager.OnPackLoaded += HandlePackLoaded;
 //        _mainMenu.OnStartGame += HandleStartGame;
         _pauseWatcher.OnTogglePause += HandleTogglePause;
-        // ! Debug
+        // ! DEBUG
         HandleStartGame(PackManager.GamePacks["Block Game"]);
     }
-    // -> Event Handlers
+    // *-> Event Handlers
     /// <summary>
     /// Handles game state change requests from the GameMonitor.
     /// </summary>
@@ -72,6 +73,7 @@ public sealed partial class GameManager : Control
                 break;
             case GameState.Loading:
 //                _loadingScreen.Visible = true;
+                // ! DEBUG
                 Monitor.ChangeState(GameState.InGame);
                 break;
             default:

@@ -1,6 +1,6 @@
 # TennisDough - Project TODO List
 
-> **Last Updated:** January 29, 2026
+> **Last Updated:** February 02, 2026
 > **Project Status:** In Development
 
 ---
@@ -15,16 +15,25 @@ Both games need to be integrated into a unified system with a main menu, game pa
 
 ### Further Mini-Games
 - **FrogGame** - A Frogger-style game (planned, not started)
+- **SpaceGame** - A floaty space-style game (planned, not started)
 - **PacGame** - A Pacman-style game (planned, not started)
+- **BrotherGame** - A Donkey Kong-style game (planned, not started)
+- **WormyGame** - A Worms-style game (planned, not started)
+
+*MAYBE 3D concepts, maybe.*
+- **FoxGame** - StarFox-style game (planned, not started)
+- **WolfGame** - A German-shooting style game (planned, not started)
+
+At some point want to add the background elements to the main menu screen, where the monitor is, to show a stack of game carts for quick selection. Maybe a window?
 
 ---
 
 ## 🔴 Critical / High Priority
 
 ### 1. GameManager - Core System Integration
-- [ ] **Implement `HandleStartGame` logic** - Currently just prints a debug message
-- [ ] **Scene loading/unloading** - Load game scenes based on `GamePack` selection
-- [ ] **State transitions** - Wire `GameMonitor.ChangeState()` calls throughout game lifecycle
+- [x] **Implement `HandleStartGame` logic** - Currently just prints a debug message
+- [x] **Scene loading/unloading** - Load game scenes based on `GamePack` selection
+- [x] **State transitions** - Wire `GameMonitor.ChangeState()` calls throughout game lifecycle
 - [ ] **Return to main menu** - Handle game completion → main menu transition
 - [ ] **Cleanup on game exit** - Properly dispose of game scenes when returning to menu
 
@@ -37,10 +46,10 @@ Both games need to be integrated into a unified system with a main menu, game pa
 - [ ] **Inject GamePacks from GameManager** - Pass loaded packs to menu for display
 
 ### 3. Global Game State Management
-- [ ] **Integrate `GameMonitor` into both games** - BlockGame partially done, TennisGame needs update
-- [ ] **Pause state handling** - `GameState.Paused` should propagate to active game
-- [ ] **Game over state** - `GameState.GameOver` should trigger return flow
-- [ ] **State change events** - Games should subscribe to `OnGameStateChanged`
+- [x] **Integrate `GameMonitor` into both games** - BlockGame partially done, TennisGame needs update
+- [x] **Pause state handling** - `GameState.Paused` should propagate to active game
+- [x] **Game over state** - `GameState.GameOver` should trigger return flow
+- [x] **State change events** - Games should subscribe to `OnGameStateChanged`
 
 ---
 
@@ -85,10 +94,12 @@ Both games need to be integrated into a unified system with a main menu, game pa
 ### 8. Audio System Improvements
 - [ ] **Global volume settings** - Persist across game sessions
 - [ ] **Music support** - Background music tracks
+- [ ] ? Music Player ?
 - [ ] **Audio bus configuration** - Separate SFX/Music buses
 
 ### 9. Visual Polish
 - [ ] **CRT shader refinement** - Tune parameters for better effect
+- [ ] ? CRT Shader options and effects related to loading, gameover, etc.
 - [ ] **Loading transitions** - Fade in/out between scenes
 - [ ] **Rainbow effect** - Implement `_isRainbowEffectActive` in BlockGame (already in TennisGame)
 - [ ] **Particle system fixes** - Ensure trail effects work in all contexts
@@ -98,27 +109,3 @@ Both games need to be integrated into a unified system with a main menu, game pa
 - [ ] **Consolidate IController interfaces** - BlockGame and TennisGame have separate definitions
 - [ ] **Add null checks** - AudioManager calls can fail if not injected
 - [ ] **Error handling** - GamePack loading failures
-
----
-
-## 📁 File Structure Notes
-
-### Missing/Needed Files
-```
-resources/
-├── packs/
-│   ├── block_game.tres    ← CREATE
-│   └── tennis_game.tres   ← CREATE
-scenes/
-├── main_menu.tscn         ← CREATE (referenced by GameManager)
-```
-
-### Key Integration Points
-| File | Status | Notes |
-|------|--------|-------|
-| `GameManager.cs` | Partial | Core logic incomplete |
-| `GameMonitor.cs` | Complete | Ready for use |
-| `MainMenu.cs` | Stub | UI not implemented |
-| `MainBlock.cs` | 80% | Events commented, no game over |
-| `MainTennis.cs` | 90% | Needs state migration |
-| `GamePack.cs` | Complete | Resource definition ready |

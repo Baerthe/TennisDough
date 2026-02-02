@@ -1,4 +1,4 @@
-TennisDough is an open-source project, created as a means to learn Godot 4.5 (Godot.NET.Sdk/4.5.1, .net9.0) by recreating Atari's Pong, and then Atari's Breakout, but then I accidently slipped and fell and now we are making a few more little minigames along the way...
+TennisDough is an open-source project, created as a means to learn Godot 4.5 (Godot.NET.Sdk/4.5.1, .net9.0) by recreating Atari's Pong, and then Atari's Breakout, but then I accidently slipped and fell and now we are making a few more little minigames along the way... The game is named after a combination of Tennis For Two and Godot (GAH'DOUGH).
 
 # License & Acknowledgements
 This project is under GNU Affero General Public License v3.0 [License](LICENSE.txt) and uses assets from Kenney.nl under the CC0 1.0 Universal (CC0 1.0) Public Domain Dedication [Kenney Assets License](Asset_License.txt).

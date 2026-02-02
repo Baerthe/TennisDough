@@ -10,22 +10,22 @@ using System.Linq;
 /// </summary>
 public sealed partial class MenuBlock : Control
 {
-    // -> Events
+    // *-> Events
     public event Action OnGameStart;
     public event Action OnGameCancel;
     public event Action OnGameReset;
     public event Action OnMenuOpen;
-    // -> Exports
+    // *-> Exports
     [ExportGroup("Buttons")]
     [Export] private Button _buttonCancel;
     [Export] private Button _buttonPlay;
     [Export] private Button _buttonQuit;
     [Export] private OptionButton _optionPaddle;
     [Export] private OptionButton _optionLevel;
-    // -> Dependencies
+    // *-> Dependencies
     private AudioManager _audioManager;
 
-    // -> Godot Overrides
+    // *-> Godot Overrides
     public override void _Ready()
     {
         _buttonCancel.Visible = false;
