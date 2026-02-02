@@ -10,7 +10,8 @@ public sealed partial class GameManager : Control
 {
     public static AudioManager Audio { get; private set; }
     public static GameMonitor Monitor { get; private set; }
-    [ExportCategory("Scenes")]
+    [ExportCategory("Configuration")]
+    [ExportGroup("References")]
     [Export] private MainMenu _mainMenu;
     [Export] private Control _loadingScreen;
     [Export] private Control _gameScreen;
@@ -28,7 +29,8 @@ public sealed partial class GameManager : Control
         // Add our sub-nodes
         Audio = new AudioManager(
             this.AddNode<AudioStreamPlayer>("AudioChannel1"),
-            this.AddNode<AudioStreamPlayer>("AudioChannel2"));
+            this.AddNode<AudioStreamPlayer>("AudioChannel2"),
+            this.AddNode<AudioStreamPlayer>("AudioChannelMusic"));
         Monitor = new GameMonitor();
         _pauseWatcher = this.AddNode<PauseWatcher>();
         // Cache our CRT material
@@ -57,21 +59,27 @@ public sealed partial class GameManager : Control
         switch (newState)
         {
             case GameState.MainMenu:
+                GD.Print("GameManager: Switching to Main Menu.");
                 _LoadedPackedScene?.QueueFree();
                 _LoadedPackedScene = null;
                 _loadingScreen.Visible = false;
                 break;
             case GameState.GameMenu:
+                GD.Print("GameManager: Switching to Game Menu.");
                 break;
             case GameState.InGame:
+                GD.Print("GameManager: Switching to In-Game.");
 //                _loadingScreen.Visible = false;
                 break;
             case GameState.Paused:
+                GD.Print("GameManager: Switching to Game Paused.");
                 HandleTogglePause();
                 break;
             case GameState.GameOver:
+                GD.Print("GameManager: Switching to Game Over.");
                 break;
             case GameState.Loading:
+                GD.Print("GameManager: Switching to Loading Screen.");
 //                _loadingScreen.Visible = true;
                 // ! DEBUG
                 Monitor.ChangeState(GameState.InGame);
@@ -83,13 +91,15 @@ public sealed partial class GameManager : Control
     /// <summary>
     /// Handles actions to take when a game pack is loaded.
     /// </summary>
-    /// <param name="pack"></param>
-    private void HandlePackLoaded(GamePack pack)
+    /// <param name="scene"></param>
+    private void HandlePackLoaded(Node scene)
     {
-        GD.Print($"GameManager: Pack loaded: {pack.GameName}");
-        _LoadedPackedScene =  pack.GameScene.Instantiate() as Node2D;
+        _LoadedPackedScene?.QueueFree();
+        _LoadedPackedScene =  scene as Node2D;
         _gameScreen.AddChild(_LoadedPackedScene);
         _LoadedPackedScene.Scale = new Vector2(1.78f, 1.78f);
+        Monitor.ChangeState(GameState.InGame);
+        GD.Print("GameManager: Pack loaded and scene instantiated.");
     }
     /// <summary>
     /// Handles starting a new game based on the selected game type.

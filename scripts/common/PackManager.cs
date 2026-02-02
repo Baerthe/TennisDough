@@ -8,7 +8,7 @@ using System.Collections.Generic;
 /// </summary>
 public sealed class PackManager
 {
-    public event Action<GamePack> OnPackLoaded;
+    public event Action<Node> OnPackLoaded;
     public Dictionary<string, GamePack> GamePacks { get; private set; }
     public GamePack CurrentPack { get; private set; }
     public PackManager()
@@ -24,7 +24,8 @@ public sealed class PackManager
     {
         GD.Print($"PackManager: Starting game with pack: {pack.GameName}");
         CurrentPack = pack;
-        OnPackLoaded?.Invoke(pack);
+        Node LoadedScene = pack.GameScene.Instantiate();
+        OnPackLoaded?.Invoke(LoadedScene);
     }
     /// <summary>
     /// Loads all game packs from the designated resource directory.

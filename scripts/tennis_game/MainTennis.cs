@@ -56,6 +56,14 @@ public sealed partial class MainTennis : Node2D
         _controller1.Update();
         _controller2.Update();
     }
+    public override void _ExitTree()
+    {
+        _controller1?.Detach();
+        _controller2?.Detach();
+        _menu.OnGameCancel -= GamePause;
+        _menu.OnGameStart -= GameStart;
+        _gameTimer.Timeout -= TimerUpdate;
+    }
     // *-> Game State Functions
     /// <summary>
     /// Pauses or unpauses the current game.
