@@ -11,7 +11,6 @@ public partial class MenuTennis : Control
 {
     public event Action<PlayerType, PlayerType, int, int, int, int, int, Color, Color, Color,int, int> OnGameStart;
     public event Action OnGameCancel;
-    public event Action OnGameReset;
     private AudioManager _audioManager;
     [ExportGroup("Sound Effects")]
     [Export] private AudioStream _sfxButtonPress;
@@ -58,13 +57,13 @@ public partial class MenuTennis : Control
                 _audioManager.PlayAudioClip("menu_open");
         };
         // Connect slider signals to update labels
-        _gameTimeSlider.ValueChanged += (double value) => _labelGameTime.Text = ((int)value).ToString("D4");
-        _sliderBall.ValueChanged += (double value) => _labelBallSpeed.Text = ((int)value).ToString("D2");
-        _sliderPaddle1Size.ValueChanged += (double value) => _labelPaddle1Size.Text = ((int)value).ToString("D2");
-        _sliderPaddle2Size.ValueChanged += (double value) => _labelPaddle2Size.Text = ((int)value).ToString("D2");
-        _sliderPaddle1Speed.ValueChanged += (double value) => _labelPaddle1Speed.Text = ((int)value).ToString("D2");
-        _sliderPaddle2Speed.ValueChanged += (double value) => _labelPaddle2Speed.Text = ((int)value).ToString("D2");
-        _maxScoreSlider.ValueChanged += (double value) => _labelMaxScore.Text = ((int)value).ToString("D2");
+        _gameTimeSlider.ValueChanged += value => _labelGameTime.Text = ((int)value).ToString("D4");
+        _sliderBall.ValueChanged += value => _labelBallSpeed.Text = ((int)value).ToString("D2");
+        _sliderPaddle1Size.ValueChanged += value => _labelPaddle1Size.Text = ((int)value).ToString("D2");
+        _sliderPaddle2Size.ValueChanged += value => _labelPaddle2Size.Text = ((int)value).ToString("D2");
+        _sliderPaddle1Speed.ValueChanged += value => _labelPaddle1Speed.Text = ((int)value).ToString("D2");
+        _sliderPaddle2Speed.ValueChanged += value => _labelPaddle2Speed.Text = ((int)value).ToString("D2");
+        _maxScoreSlider.ValueChanged += value => _labelMaxScore.Text = ((int)value).ToString("D2");
         // Initialize labels
         _labelGameTime.Text = ((int)_gameTimeSlider.Value).ToString("D4");
         _labelBallSpeed.Text = ((int)_sliderBall.Value).ToString("D2");
@@ -117,7 +116,7 @@ public partial class MenuTennis : Control
     /// <summary>
     /// Configures the appearance and behavior of a ColorPickerButton.
     /// </summary>
-    private void ConfigureColorPicker(ColorPickerButton button)
+    private static void ConfigureColorPicker(ColorPickerButton button)
     {
         ColorPicker picker = button.GetPicker();
         picker.AddThemeConstantOverride("sv_width", 100);

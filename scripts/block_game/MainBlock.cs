@@ -75,13 +75,6 @@ public sealed partial class MainBlock : Node2D
             return;
         _controller.Update();
     }
-    public override void _ExitTree()
-    {
-        _ball.OnBlockHit -= HandleBlockHit;
-        // _ball.OnOutOfBounds -= HandleBallOutOfBounds;
-        // _gameTimer.Timeout -= HandleTimerUpdate;
-        // _pauseWatcher.OnTogglePause -= GamePause;
-    }
     // *-> Game State Functions
     /// <summary>
     /// Pauses or unpauses the current game.

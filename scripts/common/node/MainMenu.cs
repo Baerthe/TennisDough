@@ -16,7 +16,9 @@ public sealed partial class MainMenu : Control
     [Export] private AudioStream _menuBootUpSound;
     [Export] private AudioStream _menuTheme;
     [Export] private HBoxContainer _packButtonContainer;
+    [Export] private Control _settingsSubMenu;
     [ExportGroup("Buttons")]
+    [Export] private Button _settingsButton;
     [Export] private Button _quitButton;
     // *-> Singleton References
     private AudioManager _audioManager;
@@ -31,6 +33,7 @@ public sealed partial class MainMenu : Control
         _audioManager.AddAudioClip("menu_bootup", _menuBootUpSound);
         _audioManager.AddMusicTrack("menu_theme", _menuTheme);
         _quitButton.Pressed += () => OnQuitGame?.Invoke();
+        _settingsButton.Pressed += () => _settingsSubMenu.Visible = !_settingsSubMenu.Visible;
         BootSequence();
         LoadPackButtons();
     }

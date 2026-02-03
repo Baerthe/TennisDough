@@ -54,6 +54,7 @@ public sealed partial class GameManager : Control
     {
         GD.Print("GameManager: Boot sequence started.");
         Monitor.ChangeState(GameState.MainMenu);
+        _crtOverlay.Material = _bootCrtMaterial;
     }
     /// <summary>
     /// Handles game state change requests from the GameMonitor.
@@ -67,8 +68,8 @@ public sealed partial class GameManager : Control
         {
             case GameState.MainMenu:
                 GD.Print("GameManager: Switching to Main Menu.");
+                _mainMenu.Visible = true;
                 _LoadedPackedScene?.QueueFree();
-                _LoadedPackedScene = null;
                 _loadingScreen.Visible = false;
                 break;
             case GameState.GameMenu:
@@ -76,6 +77,7 @@ public sealed partial class GameManager : Control
                 break;
             case GameState.InGame:
                 GD.Print("GameManager: Switching to In-Game.");
+                _mainMenu.Visible = false;
                 _crtOverlay.Material = _defaultCrtMaterial;
 //                _loadingScreen.Visible = false;
                 break;
