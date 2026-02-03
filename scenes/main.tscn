@@ -3,25 +3,9 @@
 [ext_resource type="Theme" uid="uid://b06djk5f1at43" path="res://assets/themes/space_worm_theme.tres" id="1_tbgi4"]
 [ext_resource type="Script" uid="uid://b2rpfmxa0l35n" path="res://scripts/common/node/GameManager.cs" id="2_o6xl0"]
 [ext_resource type="Texture2D" uid="uid://b2v83xfx4rh7s" path="res://assets/interface/user_interface_com.png" id="2_tefeu"]
+[ext_resource type="Material" uid="uid://dwde0rpeqm4to" path="res://assets/shaders/materials/crt_paused.material" id="3_tbgi4"]
 [ext_resource type="Texture2D" uid="uid://c26vuo5mykg5n" path="res://assets/interface/user_interface_crt.png" id="4_o6xl0"]
-[ext_resource type="Shader" uid="uid://cnudfwxibdlxn" path="res://assets/shaders/crt.gdshader" id="5_tbgi4"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tefeu"]
-shader = ExtResource("5_tbgi4")
-shader_parameter/resolution = Vector2(1152, 864)
-shader_parameter/scan_line_amount = 0.800000038
-shader_parameter/warp_amount = 0.400000019
-shader_parameter/noise_amount = 0.0400000019
-shader_parameter/interference_amount = 0.0800000038
-shader_parameter/grille_amount = 0.14000000665
-shader_parameter/grille_size = 4.000000142499999
-shader_parameter/vignette_amount = 1.6000000760000002
-shader_parameter/vignette_intensity = 0.4750000225625
-shader_parameter/aberation_amount = 0.9600000456
-shader_parameter/roll_line_amount = 0.0400000019
-shader_parameter/roll_speed = 1.0
-shader_parameter/scan_line_strength = -8.0
-shader_parameter/pixel_strength = -0.3599998271000002
+[ext_resource type="Material" uid="uid://jeo74wvqtm8q" path="res://assets/shaders/materials/crt_default.material" id="6_tefeu"]
 
 [node name="GameManager" type="Control" unique_id=1154646228 node_paths=PackedStringArray("_gameScreen", "_crtOverlay")]
 texture_filter = 1
@@ -36,6 +20,8 @@ theme = ExtResource("1_tbgi4")
 script = ExtResource("2_o6xl0")
 _gameScreen = NodePath("crt/game_screen")
 _crtOverlay = NodePath("crt/crt_overlay")
+_defaultCrtMaterial = ExtResource("6_tefeu")
+_pausedCrtMaterial = ExtResource("3_tbgi4")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=2068144816]
 z_index = -10
@@ -106,7 +92,7 @@ color = Color(0, 0.096179135, 0.07974955, 1)
 metadata/_edit_lock_ = true
 
 [node name="crt_overlay" type="ColorRect" parent="crt" unique_id=1995530114]
-material = SubResource("ShaderMaterial_tefeu")
+material = ExtResource("6_tefeu")
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.032

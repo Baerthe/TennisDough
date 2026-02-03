@@ -11,8 +11,6 @@ public sealed partial class PauseWatcher : Node
     public override void _UnhandledInput(InputEvent @event)
     {
         if (@event.IsActionPressed("pause_game"))
-        {
             OnTogglePause?.Invoke();
-        }
     }
 }

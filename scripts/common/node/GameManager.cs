@@ -10,31 +10,32 @@ public sealed partial class GameManager : Control
 {
     public static AudioManager Audio { get; private set; }
     public static GameMonitor Monitor { get; private set; }
+    public static PackManager PackManager { get; private set; }
     [ExportCategory("Configuration")]
     [ExportGroup("References")]
     [Export] private MainMenu _mainMenu;
     [Export] private Control _loadingScreen;
     [Export] private Control _gameScreen;
     [Export] private Control _crtOverlay;
+    [ExportGroup("Shaders")]
+    [Export] private ShaderMaterial _defaultCrtMaterial;
+    [Export] private ShaderMaterial _pausedCrtMaterial;
+    [Export] private ShaderMaterial _bootCrtMaterial;
     // *-> Fields
-    private Material _crtMaterial;
     private Node2D _LoadedPackedScene;
-    private static PackManager PackManager;
     private static PauseWatcher _pauseWatcher;
     // *-> Godot Overrides
     public override void _EnterTree()
     {
         GD.Print("GameManager: EnterTree");
-        PackManager = new PackManager();
-        // Add our sub-nodes
+       // Add our sub-nodes
         Audio = new AudioManager(
             this.AddNode<AudioStreamPlayer>("AudioChannel1"),
             this.AddNode<AudioStreamPlayer>("AudioChannel2"),
             this.AddNode<AudioStreamPlayer>("AudioChannelMusic"));
         Monitor = new GameMonitor();
+        PackManager = new PackManager();
         _pauseWatcher = this.AddNode<PauseWatcher>();
-        // Cache our CRT material
-        _crtMaterial = _crtOverlay.Material;
 //        _loadingScreen.Visible = false;
     }
     public override void _Ready()
@@ -42,12 +43,18 @@ public sealed partial class GameManager : Control
         // Hook up events
         Monitor.OnGameStateChanged += HandleGameStateRequest;
         PackManager.OnPackLoaded += HandlePackLoaded;
-//        _mainMenu.OnStartGame += HandleStartGame;
+       // _mainMenu.OnBootSequence += HandleBootSequence;
+       // _mainMenu.OnStartGame += PackManager.LoadIntoPack;
         _pauseWatcher.OnTogglePause += HandleTogglePause;
         // ! DEBUG
-        HandleStartGame(PackManager.GamePacks["Block Game"]);
+        PackManager.LoadIntoPack(PackManager.GamePacks["Block Game"]);
     }
     // *-> Event Handlers
+    private void HandleBootSequence()
+    {
+        GD.Print("GameManager: Boot sequence started.");
+        Monitor.ChangeState(GameState.MainMenu);
+    }
     /// <summary>
     /// Handles game state change requests from the GameMonitor.
     /// </summary>
@@ -69,11 +76,12 @@ public sealed partial class GameManager : Control
                 break;
             case GameState.InGame:
                 GD.Print("GameManager: Switching to In-Game.");
+                _crtOverlay.Material = _defaultCrtMaterial;
 //                _loadingScreen.Visible = false;
                 break;
             case GameState.Paused:
                 GD.Print("GameManager: Switching to Game Paused.");
-                HandleTogglePause();
+                _crtOverlay.Material = _pausedCrtMaterial;
                 break;
             case GameState.GameOver:
                 GD.Print("GameManager: Switching to Game Over.");
@@ -95,19 +103,11 @@ public sealed partial class GameManager : Control
     private void HandlePackLoaded(Node scene)
     {
         _LoadedPackedScene?.QueueFree();
-        _LoadedPackedScene =  scene as Node2D;
+        _LoadedPackedScene = scene as Node2D;
         _gameScreen.AddChild(_LoadedPackedScene);
         _LoadedPackedScene.Scale = new Vector2(1.78f, 1.78f);
-        Monitor.ChangeState(GameState.InGame);
-        GD.Print("GameManager: Pack loaded and scene instantiated.");
-    }
-    /// <summary>
-    /// Handles starting a new game based on the selected game type.
-    /// </summary>
-    private static void HandleStartGame(GamePack selection)
-    {
         Monitor.ChangeState(GameState.Loading);
-        PackManager.LoadIntoPack(selection);
+        GD.Print("GameManager: Pack loaded and scene instantiated.");
     }
     /// <summary>
     /// Handles toggling the pause state of the game.
@@ -116,7 +116,10 @@ public sealed partial class GameManager : Control
     {
         if (Monitor.CurrentState == GameState.MainMenu)
             return;
-        Monitor.ChangeState(GameState.Paused);
+        if (Monitor.CurrentState == GameState.Paused)
+            Monitor.ChangeState(Monitor.PriorState);
+        else
+            Monitor.ChangeState(GameState.Paused);
         GD.Print($"GameManager: Game paused -> {Monitor.CurrentState == GameState.Paused}");
     }
 }
