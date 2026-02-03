@@ -13,6 +13,7 @@ public sealed partial class MainMenu : Control
     public event Action<GamePack> OnStartGame;
     public event Action OnQuitGame;
     [ExportGroup("References")]
+    [Export] private AudioStream _menuBootUpSound;
     [Export] private AudioStream _menuTheme;
     [Export] private HBoxContainer _packButtonContainer;
     [ExportGroup("Buttons")]
@@ -27,6 +28,7 @@ public sealed partial class MainMenu : Control
         _audioManager = GameManager.Audio;
         _gameMonitor = GameManager.Monitor;
         _packManager = GameManager.PackManager;
+        _audioManager.AddAudioClip("menu_bootup", _menuBootUpSound);
         _audioManager.AddMusicTrack("menu_theme", _menuTheme);
         _quitButton.Pressed += () => OnQuitGame?.Invoke();
         BootSequence();
@@ -39,7 +41,9 @@ public sealed partial class MainMenu : Control
     private void BootSequence()
     {
         _gameMonitor.ChangeState(GameState.MainMenu);
+        _audioManager.PlayAudioClip("menu_bootup");
         _audioManager.PlayMusicTrack("menu_theme");
+        OnBootSequence?.Invoke();
     }
     /// <summary>
     /// Loads buttons for each available game pack into the main menu.

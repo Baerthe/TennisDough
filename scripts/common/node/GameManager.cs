@@ -11,8 +11,8 @@ public sealed partial class GameManager : Control
     public static AudioManager Audio { get; private set; }
     public static GameMonitor Monitor { get; private set; }
     public static PackManager PackManager { get; private set; }
-    [ExportCategory("Configuration")]
-    [ExportGroup("References")]
+    [ExportCategory("References")]
+    [ExportGroup("Nodes")]
     [Export] private MainMenu _mainMenu;
     [Export] private Control _loadingScreen;
     [Export] private Control _gameScreen;
@@ -43,8 +43,8 @@ public sealed partial class GameManager : Control
         // Hook up events
         Monitor.OnGameStateChanged += HandleGameStateRequest;
         PackManager.OnPackLoaded += HandlePackLoaded;
-       // _mainMenu.OnBootSequence += HandleBootSequence;
-       // _mainMenu.OnStartGame += PackManager.LoadIntoPack;
+        _mainMenu.OnBootSequence += HandleBootSequence;
+        _mainMenu.OnStartGame += PackManager.LoadIntoPack;
         _pauseWatcher.OnTogglePause += HandleTogglePause;
         // ! DEBUG
         PackManager.LoadIntoPack(PackManager.GamePacks["Block Game"]);
