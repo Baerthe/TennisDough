@@ -13,10 +13,13 @@ public sealed partial class MainMenu : Control
     public event Action<GamePack> OnStartGame;
     public event Action OnQuitGame;
     [ExportGroup("References")]
-    [Export] private AudioStream _menuBootUpSound;
-    [Export] private AudioStream _menuTheme;
     [Export] private HBoxContainer _packButtonContainer;
     [Export] private Control _settingsSubMenu;
+    [ExportGroup("Sounds")]
+    [Export] private AudioEvent _menuBootUpSound;
+    [Export] private AudioEvent _menuTheme;
+    [Export] private AudioEvent _sfxButtonPress;
+    [Export] private AudioEvent _sfxMenuOpen;
     [ExportGroup("Buttons")]
     [Export] private Button _settingsButton;
     [Export] private Button _quitButton;
@@ -30,8 +33,6 @@ public sealed partial class MainMenu : Control
         _audioManager = GameManager.Audio;
         _gameMonitor = GameManager.Monitor;
         _packManager = GameManager.PackManager;
-        _audioManager.AddAudioClip("menu_bootup", _menuBootUpSound);
-        _audioManager.AddMusicTrack("menu_theme", _menuTheme);
         _quitButton.Pressed += () => OnQuitGame?.Invoke();
         _settingsButton.Pressed += () => _settingsSubMenu.Visible = !_settingsSubMenu.Visible;
         BootSequence();
@@ -44,8 +45,8 @@ public sealed partial class MainMenu : Control
     private void BootSequence()
     {
         _gameMonitor.ChangeState(GameState.MainMenu);
-        _audioManager.PlayAudioClip("menu_bootup");
-        _audioManager.PlayMusicTrack("menu_theme");
+        _audioManager.PlayAudioClip(_sfxMenuOpen);
+        _audioManager.PlayMusicTrack(_menuTheme);
         OnBootSequence?.Invoke();
     }
     /// <summary>

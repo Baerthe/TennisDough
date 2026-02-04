@@ -1,6 +1,7 @@
 namespace Common;
 
 using Godot;
+using Godot.Collections;
 /// <summary>
 /// A resource representing a game pack with its associated metadata.
 /// </summary>

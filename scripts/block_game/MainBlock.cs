@@ -15,13 +15,13 @@ public sealed partial class MainBlock : Node2D
     [Export] private LevelData _testLevel;
     [Export] public PaddleBlock _paddle;
     [ExportGroup("Sounds")]
-    [Export] private AudioStream _audioBlockHit;
-    [Export] private AudioStream _audioBlockDestroy;
-    [Export] private AudioStream _audioOutOfBounds;
-    [Export] private AudioStream _sfxButtonPress;
-    [Export] private AudioStream _sfxMenuOpen;
-    [Export] private AudioStream _sfxMenuClose;
-    [Export] private AudioStream _sfxGameOver;
+    [Export] private AudioEvent _audioBlockHit;
+    [Export] private AudioEvent _audioBlockDestroy;
+    [Export] private AudioEvent _audioOutOfBounds;
+    [Export] private AudioEvent _sfxButtonPress;
+    [Export] private AudioEvent _sfxMenuOpen;
+    [Export] private AudioEvent _sfxMenuClose;
+    [Export] private AudioEvent _sfxGameOver;
     [ExportGroup("Rects")]
     [Export] private ColorRect _crossRect;
     [Export] private ColorRect _leftWallRect;
@@ -47,14 +47,6 @@ public sealed partial class MainBlock : Node2D
     // *-> Godot Overrides
     public override void _Ready()
     {
-        // Setup AudioManager
-        _audioManager.AddAudioClip("block_hit", _audioBlockHit);
-        _audioManager.AddAudioClip("block_destroy", _audioBlockDestroy);
-        _audioManager.AddAudioClip("out_of_bounds", _audioOutOfBounds);
-        // _audioManager.AddAudioClip("button_press", _sfxButtonPress);
-        // _audioManager.AddAudioClip("menu_open", _sfxMenuOpen);
-        // _audioManager.AddAudioClip("menu_close", _sfxMenuClose);
-        // _audioManager.AddAudioClip("game_over", _sfxGameOver);
         // // Initialize Score and Controller
         _score = new Score(_scoreLabel);
         _controller = new PaddlePlayer(_paddle, _ball, _score);
@@ -107,14 +99,14 @@ public sealed partial class MainBlock : Node2D
     /// <param name="block"></param>
     private void HandleBlockHit(Block block)
     {
-        _audioManager.PlayAudioClip("block_hit");
+        _audioManager.PlayAudioClip(_audioBlockHit);
         block.OnBlockHit();
         _score.AddPoint();
     }
     /// <summary>
     /// Handles the ball going out of bounds.
     /// </summary>
-    private void HandleBallOutOfBounds() => _audioManager.PlayAudioClip("out_of_bounds");
+    private void HandleBallOutOfBounds() => _audioManager.PlayAudioClip(_audioOutOfBounds);
     /// <summary>
     /// Updates the game timer each second. Calls GameOver if the max time (or score) is reached.
     /// </summary>

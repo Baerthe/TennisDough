@@ -40,9 +40,6 @@ public sealed partial class MainTennis : Node2D
     // *-> Godot Overrides
     public override void _Ready()
     {
-        // TODO: Really should remove injection and call the global singleton, but it works for now so eh?
-        _ball.Inject(_audioManager);
-        _menu.Inject(_audioManager);
         _scoreP1 = new Score(_scoreP1Label);
         _scoreP2 = new Score(_scoreP2Label);
         _menu.OnGameCancel += GamePause;

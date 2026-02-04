@@ -22,6 +22,9 @@ public sealed partial class MenuBlock : Control
     [Export] private Button _buttonQuit;
     [Export] private OptionButton _optionPaddle;
     [Export] private OptionButton _optionLevel;
+    [ExportGroup("Sound Effects")]
+    [Export] private AudioEvent _sfxButtonPress;
+    [Export] private AudioEvent _sfxMenuOpen;
     // *-> Dependencies
     private AudioManager _audioManager;
 
@@ -48,5 +51,5 @@ public sealed partial class MenuBlock : Control
     /// <summary>
     /// Handles any button press to play a sound effect.
     /// </summary>
-    private void OnAnyButtonPressed() => _audioManager.PlayAudioClip("button_press");
+    private void OnAnyButtonPressed() => _audioManager.PlayAudioClip(_sfxButtonPress);
 }

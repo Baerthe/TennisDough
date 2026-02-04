@@ -11,6 +11,8 @@ using System;
 public sealed partial class BallTennis : BallBase
 {
     public event Action<bool> OnOutOfBounds;
+    [Export] public AudioEvent HitSound;
+    [Export] public AudioEvent ScoreSound;
     public override void _PhysicsProcess(double delta)
     {
         if (!IsEnabled)
@@ -19,7 +21,7 @@ public sealed partial class BallTennis : BallBase
         var collision = MoveAndCollide(Velocity * (float)delta * SpeedFactor);
         if (collision != null)
         {
-            AudioManager.PlayAudioClip("hit");
+            AudioManager.PlayAudioClip(HitSound);
             var normal = collision.GetNormal();
             Velocity = Velocity.Bounce(normal);
             SpeedFactor += SpeedFactor * (Acceleration / 200.0f);
@@ -47,8 +49,8 @@ public sealed partial class BallTennis : BallBase
         }
         if (GlobalPosition.X != 0)
         {
-            var winner = GlobalPosition.X < 0 ? false : true;
-            AudioManager.PlayAudioClip("score");
+            var winner = GlobalPosition.X >= 0;
+            AudioManager.PlayAudioClip(ScoreSound);
             OnOutOfBounds?.Invoke(winner);
             if (winner)
                 Velocity = new Vector2( -8000, GD.RandRange(-512, 512));

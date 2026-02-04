@@ -4,7 +4,6 @@ using Godot;
 /// <summary>
 /// Base class for the ball in the tennis games.
 /// Contains common properties and methods for ball behavior.
-/// TODO: Refactor BallBase to use signals instead of direct AudioManager calls.
 /// </summary>
 public abstract partial class BallBase : CharacterBody2D
 {
@@ -16,7 +15,7 @@ public abstract partial class BallBase : CharacterBody2D
     [Export] public ColorRect ColorRect { get; private set; }
     [Export] public GpuParticles2D TrailParticles { get; private set; }
     [Export] public VisibleOnScreenNotifier2D VisibleNotifier { get; private set; }
-    public AudioManager AudioManager { get; private set; }
+    public readonly AudioManager AudioManager = GameManager.Audio;
     public Vector2 InitialPosition { get; private set; }
     public bool IsEnabled { get; private set; } = false;
     public float SpeedFactor = 0.05f;
@@ -26,14 +25,6 @@ public abstract partial class BallBase : CharacterBody2D
         VisibleNotifier.ScreenExited += ResetBall;
         InitialPosition = GlobalPosition;
         AddToGroup("ball");
-    }
-    /// <summary>
-    /// Injects the AudioManager dependency for playing sound effects.
-    /// </summary>
-    /// <param name="audioManager"></param>
-    public virtual void Inject(AudioManager audioManager)
-    {
-        AudioManager = audioManager;
     }
     /// <summary>
     /// Adjusts the size of the ball and updates related components.

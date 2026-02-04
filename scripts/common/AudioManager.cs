@@ -1,17 +1,17 @@
 namespace Common;
 
 using Godot;
-using System.Collections.Generic;
+using System.Linq;
 /// <summary>
 /// Manages audio playback with two channels and volume control.
 /// </summary>
-public sealed class AudioManager(AudioStreamPlayer audioPlayerChannel1, AudioStreamPlayer audioPlayerChannel2, AudioStreamPlayer audioPlayerChannelMusic)
+public sealed class AudioManager
 {
-    private readonly AudioStreamPlayer _audioPlayerChannel1 = audioPlayerChannel1;
-    private readonly AudioStreamPlayer _audioPlayerChannel2 = audioPlayerChannel2;
-    private readonly AudioStreamPlayer _audioPlayerChannelMusic = audioPlayerChannelMusic;
-    private Dictionary<string, AudioStream> _audioClips = [];
-    private Dictionary<string, AudioStream> _musicClips = [];
+    private readonly AudioStreamPlayer _audioPlayerChannel1;
+    private readonly AudioStreamPlayer _audioPlayerChannel2;
+    private readonly AudioStreamPlayer _audioPlayerChannelMusic;
+    private AudioEvent[] _audioClips = [];
+    private AudioEvent[] _musicClips = [];
     private float _channel1Volume = 1.0f;
     private float _channel2Volume = 1.0f;
     private float _channelMusicVolume = 1.0f;
@@ -21,44 +21,53 @@ public sealed class AudioManager(AudioStreamPlayer audioPlayerChannel1, AudioStr
     private bool _isChannel2AllowedToPlay = true;
     private bool _isChannelMusicPlaying = false;
     private bool _isChannelMusicAllowedToPlay = true;
-    /// <summary>
-    /// Adds an audio clip to the manager with the specified name.
-    /// </summary>
-    /// <param name="name"></param>
-    /// <param name="clip"></param>
-    public void AddAudioClip(string name, AudioStream clip)
+    public AudioManager(AudioStreamPlayer audioPlayerChannel1, AudioStreamPlayer audioPlayerChannel2, AudioStreamPlayer audioPlayerChannelMusic)
     {
-        if (!_audioClips.ContainsKey(name))
-            _audioClips[name] = clip;
+        _audioPlayerChannel1 = audioPlayerChannel1;
+        _audioPlayerChannel2 = audioPlayerChannel2;
+        _audioPlayerChannelMusic = audioPlayerChannelMusic;
+        BuildAudioCache();
+        GD.Print("AudioManager: Initialized");
     }
     /// <summary>
-    /// Adds a music track to the manager with the specified name. Make sure to check looping in the AudioStream resource if desired!
+    /// Mutes or unmutes the specified audio channel. 0 = all, 1 = channel 1, 2 = channel 2, 3 = music.
+    /// Specifically inverts the allowed to play flag; which by default is 'true', meaning audio is allowed to play.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="track"></param>
-    public void AddMusicTrack(string name, AudioStream track)
+    /// <param name="channel"></param>
+    public void MuteAudioChannel(int channel = 0)
     {
-        if (!_musicClips.ContainsKey(name))
-            _musicClips[name] = track;
+        if (channel == 0)
+        {
+            _isChannel1AllowedToPlay = false;
+            _isChannel2AllowedToPlay = false;
+            _isChannelMusicAllowedToPlay = false;
+            return;
+        }
+        if (channel == 1)
+            _isChannel1AllowedToPlay = !_isChannel1AllowedToPlay;
+        else if (channel == 2)
+            _isChannel2AllowedToPlay = !_isChannel2AllowedToPlay;
+        else if (channel == 3)
+            _isChannelMusicAllowedToPlay = !_isChannelMusicAllowedToPlay;
     }
     /// <summary>
     /// Plays an audio clip by name on the specified channel.
     /// </summary>
     /// <param name="name"></param>
     /// <param name="channel"></param>
-    public void PlayAudioClip(string name, int channel = 1)
+    public void PlayAudioClip(AudioEvent audioEvent, int channel = 1)
     {
-        if (_audioClips.ContainsKey(name))
+        if (_audioClips.Contains(audioEvent))
         {
             if (channel == 1 && _isChannel1AllowedToPlay)
             {
-                _audioPlayerChannel1.Stream = _audioClips[name];
+                _audioPlayerChannel1.Stream = audioEvent.Clip;
                 _audioPlayerChannel1.VolumeDb = LinearToDb(_channel1Volume);
                 _audioPlayerChannel1.Play();
                 _isChannel1Playing = true;
             } else if (channel == 2 && _isChannel2AllowedToPlay)
             {
-                _audioPlayerChannel2.Stream = _audioClips[name];
+                _audioPlayerChannel2.Stream = audioEvent.Clip;
                 _audioPlayerChannel2.VolumeDb = LinearToDb(_channel2Volume);
                 _audioPlayerChannel2.Play();
                 _isChannel2Playing = true;
@@ -69,11 +78,11 @@ public sealed class AudioManager(AudioStreamPlayer audioPlayerChannel1, AudioStr
     /// Plays a music track by name on the music channel.
     /// </summary>
     /// <param name="name"></param>
-    public void PlayMusicTrack(string name)
+    public void PlayMusicTrack(AudioEvent audioEvent)
     {
-        if (_musicClips.TryGetValue(name, out AudioStream value) && _isChannelMusicAllowedToPlay)
+        if (_musicClips.Contains(audioEvent) && _isChannelMusicAllowedToPlay)
         {
-            _audioPlayerChannelMusic.Stream = value;
+            _audioPlayerChannelMusic.Stream = audioEvent.Clip;
             _audioPlayerChannelMusic.VolumeDb = LinearToDb(_channelMusicVolume);
             _audioPlayerChannelMusic.Play();
             _isChannelMusicPlaying = true;
@@ -130,4 +139,43 @@ public sealed class AudioManager(AudioStreamPlayer audioPlayerChannel1, AudioStr
     /// <param name="linear"></param>
     /// <returns>float</returns>
     private static float LinearToDb(float linear) => linear <= 0.0f ? -80.0f : 20.0f * Mathf.Log(linear);
+    /// <summary>
+    /// Caches an audio or music clip to the manager.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="clip"></param>
+    private void AddAudioClip(AudioEvent audioEvent)
+    {
+        if (!_audioClips.Contains(audioEvent))
+            if (audioEvent.IsMusic)
+                _musicClips = [.. _musicClips, audioEvent];
+            else
+            _audioClips = [.. _audioClips, audioEvent];
+    }
+    /// <summary>
+    /// Builds the audio cache from resources.
+    /// </summary>
+    private void BuildAudioCache()
+    {
+        string hardPath = "res://assets/resources/audio";
+        var dir = DirAccess.Open(hardPath);
+        if (dir != null)
+        {
+            dir.ListDirBegin();
+            string fileName = dir.GetNext();
+            while (fileName != "")
+            {
+                if (fileName.EndsWith(".tres"))
+                {
+                    var clipPath = $"{hardPath}/{fileName}";
+                    AudioEvent audioEvent = GD.Load<AudioEvent>(clipPath);
+                    AddAudioClip(audioEvent);
+                    GD.Print($"AudioManager: Cached audio clip from {clipPath}");
+                }
+                fileName = dir.GetNext();
+            }
+            dir.ListDirEnd();
+        } else
+            GD.PrintErr("AudioManager: Failed to open audio resources directory.");
+    }
 }

@@ -11,10 +11,9 @@ public partial class MenuTennis : Control
 {
     public event Action<PlayerType, PlayerType, int, int, int, int, int, Color, Color, Color,int, int> OnGameStart;
     public event Action OnGameCancel;
-    private AudioManager _audioManager;
     [ExportGroup("Sound Effects")]
-    [Export] private AudioStream _sfxButtonPress;
-    [Export] private AudioStream _sfxMenuOpen;
+    [Export] private AudioEvent _sfxButtonPress;
+    [Export] private AudioEvent _sfxMenuOpen;
     [ExportGroup("Buttons")]
     [Export] private Button _buttonCancel;
     [Export] private Button _buttonPlay;
@@ -39,6 +38,7 @@ public partial class MenuTennis : Control
     [Export] private Label _labelGameTime;
     [Export] private HSlider _maxScoreSlider;
     [Export] private Label _labelMaxScore;
+    private readonly AudioManager _audioManager = GameManager.Audio;
     public override void _Ready()
     {
         _buttonCancel.Visible = false;
@@ -48,13 +48,13 @@ public partial class MenuTennis : Control
         _buttonCancel.Pressed += () => Visible = false;
         _buttonCancel.Pressed += () => OnGameCancel?.Invoke();
         // Connect sound effects
-        _buttonPlay.Pressed += () => _audioManager.PlayAudioClip("button_press");
-        _buttonQuit.Pressed += () => _audioManager.PlayAudioClip("button_press");
-        _buttonCancel.Pressed += () => _audioManager.PlayAudioClip("button_press");
+        _buttonPlay.Pressed += () => _audioManager.PlayAudioClip(_sfxButtonPress);
+        _buttonQuit.Pressed += () => _audioManager.PlayAudioClip(_sfxButtonPress);
+        _buttonCancel.Pressed += () => _audioManager.PlayAudioClip(_sfxButtonPress);
         VisibilityChanged += () =>
         {
             if (Visible)
-                _audioManager.PlayAudioClip("menu_open");
+                _audioManager.PlayAudioClip(_sfxMenuOpen);
         };
         // Connect slider signals to update labels
         _gameTimeSlider.ValueChanged += value => _labelGameTime.Text = ((int)value).ToString("D4");
@@ -76,12 +76,6 @@ public partial class MenuTennis : Control
         ConfigureColorPicker(_colorPickerPaddle1);
         ConfigureColorPicker(_colorPickerPaddle2);
         ConfigureColorPicker(_colorPickerBall);
-    }
-    public void Inject(AudioManager audioManager)
-    {
-        _audioManager = audioManager;
-        _audioManager.AddAudioClip("button_press", _sfxButtonPress);
-        _audioManager.AddAudioClip("menu_open", _sfxMenuOpen);
     }
     /// <summary>
     /// Toggles the visibility of the Reset and Cancel buttons.
