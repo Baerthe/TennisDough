@@ -60,6 +60,10 @@ public sealed partial class MainTennis : Node2D
     {
         _menu.OnGameCancel -= GamePause;
         _menu.OnGameStart -= GameStart;
+        _gameTimer.Timeout -= TimerUpdate;
+        _controller1?.Detach();
+        _controller2?.Detach();
+        _isRainbowEffectActive = false;
     }
     // *-> Game State Functions
     /// <summary>
