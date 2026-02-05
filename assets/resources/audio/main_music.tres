@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="AudioEvent" format=3 uid="uid://baim5jhp3p5r3"]
+
+[ext_resource type="Script" uid="uid://bv235gb45xngb" path="res://scripts/common/resource/AudioEvent.cs" id="1_rumcq"]
+
+[resource]
+script = ExtResource("1_rumcq")
+IsMusic = true
+metadata/_custom_type_script = "uid://bv235gb45xngb"

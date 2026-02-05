@@ -3,6 +3,7 @@
 [ext_resource type="FontFile" uid="uid://dcoyeg1tf1500" path="res://assets/themes/fonts/ProggyClean.ttf" id="1_6u0fb"]
 [ext_resource type="Texture2D" uid="uid://ba7mvawrmi0qt" path="res://assets/themes/button/Blue_Hover.png" id="1_gebbq"]
 [ext_resource type="Texture2D" uid="uid://bnf4a0raxkqen" path="res://assets/themes/general/Blue.png" id="1_lfy6v"]
+[ext_resource type="FontFile" uid="uid://doof6ux5cfqt2" path="res://assets/fonts/Kenney Future.ttf" id="1_s54lw"]
 [ext_resource type="Texture2D" uid="uid://dvx3hvav2n7b7" path="res://assets/themes/panel/Panel.png" id="1_ulhmq"]
 [ext_resource type="Texture2D" uid="uid://bkxvfdx82p2lq" path="res://assets/themes/scrollbar/Slider_Blue_Grabber_Horizontal.png" id="4_7hqu0"]
 [ext_resource type="Texture2D" uid="uid://1d8q46t3elp8" path="res://assets/themes/checkbox/Checkbox_Blue_Checked.png" id="4_pbf4m"]
@@ -428,7 +429,7 @@ expand_margin_bottom = 6.0
 modulate_color = Color(0.29411766, 0.3372549, 0.5019608, 1)
 
 [resource]
-Button/fonts/font = ExtResource("1_6u0fb")
+Button/fonts/font = ExtResource("1_s54lw")
 Button/styles/disabled = SubResource("StyleBoxTexture_gcxt6")
 Button/styles/focus = SubResource("StyleBoxEmpty_07amn")
 Button/styles/hover = SubResource("StyleBoxTexture_v1mvt")

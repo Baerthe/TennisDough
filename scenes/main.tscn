@@ -7,7 +7,9 @@
 [ext_resource type="Texture2D" uid="uid://c26vuo5mykg5n" path="res://assets/interface/user_interface_crt.png" id="4_o6xl0"]
 [ext_resource type="Material" uid="uid://sx1446vh40q" path="res://assets/shaders/materials/crt_boot.material" id="5_o6xl0"]
 [ext_resource type="Material" uid="uid://jeo74wvqtm8q" path="res://assets/shaders/materials/crt_default.material" id="6_tefeu"]
+[ext_resource type="Material" uid="uid://dl7asqj8k5uhf" path="res://assets/shaders/materials/background_ink.material" id="8_choun"]
 [ext_resource type="Script" uid="uid://c7rm2e5hpvrow" path="res://scripts/common/node/MainMenu.cs" id="8_tipki"]
+[ext_resource type="Resource" uid="uid://82c405m6a7o5" path="res://assets/resources/audio/button_click.tres" id="9_85g3d"]
 
 [node name="GameManager" type="Control" unique_id=1154646228 node_paths=PackedStringArray("_mainMenu", "_loadingScreen", "_gameScreen", "_crtOverlay")]
 texture_filter = 1
@@ -32,11 +34,8 @@ _bootCrtMaterial = ExtResource("5_o6xl0")
 z_index = -10
 layout_mode = 1
 anchors_preset = -1
-anchor_right = 48.000004
-anchor_bottom = 27.000002
-offset_left = -1216.0
-offset_right = 1216.0
-offset_bottom = 697.0664
+anchor_right = 1.0
+anchor_bottom = 1.0
 color = Color(0, 0, 0, 1)
 metadata/_edit_lock_ = true
 
@@ -83,6 +82,7 @@ axis_stretch_vertical = 2
 [node name="game_screen" type="ColorRect" parent="crt" unique_id=1650678906]
 z_index = -2
 z_as_relative = false
+material = ExtResource("8_choun")
 clip_contents = true
 layout_mode = 1
 anchors_preset = -1
@@ -101,6 +101,7 @@ anchors_preset = 0
 offset_right = 280.0
 offset_bottom = 272.0
 script = ExtResource("8_tipki")
+_sfxButtonPress = ExtResource("9_85g3d")
 
 [node name="loading_screen" type="Control" parent="crt/game_screen" unique_id=70546353]
 anchors_preset = 0
