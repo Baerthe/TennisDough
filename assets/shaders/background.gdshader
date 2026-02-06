@@ -6,12 +6,13 @@ uniform vec4 main_color : source_color = vec4(0.25, 0.25, 0.12, 1.0);
 uniform vec4 second_color : source_color = vec4(0.25, 0.12, 0.25, 1.0);
 uniform vec4 back_color : source_color = vec4(0.12, 0.25, 0.25, 1.0);
 uniform float contrast :hint_range(-5.0, 5.0) = 4;
-uniform float lighting :hint_range(0.0, 1.0) = 0.4;
-uniform float spin_amount :hint_range(0.0, 1.0) = 0.25;
-uniform float pixel_filter :hint_range(0.0, 1280.0) = 64.0;
+uniform float lighting :hint_range(0.1, 1.0) = 0.4;
+uniform float spin_amount :hint_range(0.1, 1.0) = 0.25;
 uniform vec2 screen_size = vec2(1920.0, 1080.0);
-uniform float spin_rotation_speed :hint_range(0.0, 2.0) = 1.0;
-uniform float move_speed :hint_range(0.0, 25.0) = 0.1;
+uniform float spin_rotation_speed :hint_range(0.1, 2.0) = 1.0;
+uniform float move_speed :hint_range(0.0, 25.0) = 5.0;
+uniform float pixel_filter :hint_range(1, 1280.0) = 64.0;
+uniform float frame_limit :hint_range(1.0, 120.0) = 60.0;
 
 #define SPIN_EASE 1.0
 
@@ -29,7 +30,8 @@ vec4 effect(vec2 screenSize, vec2 screen_coords){
     vec2 mid = (screenSize.xy/length(screenSize.xy))/2.1;
     uv = (vec2((uv_len * cos(new_pixel_angle) + mid.x), (uv_len * sin(new_pixel_angle) + mid.y)) - mid);
     uv *= 28.3;
-    speed = TIME*(move_speed);
+    float quantized_time = floor(TIME*frame_limit)/frame_limit;
+    speed = quantized_time*(move_speed);
     vec2 uv2 = vec2(uv.x+uv.y);
 
     for(int i=0; i < 5; i++) {

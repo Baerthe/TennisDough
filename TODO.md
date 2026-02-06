@@ -17,12 +17,6 @@ Both games need to be integrated into a unified system with a main menu, game pa
 - **FrogGame** - A Frogger-style game (planned, not started)
 - **SpaceGame** - A floaty space-style game (planned, not started)
 - **PacGame** - A Pacman-style game (planned, not started)
-- **BrotherGame** - A Donkey Kong-style game (planned, not started)
-- **WormyGame** - A Worms-style game (planned, not started)
-
-*MAYBE 3D concepts, maybe.*
-- **FoxGame** - StarFox-style game (planned, not started)
-- **WolfGame** - A German-shooting style game (planned, not started)
 
 At some point want to add the background elements to the main menu screen, where the monitor is, to show a stack of game carts for quick selection. Maybe a window?
 
