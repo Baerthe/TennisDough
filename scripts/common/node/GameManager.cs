@@ -2,6 +2,7 @@ namespace Common;
 
 using Godot;
 using System;
+using Godot.Collections;
 /// <summary>
 /// The core game manager responsible for handling game state and transitions. Global Root Node.
 /// Normally we would want some sort of state orchestratior/scene loader, but we will be handling it inline for simplicity.
@@ -11,6 +12,7 @@ public sealed partial class GameManager : Control
     public static AudioManager Audio { get; private set; }
     public static GameMonitor Monitor { get; private set; }
     public static PackManager PackManager { get; private set; }
+    public Dictionary<string, uint> CurrentScores { get; private set;}
     [ExportCategory("References")]
     [ExportGroup("Nodes")]
     [Export] private MainMenu _mainMenu;
@@ -24,6 +26,7 @@ public sealed partial class GameManager : Control
     // *-> Fields
     private Node2D _LoadedPackedScene;
     private static PauseWatcher _pauseWatcher;
+    private static ScoreManager _scoreManager;
     // *-> Godot Overrides
     public override void _EnterTree()
     {
@@ -35,6 +38,7 @@ public sealed partial class GameManager : Control
             this.AddNode<AudioStreamPlayer>("AudioChannelMusic"));
         Monitor = new GameMonitor();
         PackManager = new PackManager();
+        _scoreManager = new ScoreManager();
         _pauseWatcher = this.AddNode<PauseWatcher>();
 //        _loadingScreen.Visible = false;
     }
@@ -108,6 +112,7 @@ public sealed partial class GameManager : Control
         _LoadedPackedScene = scene as Node2D;
         _gameScreen.AddChild(_LoadedPackedScene);
         _LoadedPackedScene.Scale = new Vector2(1.78f, 1.78f);
+        CurrentScores = _scoreManager.LoadScores(_LoadedPackedScene);
         Monitor.ChangeState(GameState.Loading);
         GD.Print("GameManager: Pack loaded and scene instantiated.");
     }
