@@ -3,10 +3,11 @@ namespace Common;
 using Godot;
 using Godot.Collections;
 /// <summary>
-/// Manages loading and saving scores for game packs. Scores are stored in JSON files in the user directory, keyed by pack name. Each score entry is a key-value pair of scorer name and score value.
+/// Manages loading and saving scores for game packs. Scores are stored in SCORES (godot cfg) files in the user directory, keyed by pack name derived from scene string name.
 /// </summary>
 public sealed class ScoreManager
 {
+    public Dictionary<string, uint> CurrentScores { get; private set; }
     private readonly string _savePath = "user://saves/";
     private readonly string _saveFileName = "high.scores";
     private readonly string _section = "High Scores";
@@ -21,9 +22,9 @@ public sealed class ScoreManager
     /// <summary>
     /// Loads scores for the given game pack from a SCORES file. If no file exists, creates a new one with default scores.
     /// <returns>Dictionary of scores keyed by scorer name</returns>
-    public Dictionary<string, uint> LoadScores(GamePack pack)
+    public void LoadScores(string pack)
     {
-        string fullPath = $"{_savePath}{pack.GameName}";
+        string fullPath = $"{_savePath}{pack}";
         Dictionary<string, uint> save = [];
         ConfigFile config = new();
         if (config.Load(fullPath + _saveFileName) == Error.Ok)
@@ -33,26 +34,26 @@ public sealed class ScoreManager
                 var playerScore = (uint)config.GetValue(_section, player);
                 save.Add(player, playerScore);
             }
-            return save;
+            CurrentScores = save;
         } else
         {
-            GD.Print($"ScoreManager: Score table for {pack.GameName} could not be loaded. Creating...");
+            GD.Print($"ScoreManager: Score table for {pack} could not be loaded. Creating...");
             SaveData(_defaultScores, config, fullPath);
-            return _defaultScores;
+            CurrentScores = _defaultScores;
         }
     }
     /// <summary>
     /// Saves scores for the given game pack to a SCORES file. If no file exists, creates a new one. If a file exists, it is overwritten with the new scores.
     /// </summary>
-    public void SaveScores(Dictionary<string, uint> scores, GamePack pack)
+    public void SaveScores(string pack)
     {
-        string fullPath = $"{_savePath}{pack.GameName}";
+        string fullPath = $"{_savePath}{pack}";
         ConfigFile config = new();
         if (config.Load(fullPath + _saveFileName) == Error.Ok)
-            SaveData(scores, config, fullPath);
+            SaveData(CurrentScores, config, fullPath);
         else
         {
-            GD.Print($"ScoreManager: Score table for {pack.GameName} could not be saved! Creating...");
+            GD.Print($"ScoreManager: Score table for {pack} could not be saved! Creating...");
             SaveData(_defaultScores, config, fullPath);
         }
     }

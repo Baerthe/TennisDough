@@ -12,7 +12,6 @@ public sealed partial class GameManager : Control
     public static AudioManager Audio { get; private set; }
     public static GameMonitor Monitor { get; private set; }
     public static PackManager PackManager { get; private set; }
-    public Dictionary<string, uint> CurrentScores { get; private set;}
     [ExportCategory("References")]
     [ExportGroup("Nodes")]
     [Export] private MainMenu _mainMenu;
@@ -91,6 +90,7 @@ public sealed partial class GameManager : Control
                 break;
             case GameState.GameOver:
                 GD.Print("GameManager: Switching to Game Over.");
+                _scoreManager.SaveScores(_LoadedPackedScene.Name);
                 break;
             case GameState.Loading:
                 GD.Print("GameManager: Switching to Loading Screen.");
@@ -112,7 +112,7 @@ public sealed partial class GameManager : Control
         _LoadedPackedScene = scene as Node2D;
         _gameScreen.AddChild(_LoadedPackedScene);
         _LoadedPackedScene.Scale = new Vector2(1.78f, 1.78f);
-        CurrentScores = _scoreManager.LoadScores(_LoadedPackedScene);
+        _scoreManager.LoadScores(_LoadedPackedScene.Name);
         Monitor.ChangeState(GameState.Loading);
         GD.Print("GameManager: Pack loaded and scene instantiated.");
     }
