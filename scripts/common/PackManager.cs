@@ -25,6 +25,11 @@ public sealed class PackManager
         GD.Print($"PackManager: Starting game with pack: {pack.GameName}");
         CurrentPack = pack;
         Node LoadedScene = pack.GameScene.Instantiate();
+        if (LoadedScene is not PackBase)
+        {
+            GD.PrintErr($"PackManager: Loaded Scene, {LoadedScene.Name}, is NOT a PackBase, check resource!");
+            return;
+        }
         OnPackLoaded?.Invoke(LoadedScene);
     }
     /// <summary>

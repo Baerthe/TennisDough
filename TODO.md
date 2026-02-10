@@ -1,6 +1,6 @@
 # TennisDough - Project TODO List
 
-> **Last Updated:** February 02, 2026
+> **Last Updated:** February 10, 2026
 > **Project Status:** In Development
 
 ---
@@ -28,8 +28,8 @@ At some point want to add the background elements to the main menu screen, where
 - [x] **Implement `HandleStartGame` logic** - Currently just prints a debug message
 - [x] **Scene loading/unloading** - Load game scenes based on `GamePack` selection
 - [x] **State transitions** - Wire `GameMonitor.ChangeState()` calls throughout game lifecycle
-- [ ] **Return to main menu** - Handle game completion → main menu transition
-- [ ] **Cleanup on game exit** - Properly dispose of game scenes when returning to menu
+- [X] **Return to main menu** - Handle game completion → main menu transition
+- [X] **Cleanup on game exit** - Properly dispose of game scenes when returning to menu
 
 ### 2. MainMenu - UI Implementation
 - [ ] **Build MainMenu scene** - Scene file needs to be created
@@ -70,9 +70,9 @@ At some point want to add the background elements to the main menu screen, where
 - [ ] **Standardize controller interface** - Align with BlockGame's `IController`
 
 ### 6. GamePack System
-- [ ] **Create `resources/packs/` directory** - For storing game pack `.tres` files
-- [ ] **Create BlockGame.tres pack** - GamePack resource for BlockGame
-- [ ] **Create TennisGame.tres pack** - GamePack resource for TennisGame
+- [X] **Create `resources/packs/` directory** - For storing game pack `.tres` files
+- [X] **Create BlockGame.tres pack** - GamePack resource for BlockGame
+- [X] **Create TennisGame.tres pack** - GamePack resource for TennisGame
 - [ ] **Add pack icons** - Create/assign `GameIcon` textures
 - [ ] **Write pack descriptions** - Fill in `GameDescription` for each pack
 
@@ -97,6 +97,7 @@ At some point want to add the background elements to the main menu screen, where
 - [ ] **Loading transitions** - Fade in/out between scenes
 - [ ] **Rainbow effect** - Implement `_isRainbowEffectActive` in BlockGame (already in TennisGame)
 - [ ] **Particle system fixes** - Ensure trail effects work in all contexts
+- [ ] **Demo mode?** - Attract mode showing gameplay when idle on main menu
 
 ### 10. Code Quality
 - [ ] **Remove debug flags** - `_isRandomLevel = true` should be configurable

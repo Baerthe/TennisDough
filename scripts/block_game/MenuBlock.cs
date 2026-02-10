@@ -26,7 +26,7 @@ public sealed partial class MenuBlock : Control
     [Export] private AudioEvent _sfxButtonPress;
     [Export] private AudioEvent _sfxMenuOpen;
     // *-> Dependencies
-    private AudioManager _audioManager;
+    private readonly AudioManager _audioManager = GameManager.Audio;
 
     // *-> Godot Overrides
     public override void _Ready()
@@ -40,7 +40,6 @@ public sealed partial class MenuBlock : Control
         foreach (Button button in GetChildren().Cast<Button>())
             button.Pressed += OnAnyButtonPressed;
     }
-    public void Inject(AudioManager audioManager) => _audioManager = audioManager;
     /// <summary>
     /// Handles the Play button press event.
     /// </summary>

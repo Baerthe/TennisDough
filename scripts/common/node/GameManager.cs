@@ -23,7 +23,7 @@ public sealed partial class GameManager : Control
     [Export] private ShaderMaterial _pausedCrtMaterial;
     [Export] private ShaderMaterial _bootCrtMaterial;
     // *-> Fields
-    private Node2D _LoadedPackedScene;
+    private PackBase _LoadedPackedScene;
     private static PauseWatcher _pauseWatcher;
     private static ScoreManager _scoreManager;
     // *-> Godot Overrides
@@ -109,7 +109,7 @@ public sealed partial class GameManager : Control
     private void HandlePackLoaded(Node scene)
     {
         _LoadedPackedScene?.QueueFree();
-        _LoadedPackedScene = scene as Node2D;
+        _LoadedPackedScene = scene as PackBase;
         _gameScreen.AddChild(_LoadedPackedScene);
         _LoadedPackedScene.Scale = new Vector2(1.78f, 1.78f);
         _scoreManager.LoadScores(_LoadedPackedScene.Name);

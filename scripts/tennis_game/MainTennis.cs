@@ -7,8 +7,9 @@ using System;
 /// Main game controller for tennis_game. tennis_game is a pretty simple game, so we will have Main being the controller and orchestrator of the game.
 /// It will manage the paddles and the ball, and handle the game logic.
 /// </summary>
-public sealed partial class MainTennis : Node2D
+public sealed partial class MainTennis : PackBase
 {
+    public override event Action<string, uint> OnScoreSubmission;
     [ExportGroup("References")]
     [Export] private MenuTennis _menu;
     [Export] private Timer _gameTimer;
@@ -99,6 +100,7 @@ public sealed partial class MainTennis : Node2D
             _scoreP2.CurrentScore > _scoreP1.CurrentScore ?
             "Player 2 Wins!" :
             "It's a Tie!";
+        SubmitScore();
         _middleScreenLabel.Visible = true;
         ToggleRainbowColorEffect();
         _menu.ToggleButtons();
@@ -201,6 +203,15 @@ public sealed partial class MainTennis : Node2D
             _scoreP2.Reset();
             GD.Print("Ball and Score reset.");
         }
+    }
+    /// <summary>
+    /// Sends out the highest of the player scores.
+    /// </summary>
+    private void SubmitScore()
+    {
+        var score = _scoreP1.CurrentScore >= _scoreP2.CurrentScore ? _scoreP1.CurrentScore : _scoreP2.CurrentScore;
+        // TODO: we need some sort of name manager lol...
+        OnScoreSubmission?.Invoke("player", score);
     }
     /// <summary>
     /// Updates the game timer each second. Calls GameOver if the max time (or score) is reached.
