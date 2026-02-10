@@ -35,9 +35,6 @@ public sealed partial class MainTennis : PackBase
     private int _timeInSeconds = 0;
     private int _maxTimeInSeconds = 9999;
     private byte _maxScore = 255;
-    // *-> Singleton Access
-    private readonly AudioManager _audioManager = GameManager.Audio;
-    private readonly GameMonitor _monitor = GameManager.Monitor;
     // *-> Godot Overrides
     public override void _Ready()
     {
@@ -49,7 +46,7 @@ public sealed partial class MainTennis : PackBase
     }
     public override void _Process(double delta)
     {
-        if (_monitor.CurrentState != GameState.InGame)
+        if (Monitor.CurrentState != GameState.InGame)
             return;
         _controller1.Update();
         _controller2.Update();
@@ -69,23 +66,23 @@ public sealed partial class MainTennis : PackBase
     /// </summary>
     private void GamePause()
     {
-        if (_monitor.CurrentState == GameState.GameOver)
+        if (Monitor.CurrentState == GameState.GameOver)
             return;
-        if (_monitor.CurrentState == GameState.Paused)
+        if (Monitor.CurrentState == GameState.Paused)
         {
             if (_gameTimer.IsStopped())
                 _gameTimer.Start();
             _gameTimer.Paused = false;
             _ball.ToggleEnable();
             _menu.Visible = false;
-            _monitor.ChangeState(GameState.InGame);
+            Monitor.ChangeState(GameState.InGame);
         }
         else
         {
             _gameTimer.Paused = true;
             _ball.ToggleEnable();
             _menu.Visible = true;
-            _monitor.ChangeState(GameState.Paused);
+            Monitor.ChangeState(GameState.Paused);
         }
     }
     /// <summary>
@@ -93,7 +90,7 @@ public sealed partial class MainTennis : PackBase
     /// </summary>
     private async void GameOver()
     {
-        _monitor.ChangeState(GameState.GameOver);
+        Monitor.ChangeState(GameState.GameOver);
         _middleScreenLabel.Text =
             _scoreP1.CurrentScore > _scoreP2.CurrentScore ?
             "Player 1 Wins!" :
@@ -125,7 +122,7 @@ public sealed partial class MainTennis : PackBase
         _scoreP1.Reset();
         _scoreP2.Reset();
         _timeInSeconds = 0;
-        _monitor.ChangeState(GameState.InGame);
+        Monitor.ChangeState(GameState.InGame);
     }
     /// <summary>
     /// Starts a new game with the given parameters sent from the Menu.
@@ -182,12 +179,12 @@ public sealed partial class MainTennis : PackBase
         GD.Print("Game time set.");
         _maxScore = (byte)maxScore;
         GD.Print("Max score set.");
-        if (_monitor.CurrentState == GameState.Paused)
+        if (Monitor.CurrentState == GameState.Paused)
         {
             GamePause();
             return;
         }
-        if (_monitor.CurrentState == GameState.InGame)
+        if (Monitor.CurrentState == GameState.InGame)
         {
             GD.Print("Game already in progress.");
             _menu.ToggleButtons();

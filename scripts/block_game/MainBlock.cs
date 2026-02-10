@@ -2,11 +2,13 @@ namespace BlockGame;
 
 using Common;
 using Godot;
+using System;
 /// <summary>
 /// Main game controller for BlockGame. BlockGame is a breakout-style game, so we will have MainBlock being the controller and orchestrator of the game.
 /// </summary>
-public sealed partial class MainBlock : Node2D
+public sealed partial class MainBlock : PackBase
 {
+    public override event Action<string, uint> OnScoreSubmission;
     [ExportGroup("References")]
     [Export] private MenuBlock _menu;
     [Export] private BallBlock _ball;
@@ -41,16 +43,13 @@ public sealed partial class MainBlock : Node2D
     private int _timeInSeconds = 0;
     private int _maxTimeInSeconds = 9999;
     private byte _maxScore = 255;
-    // *-> Singleton Access
-    private readonly AudioManager _audioManager = GameManager.Audio;
-    private readonly GameMonitor _monitor = GameManager.Monitor;
     // *-> Godot Overrides
     public override void _Ready()
     {
         // // Initialize Score and Controller
         _score = new Score(_scoreLabel);
         _controller = new PaddlePlayer(_paddle, _ball, _score);
-        // _menu.Inject(_audioManager);
+        // _menu.Inject(AudioManager);
         // // Connect Events
         _ball.OnBlockHit += HandleBlockHit;
         // _ball.OnOutOfBounds += HandleBallOutOfBounds;
@@ -63,7 +62,7 @@ public sealed partial class MainBlock : Node2D
     }
     public override void _Process(double delta)
     {
-        if (_monitor.CurrentState != GameState.InGame)
+        if (Monitor.CurrentState != GameState.InGame)
             return;
         _controller.Update();
     }
@@ -73,23 +72,23 @@ public sealed partial class MainBlock : Node2D
     /// </summary>
     private void GamePause()
     {
-        if (_monitor.CurrentState == GameState.GameOver)
+        if (Monitor.CurrentState == GameState.GameOver)
             return;
-        if (_monitor.CurrentState != GameState.Paused)
+        if (Monitor.CurrentState != GameState.Paused)
         {
             if (_gameTimer.IsStopped())
                 _gameTimer.Start();
             _gameTimer.Paused = false;
             _ball.ToggleEnable();
             _menu.Visible = false;
-            _monitor.ChangeState(GameState.InGame);
+            Monitor.ChangeState(GameState.InGame);
         }
         else
         {
             _gameTimer.Paused = true;
             _ball.ToggleEnable();
             _menu.Visible = true;
-            _monitor.ChangeState(GameState.Paused);
+            Monitor.ChangeState(GameState.Paused);
         }
     }
     // *-> Event Handlers
@@ -99,14 +98,14 @@ public sealed partial class MainBlock : Node2D
     /// <param name="block"></param>
     private void HandleBlockHit(Block block)
     {
-        _audioManager.PlayAudioClip(_audioBlockHit);
+        AudioManager.PlayAudioClip(_audioBlockHit);
         block.OnBlockHit();
         _score.AddPoint();
     }
     /// <summary>
     /// Handles the ball going out of bounds.
     /// </summary>
-    private void HandleBallOutOfBounds() => _audioManager.PlayAudioClip(_audioOutOfBounds);
+    private void HandleBallOutOfBounds() => AudioManager.PlayAudioClip(_audioOutOfBounds);
     /// <summary>
     /// Updates the game timer each second. Calls GameOver if the max time (or score) is reached.
     /// </summary>
