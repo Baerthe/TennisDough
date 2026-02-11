@@ -31,3 +31,10 @@ public enum GameState : byte
     GameOver = 4,
     Loading = 5
 }
+/// <summary>
+/// Game Settings section enum
+/// </summary>
+public enum Sectional : byte
+{
+    Audio,
+}

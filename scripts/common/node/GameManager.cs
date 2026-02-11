@@ -11,7 +11,8 @@ public sealed partial class GameManager : Control
 {
     public static AudioManager Audio { get; private set; }
     public static GameMonitor Monitor { get; private set; }
-    public static PackManager PackManager { get; private set; }
+    public static PackManager Package { get; private set; }
+    public static SettingsManager Settings { get; private set; }
     [ExportCategory("References")]
     [ExportGroup("Nodes")]
     [Export] private MainMenu _mainMenu;
@@ -36,7 +37,7 @@ public sealed partial class GameManager : Control
             this.AddNode<AudioStreamPlayer>("AudioChannel2"),
             this.AddNode<AudioStreamPlayer>("AudioChannelMusic"));
         Monitor = new GameMonitor();
-        PackManager = new PackManager();
+        Package = new PackManager();
         _scoreManager = new ScoreManager();
         _pauseWatcher = this.AddNode<PauseWatcher>();
 //        _loadingScreen.Visible = false;
@@ -45,12 +46,12 @@ public sealed partial class GameManager : Control
     {
         // Hook up events
         Monitor.OnGameStateChanged += HandleGameStateRequest;
-        PackManager.OnPackLoaded += HandlePackLoaded;
+        Package.OnPackLoaded += HandlePackLoaded;
         _mainMenu.OnBootSequence += HandleBootSequence;
-        _mainMenu.OnStartGame += PackManager.LoadIntoPack;
+        _mainMenu.OnStartGame += Package.LoadIntoPack;
         _pauseWatcher.OnTogglePause += HandleTogglePause;
         // ! DEBUG
-        PackManager.LoadIntoPack(PackManager.GamePacks["Block Game"]);
+        Package.LoadIntoPack(Package.GamePacks["Block Game"]);
     }
     // *-> Event Handlers
     private void HandleBootSequence()

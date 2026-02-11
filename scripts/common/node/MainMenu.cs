@@ -27,12 +27,14 @@ public sealed partial class MainMenu : Control
     private AudioManager _audioManager;
     private GameMonitor _gameMonitor;
     private PackManager _packManager;
+    private SettingsManager _settingsManager;
     // *-> Godot Overrides
     public override void _Ready()
     {
         _audioManager = GameManager.Audio;
         _gameMonitor = GameManager.Monitor;
-        _packManager = GameManager.PackManager;
+        _packManager = GameManager.Package;
+        _settingsManager = GameManager.Settings;
         _quitButton.Pressed += () => OnQuitGame?.Invoke();
         _settingsButton.Pressed += () => _settingsSubMenu.Visible = !_settingsSubMenu.Visible;
         BootSequence();
