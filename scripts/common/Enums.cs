@@ -36,5 +36,6 @@ public enum GameState : byte
 /// </summary>
 public enum Sectional : byte
 {
+    User,
     Audio,
 }

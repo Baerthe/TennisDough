@@ -7,6 +7,7 @@ using System.Collections.Generic;
 /// </summary>
 public sealed class SettingsManager
 {
+    public string CurrentUsername { get; private set; }
     public (Sectional , Dictionary<string, (float, bool)>) AudioSettings { get; private set;}
     = (Sectional.Audio ,new()
     {
@@ -14,20 +15,28 @@ public sealed class SettingsManager
         { "Channel2", (0.7f, true)},
         { "ChannelMusic", (1.0f, true)},
     });
-    private readonly string _savePath = "user://config/";
-    private readonly string _saveFileName = "user.config";
+    private ConfigFile _configFile;
+    private readonly string _configPath = "user://config/user.config";
     public SettingsManager()
     {
-        //TODO: Load up some settin'
+        ConfigFile config = new();
+        if (config.Load(_configPath) == Error.Ok)
+            _configFile = config;
     }
-    //TODO: Saving/Loading settings, loop into mainmenu.
-    private void SaveData(Sectional section, Dictionary<string, (float, bool)> Data, ConfigFile config, string fullPath)
+    public void SaveData(Sectional section, Dictionary<string, (float, bool)> Data, ConfigFile config)
     {
         foreach (var (setting, (value,allowed)) in Data)
         {
             config.SetValue(section.ToString(), setting, value);
             config.SetValue(section.ToString(), $"{setting}_allowed?", allowed);
         }
-        config.Save(fullPath + _saveFileName);
+        Save();
     }
+    public void SaveUsername(string input)
+    {
+        _configFile.SetValue(Sectional.User.ToString(),"Username", input);
+        CurrentUsername = input;
+        Save();
+    }
+    private void Save() => _configFile.Save(_configPath);
 }

@@ -1,5 +1,6 @@
 namespace Common;
 
+using System;
 using Godot;
 using Godot.Collections;
 /// <summary>
